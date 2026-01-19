@@ -22,3 +22,8 @@ declare module 'shoppingCart/CartButton' {
   const CartButton: ComponentType;
   export default CartButton;
 }
+
+// Type for cart store
+declare module 'shoppingCart/CartStore' {
+  export const useCartStore: any;
+}

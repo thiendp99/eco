@@ -11,11 +11,12 @@ export default defineConfig({
       exposes: {
         './Cart': './src/components/Cart',
         './CartButton': './src/components/CartButton',
+        './CartStore': './src/stores/cartStore', // ADD THIS
       },
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
-        'zustand': { singleton: true },
+        zustand: { singleton: true },
         '@tanstack/react-query': { singleton: true },
       },
     }),

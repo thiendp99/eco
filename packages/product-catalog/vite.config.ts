@@ -12,11 +12,16 @@ export default defineConfig({
         './ProductList': './src/components/ProductList',
         './ProductDetail': './src/components/ProductDetail',
       },
+      // ADD: Import cart store from shopping-cart remote
+      remotes: {
+        shoppingCart: 'http://localhost:3002/assets/remoteEntry.js',
+      },
       shared: {
         react: { singleton: true },
         'react-dom': { singleton: true },
         'react-router-dom': { singleton: true },
         '@tanstack/react-query': { singleton: true },
+        zustand: { singleton: true }, // ADD zustand as shared
       },
     }),
   ],
