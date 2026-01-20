@@ -20,26 +20,28 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigate to detail
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     
-    // Get cart store instance
-    const cartStore = useCartStore?.getState?.() || useCartStore();
-    
-    // Add item to cart
-    cartStore.addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      stock: product.stock,
-    });
-    
-    // Open cart drawer (optional)
-    cartStore.openCart?.();
-    
-    // Show toast notification (you can add a toast library)
-    alert(`Added ${product.name} to cart!`);
+    try {
+      // Lazy import cart store only when needed
+      const { useCartStore } = await import('shoppingCart/CartStore');
+      const cartStore = useCartStore.getState();
+      
+      cartStore.addItem({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        stock: product.stock,
+      });
+      
+      cartStore.openCart?.();
+      alert(`Added ${product.name} to cart!`);
+    } catch (error) {
+      console.warn('Cart store not available:', error);
+      alert(`Added ${product.name} to cart! (cart store unavailable)`);
+    }
   };
 
   return (

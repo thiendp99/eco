@@ -2,12 +2,33 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CartStore } from '../types/cart';
 
+// In Node/Vitest environment, `localStorage` may not exist. Provide a safe no-op storage
+// so zustand/persist doesn't error or interfere with store behavior during tests.
+const memoryStorage: Storage = {
+  getItem: () => null,
+  setItem: () => undefined,
+  removeItem: () => undefined,
+  clear: () => undefined,
+  key: () => null,
+  get length() {
+    return 0;
+  },
+};
+
+function computeTotals(items: CartStore['items']) {
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return { totalItems, totalPrice };
+}
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       // Initial State
       items: [],
       isOpen: false,
+      totalItems: 0,
+      totalPrice: 0,
 
       // Actions
       addItem: (item) => {
@@ -16,26 +37,25 @@ export const useCartStore = create<CartStore>()(
 
           if (existingItem) {
             // Item exists, increase quantity
-            return {
-              items: state.items.map((i) =>
+            const items = state.items.map((i) =>
                 i.id === item.id
                   ? { ...i, quantity: Math.min(i.quantity + 1, i.stock) }
                   : i
-              ),
-            };
+              );
+            return { items, ...computeTotals(items) };
           } else {
             // New item, add with quantity 1
-            return {
-              items: [...state.items, { ...item, quantity: 1 }],
-            };
+            const items = [...state.items, { ...item, quantity: 1 }];
+            return { items, ...computeTotals(items) };
           }
         });
       },
 
       removeItem: (id) => {
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        }));
+        set((state) => {
+          const items = state.items.filter((item) => item.id !== id);
+          return { items, ...computeTotals(items) };
+        });
       },
 
       updateQuantity: (id, quantity) => {
@@ -44,17 +64,18 @@ export const useCartStore = create<CartStore>()(
           return;
         }
 
-        set((state) => ({
-          items: state.items.map((item) =>
+        set((state) => {
+          const items = state.items.map((item) =>
             item.id === id
               ? { ...item, quantity: Math.min(quantity, item.stock) }
               : item
-          ),
-        }));
+          );
+          return { items, ...computeTotals(items) };
+        });
       },
 
       clearCart: () => {
-        set({ items: [] });
+        set({ items: [], totalItems: 0, totalPrice: 0 });
       },
 
       toggleCart: () => {
@@ -69,18 +90,6 @@ export const useCartStore = create<CartStore>()(
         set({ isOpen: false });
       },
 
-      // Computed values (getters)
-      get totalItems() {
-        return get().items.reduce((sum, item) => sum + item.quantity, 0);
-      },
-
-      get totalPrice() {
-        return get().items.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0
-        );
-      },
-
       getItemQuantity: (id: string) => {
         const item = get().items.find((i) => i.id === id);
         return item?.quantity || 0;
@@ -88,9 +97,17 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'shopping-cart', // LocalStorage key
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() =>
+        typeof localStorage === 'undefined' ? memoryStorage : localStorage
+      ),
       // Only persist items, not UI state (isOpen)
       partialize: (state) => ({ items: state.items }),
+      onRehydrateStorage: () => (state) => {
+        if (!state) return;
+        const { totalItems, totalPrice } = computeTotals(state.items);
+        state.totalItems = totalItems;
+        state.totalPrice = totalPrice;
+      },
     }
   )
 );

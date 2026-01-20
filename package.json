@@ -12,22 +12,33 @@
     "build:host": "pnpm --filter @ecommerce/host build",
     "build:products": "pnpm --filter @ecommerce/product-catalog build",
     "build:cart": "pnpm --filter @ecommerce/shopping-cart build",
-    "test": "pnpm -r test",
-    "test:watch": "pnpm -r test -- --watch",
     "lint": "pnpm -r lint",
     "type-check": "pnpm -r type-check",
     "clean": "pnpm -r exec rm -rf node_modules dist",
-    "clean:all": "rm -rf node_modules packages/*/node_modules packages/*/dist"
+    "clean:all": "rm -rf node_modules packages/*/node_modules packages/*/dist",
+    "test": "pnpm -r test",
+    "test:watch": "pnpm -r test -- --watch",
+    "test:coverage": "pnpm -r test -- --coverage",
+    "test:ui": "pnpm -r test -- --ui",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^14.3.1",
+    "@testing-library/user-event": "^14.6.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.50.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "jsdom": "^27.4.0",
     "prettier": "^3.0.0",
-    "typescript": "^5.2.0"
+    "typescript": "^5.2.0",
+    "vitest": "^1.6.1"
   },
   "engines": {
     "node": ">=18.0.0",

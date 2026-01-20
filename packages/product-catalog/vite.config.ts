@@ -17,11 +17,13 @@ export default defineConfig({
         shoppingCart: 'http://localhost:3002/assets/remoteEntry.js',
       },
       shared: {
-        react: { singleton: true },
-        'react-dom': { singleton: true },
-        'react-router-dom': { singleton: true },
-        '@tanstack/react-query': { singleton: true },
-        zustand: { singleton: true }, // ADD zustand as shared
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        react: { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        'react-dom': { singleton: true } as any,
+        'react-router-dom': { singleton: true } as any,
+        '@tanstack/react-query': { singleton: true } as any,
+        zustand: { singleton: true } as any,
       },
     }),
   ],

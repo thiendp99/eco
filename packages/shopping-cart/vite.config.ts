@@ -11,13 +11,17 @@ export default defineConfig({
       exposes: {
         './Cart': './src/components/Cart',
         './CartButton': './src/components/CartButton',
-        './CartStore': './src/stores/cartStore', // ADD THIS
+        './CartStore': './src/stores/cartStore',
       },
       shared: {
-        react: { singleton: true },
-        'react-dom': { singleton: true },
-        zustand: { singleton: true },
-        '@tanstack/react-query': { singleton: true },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        react: { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        'react-dom': { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        zustand: { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        '@tanstack/react-query': { singleton: true } as any,
       },
     }),
   ],
