@@ -4,10 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --parallel -r dev",
+    "dev:host": "pnpm --filter @ecommerce/host dev",
+    "dev:products": "pnpm --filter @ecommerce/product-catalog dev",
+    "dev:cart": "pnpm --filter @ecommerce/shopping-cart dev",
+    "dev:all": "pnpm --parallel --filter \"@ecommerce/*\" dev",
     "build": "pnpm -r build",
+    "build:host": "pnpm --filter @ecommerce/host build",
+    "build:products": "pnpm --filter @ecommerce/product-catalog build",
+    "build:cart": "pnpm --filter @ecommerce/shopping-cart build",
     "test": "pnpm -r test",
+    "test:watch": "pnpm -r test -- --watch",
     "lint": "pnpm -r lint",
-    "type-check": "pnpm -r type-check"
+    "type-check": "pnpm -r type-check",
+    "clean": "pnpm -r exec rm -rf node_modules dist",
+    "clean:all": "rm -rf node_modules packages/*/node_modules packages/*/dist"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",
