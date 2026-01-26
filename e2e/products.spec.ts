@@ -6,23 +6,19 @@ test.describe('Product Catalog', () => {
     await page.fill('input[type="email"]', 'user@test.com');
     await page.fill('input[type="password"]', 'user123');
     await page.click('button[type="submit"]');
+    await expect(page).toHaveURL('/products');
   });
 
   test('should display products', async ({ page }) => {
-    await page.goto('/products');
+    await expect(page.locator('h2:has-text("Product Catalog")')).toBeVisible();
 
-    await expect(page.locator('h1:has-text("Product Catalog")')).toBeVisible();
-
-    const products = page.locator('[style*="grid"] > div');
-    await expect(products).toHaveCount(8);
+    const products = page.getByTestId('product-grid').locator('> div');
+    await expect(products).toHaveCount(6);
   });
 
   test('should filter by category', async ({ page }) => {
-    await page.goto('/products');
-
     await page.selectOption('select', 'Electronics');
     await page.click('button:has-text("Apply Filters")');
-
     await page.waitForTimeout(500);
 
     const categoryLabels = page.locator('text=ELECTRONICS');
@@ -31,21 +27,14 @@ test.describe('Product Catalog', () => {
   });
 
   test('should search products', async ({ page }) => {
-    await page.goto('/products');
-
     await page.fill('input[placeholder="Search products..."]', 'laptop');
     await page.click('button:has-text("Apply Filters")');
-
     await page.waitForTimeout(500);
-
-    await expect(page.locator('text=Laptop')).toBeVisible();
+    await expect(page.locator('text=Laptop Dell XPS')).toBeVisible();
   });
 
   test('should paginate results', async ({ page }) => {
-    await page.goto('/products');
-
     await page.click('button:has-text("Next")');
-
     await expect(page.locator('text=Page 2')).toBeVisible();
   });
 });

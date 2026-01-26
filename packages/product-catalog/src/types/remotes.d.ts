@@ -1,31 +1,11 @@
 declare module 'shoppingCart/CartStore' {
-  export interface CartItem {
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-    stock: number;
-  }
+  import { StoreApi, UseBoundStore } from 'zustand';
+  import { CartStore } from '@ecommerce/shared';
 
-  export interface CartStore {
-    items: CartItem[];
-    isOpen: boolean;
-    addItem: (item: Omit<CartItem, 'quantity'>) => void;
-    removeItem: (id: string) => void;
-    updateQuantity: (id: string, quantity: number) => void;
-    clearCart: () => void;
-    toggleCart: () => void;
-    openCart: () => void;
-    closeCart: () => void;
-    totalItems: number;
-    totalPrice: number;
-    getItemQuantity: (id: string) => number;
-  }
+  export const useCartStore: UseBoundStore<StoreApi<CartStore>>;
+}
 
-  export const useCartStore: {
-    (): CartStore;
-    getState: () => CartStore;
-    setState: (partial: Partial<CartStore>) => void;
-  };
+declare module '*.module.css' {
+  const classes: { [key: string]: string };
+  export default classes;
 }

@@ -12,7 +12,6 @@ export default defineConfig({
         './ProductList': './src/components/ProductList',
         './ProductDetail': './src/components/ProductDetail',
       },
-      // ADD: Import cart store from shopping-cart remote
       remotes: {
         shoppingCart: 'http://localhost:3002/assets/remoteEntry.js',
       },
@@ -21,8 +20,11 @@ export default defineConfig({
         react: { singleton: true } as any,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         'react-dom': { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         'react-router-dom': { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         '@tanstack/react-query': { singleton: true } as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         zustand: { singleton: true } as any,
       },
     }),

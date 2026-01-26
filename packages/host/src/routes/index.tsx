@@ -1,15 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { MainLayout } from '../layouts/MainLayout';
-import { RemoteWrapper } from '../components/RemoteWrapper';
 
-import { useAuthStore } from '../stores/authStore';
 import { LoginPage } from '../pages/LoginPage';
 import { HomePage } from '../pages/HomePage';
+import { MainLayout } from '../layouts/MainLayout';
 import { NotFoundPage } from '../pages/NotFoundPage';
+import { useAuthStore } from '../stores/authStore';
+import { RemoteWrapper } from '../components/RemoteWrapper';
 
-// Protected Route wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
 };
 

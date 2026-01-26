@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+*.local
+.vite
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Generated files
+coverage
+playwright-report
+test-results
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+*.log

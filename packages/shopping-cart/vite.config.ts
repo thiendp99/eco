@@ -3,6 +3,13 @@ import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
 
 export default defineConfig({
+  server: {
+    port: 3002,
+    origin: 'http://localhost:3002',
+    cors: {
+      origin: '*', // QUAN TRONG
+    },
+  },
   plugins: [
     react(),
     federation({

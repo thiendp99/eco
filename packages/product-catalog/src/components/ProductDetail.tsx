@@ -1,5 +1,3 @@
-// packages/product-catalog/src/components/ProductDetail.tsx
-
 import { useProduct } from '../hooks/useProducts';
 
 interface ProductDetailProps {
@@ -28,7 +26,9 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div
+        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}
+      >
         {/* Product Image */}
         <div>
           <img
@@ -55,10 +55,21 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
             {product.category}
           </div>
 
-          <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>{product.name}</h1>
+          <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+            {product.name}
+          </h1>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#007bff' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              marginBottom: '1rem',
+            }}
+          >
+            <div
+              style={{ fontSize: '2rem', fontWeight: 'bold', color: '#007bff' }}
+            >
               ${product.price.toFixed(2)}
             </div>
             <div>
@@ -66,7 +77,13 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
             </div>
           </div>
 
-          <p style={{ fontSize: '1.125rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+          <p
+            style={{
+              fontSize: '1.125rem',
+              lineHeight: '1.6',
+              marginBottom: '1.5rem',
+            }}
+          >
             {product.description}
           </p>
 
@@ -80,8 +97,14 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
           >
             <div style={{ marginBottom: '0.5rem' }}>
               <strong>Stock:</strong>{' '}
-              <span style={{ color: product.stock > 10 ? '#28a745' : '#dc3545' }}>
-                {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
+              <span
+                style={{
+                  color: product.stock > 10 ? '#28a745' : '#dc3545',
+                }}
+              >
+                {product.stock > 0
+                  ? `${product.stock} available`
+                  : 'Out of stock'}
               </span>
             </div>
             <div>
@@ -127,29 +150,45 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <tbody>
               <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold', width: '30%' }}>
+                <td
+                  style={{
+                    padding: '0.75rem',
+                    fontWeight: 'bold',
+                    width: '30%',
+                  }}
+                >
                   Category
                 </td>
                 <td style={{ padding: '0.75rem' }}>{product.category}</td>
               </tr>
               <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>Price</td>
-                <td style={{ padding: '0.75rem' }}>${product.price.toFixed(2)}</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>Rating</td>
+                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
+                  Price
+                </td>
                 <td style={{ padding: '0.75rem' }}>
-                  {product.rating} / 5.0 ({product.reviews} reviews)
+                  ${product.price.toFixed(2)}
                 </td>
               </tr>
               <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>Availability</td>
+                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
+                  Rating
+                </td>
+                <td style={{ padding: '0.75rem' }}>
+                  {product.rating} ({product.reviews} reviews)
+                </td>
+              </tr>
+              <tr style={{ borderBottom: '1px solid #ddd' }}>
+                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
+                  Availability
+                </td>
                 <td style={{ padding: '0.75rem' }}>
                   {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
                 </td>
               </tr>
               <tr>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>Added Date</td>
+                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
+                  Added Date
+                </td>
                 <td style={{ padding: '0.75rem' }}>
                   {new Date(product.createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',

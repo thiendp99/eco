@@ -13,6 +13,8 @@ export const fetchProducts = async (
 
   let filtered = [...MOCK_PRODUCTS];
 
+  console.log('API: fetchProducts called', { page, filters });
+
   // Apply filters
   if (filters) {
     if (filters.category) {
@@ -32,25 +34,25 @@ export const fetchProducts = async (
           p.description.toLowerCase().includes(search)
       );
     }
+  }
 
-    // Sorting
-    if (filters.sortBy) {
-      filtered.sort((a, b) => {
-        let comparison = 0;
-        switch (filters.sortBy) {
-          case 'name':
-            comparison = a.name.localeCompare(b.name);
-            break;
-          case 'price':
-            comparison = a.price - b.price;
-            break;
-          case 'rating':
-            comparison = a.rating - b.rating;
-            break;
-        }
-        return filters.sortOrder === 'desc' ? -comparison : comparison;
-      });
-    }
+  // Sorting
+  if (filters?.sortBy) {
+    filtered.sort((a, b) => {
+      let comparison = 0;
+      switch (filters.sortBy) {
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'price':
+          comparison = a.price - b.price;
+          break;
+        case 'rating':
+          comparison = a.rating - b.rating;
+          break;
+      }
+      return filters.sortOrder === 'desc' ? -comparison : comparison;
+    });
   }
 
   // Pagination

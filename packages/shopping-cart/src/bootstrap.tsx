@@ -29,7 +29,14 @@ const TestApp = () => {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div
+        style={{
+          marginBottom: '2rem',
+          display: 'flex',
+          gap: '1rem',
+          alignItems: 'center',
+        }}
+      >
         <h1>Shopping Cart Test</h1>
         <CartButton />
       </div>

@@ -1,4 +1,4 @@
-// packages/product-catalog/src/bootstrap.tsx
+/* packages/product-catalog/src/bootstrap.tsx */
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

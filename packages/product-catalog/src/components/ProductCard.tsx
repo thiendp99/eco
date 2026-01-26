@@ -1,18 +1,6 @@
-import { Product } from '../types/product';
-// Import cart store dynamically to avoid errors in standalone mode
-let useCartStore: any;
-
-// Try to import cart store, fallback to mock if not available
-try {
-  const module = await import('shoppingCart/CartStore');
-  useCartStore = module.useCartStore;
-} catch (error) {
-  console.warn('CartStore not available in standalone mode');
-  useCartStore = () => ({
-    addItem: (item: any) => console.log('Mock add item:', item),
-    openCart: () => console.log('Mock open cart'),
-  });
-}
+import { Product } from '@ecommerce/shared';
+import { useCartStore } from 'shoppingCart/CartStore';
+import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
   product: Product;
@@ -20,149 +8,55 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
-  const handleAddToCart = async (e: React.MouseEvent) => {
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
+
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
-    try {
-      // Lazy import cart store only when needed
-      const { useCartStore } = await import('shoppingCart/CartStore');
-      const cartStore = useCartStore.getState();
-      
-      cartStore.addItem({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        stock: product.stock,
-      });
-      
-      cartStore.openCart?.();
-      alert(`Added ${product.name} to cart!`);
-    } catch (error) {
-      console.warn('Cart store not available:', error);
-      alert(`Added ${product.name} to cart! (cart store unavailable)`);
-    }
+    addItem(product);
+    openCart();
   };
 
+  const isStockAvailable = product.stock > 0;
+
   return (
-    <div
-      style={{
-        border: '1px solid #e0e0e0',
-        borderRadius: '8px',
-        overflow: 'hidden',
-        transition: 'transform 0.2s, box-shadow 0.2s',
-        cursor: 'pointer',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = 'none';
-      }}
-    >
-      <div onClick={() => onViewDetails(product.id)}>
-        <div
-          style={{
-            width: '100%',
-            height: '200px',
-            overflow: 'hidden',
-            backgroundColor: '#f5f5f5',
-          }}
-        >
-          <img
-            src={product.image}
-            alt={product.name}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-          />
+    <div className={styles.card} onClick={() => onViewDetails(product.id)}>
+      <div className={styles.imageContainer}>
+        <img src={product.image} alt={product.name} className={styles.image} />
+      </div>
+
+      <div className={styles.content}>
+        <div className={styles.category}>{product.category}</div>
+        <h3 className={styles.title} title={product.name}>
+          {product.name}
+        </h3>
+        <p className={styles.description}>{product.description}</p>
+
+        <div className={styles.footer}>
+          <div className={styles.price}>${product.price.toFixed(2)}</div>
+          <div className={styles.rating}>
+            ⭐ {product.rating} ({product.reviews})
+          </div>
         </div>
 
-        <div style={{ padding: '1rem' }}>
-          <div
-            style={{
-              fontSize: '0.75rem',
-              color: '#666',
-              textTransform: 'uppercase',
-              marginBottom: '0.5rem',
-            }}
-          >
-            {product.category}
-          </div>
-
-          <h3
-            style={{
-              fontSize: '1rem',
-              marginBottom: '0.5rem',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {product.name}
-          </h3>
-
-          <p
-            style={{
-              fontSize: '0.875rem',
-              color: '#666',
-              marginBottom: '1rem',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              minHeight: '2.5rem',
-            }}
-          >
-            {product.description}
-          </p>
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '0.5rem',
-            }}
-          >
-            <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#007bff' }}>
-              ${product.price.toFixed(2)}
-            </div>
-            <div style={{ fontSize: '0.875rem', color: '#666' }}>
-              ⭐ {product.rating} ({product.reviews})
-            </div>
-          </div>
-
-          <div style={{ fontSize: '0.875rem', color: product.stock > 10 ? '#28a745' : '#dc3545', marginBottom: '0.75rem' }}>
-            {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-          </div>
+        <div
+          className={`${styles.stockStatus} ${
+            isStockAvailable ? styles.stockIn : styles.stockOut
+          }`}
+        >
+          {isStockAvailable ? `${product.stock} in stock` : 'Out of stock'}
         </div>
       </div>
 
-      {/* Add to Cart Button */}
-      <div style={{ padding: '0 1rem 1rem' }}>
+      <div className={styles.actions}>
         <button
           onClick={handleAddToCart}
-          disabled={product.stock === 0}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            backgroundColor: product.stock > 0 ? '#28a745' : '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: product.stock > 0 ? 'pointer' : 'not-allowed',
-            fontSize: '0.875rem',
-            fontWeight: 'bold',
-            opacity: product.stock === 0 ? 0.6 : 1,
-          }}
+          disabled={!isStockAvailable}
+          className={`${styles.button} ${
+            isStockAvailable ? styles.buttonEnabled : styles.buttonDisabled
+          }`}
         >
-          {product.stock > 0 ? '🛒 Add to Cart' : 'Out of Stock'}
+          {isStockAvailable ? 'Add to Cart' : 'Out of Stock'}
         </button>
       </div>
     </div>

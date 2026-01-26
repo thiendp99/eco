@@ -1,17 +1,18 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ProductFilters } from '../types/product';
+import { PaginatedProducts, ProductFilters } from '../types/product';
 import {
   fetchProducts,
   fetchProductById,
   getCategories,
 } from '../api/productsApi';
+import { Product } from '@ecommerce/shared';
 
 // Query keys for cache management
 export const productKeys = {
   all: ['products'] as const,
   lists: () => [...productKeys.all, 'list'] as const,
   list: (page: number, filters?: ProductFilters) =>
-    [...productKeys.lists(), { page, filters }] as const,
+    [...productKeys.lists(), page, filters] as const,
   details: () => [...productKeys.all, 'detail'] as const,
   detail: (id: string) => [...productKeys.details(), id] as const,
   categories: ['categories'] as const,
@@ -23,6 +24,7 @@ export const useProducts = (
   pageSize: number = 12,
   filters?: ProductFilters
 ) => {
+  console.log('useProducts', filters);
   return useQuery({
     queryKey: productKeys.list(page, filters),
     queryFn: () => fetchProducts(page, pageSize, filters),
@@ -42,12 +44,12 @@ export const useProduct = (id: string) => {
     staleTime: 10 * 60 * 1000, // 10 minutes
     // Initial data từ list nếu có
     initialData: () => {
-      const lists = queryClient.getQueriesData<any>({
+      const lists = queryClient.getQueriesData<PaginatedProducts>({
         queryKey: productKeys.lists(),
       });
       for (const [, data] of lists) {
         if (data?.products) {
-          const product = data.products.find((p: any) => p.id === id);
+          const product = data.products.find((p: Product) => p.id === id);
           if (product) return product;
         }
       }

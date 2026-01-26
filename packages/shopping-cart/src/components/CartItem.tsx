@@ -10,7 +10,7 @@ export const CartItemComponent = ({ item }: CartItemProps) => {
   const removeItem = useCartStore((state) => state.removeItem);
 
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity >= 0 && newQuantity <= item.stock) {
+    if (newQuantity >= 1 && newQuantity <= item.stock) {
       updateQuantity(item.id, newQuantity);
     }
   };
@@ -39,7 +39,13 @@ export const CartItemComponent = ({ item }: CartItemProps) => {
       {/* Product Info */}
       <div style={{ flex: 1 }}>
         <h4 style={{ margin: 0, marginBottom: '0.5rem' }}>{item.name}</h4>
-        <div style={{ color: '#666', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+        <div
+          style={{
+            color: '#666',
+            fontSize: '0.875rem',
+            marginBottom: '0.5rem',
+          }}
+        >
           ${item.price.toFixed(2)} each
         </div>
 
@@ -56,13 +62,15 @@ export const CartItemComponent = ({ item }: CartItemProps) => {
               backgroundColor: item.quantity <= 1 ? '#f5f5f5' : 'white',
             }}
           >
-            −
+            -
           </button>
 
           <input
             type="number"
             value={item.quantity}
-            onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 0)}
+            onChange={(e) =>
+              handleQuantityChange(parseInt(e.target.value) || 0)
+            }
             min="1"
             max={item.stock}
             style={{
@@ -82,13 +90,20 @@ export const CartItemComponent = ({ item }: CartItemProps) => {
               border: '1px solid #ccc',
               borderRadius: '4px',
               cursor: item.quantity >= item.stock ? 'not-allowed' : 'pointer',
-              backgroundColor: item.quantity >= item.stock ? '#f5f5f5' : 'white',
+              backgroundColor:
+                item.quantity >= item.stock ? '#f5f5f5' : 'white',
             }}
           >
             +
           </button>
 
-          <span style={{ fontSize: '0.875rem', color: '#666', marginLeft: '0.5rem' }}>
+          <span
+            style={{
+              fontSize: '0.875rem',
+              color: '#666',
+              marginLeft: '0.5rem',
+            }}
+          >
             (Max: {item.stock})
           </span>
         </div>

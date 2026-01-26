@@ -76,22 +76,46 @@ const Cart = () => {
       >
         <h3 style={{ marginBottom: '1rem' }}>Order Summary</h3>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '0.5rem',
+          }}
+        >
           <span>Subtotal ({totalItems} items):</span>
           <span>${totalPrice.toFixed(2)}</span>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '0.5rem',
+          }}
+        >
           <span>Shipping:</span>
           <span style={{ color: '#28a745' }}>FREE</span>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginBottom: '0.5rem',
+          }}
+        >
           <span>Tax (10%):</span>
           <span>${(totalPrice * 0.1).toFixed(2)}</span>
         </div>
 
-        <hr style={{ margin: '1rem 0', border: 'none', borderTop: '1px solid #ccc' }} />
+        <hr
+          style={{
+            margin: '1rem 0',
+            border: 'none',
+            borderTop: '1px solid #ccc',
+          }}
+        />
 
         <div
           style={{
@@ -103,7 +127,9 @@ const Cart = () => {
           }}
         >
           <span>Total:</span>
-          <span style={{ color: '#007bff' }}>${(totalPrice * 1.1).toFixed(2)}</span>
+          <span style={{ color: '#007bff' }}>
+            ${(totalPrice * 1.1).toFixed(2)}
+          </span>
         </div>
 
         <button

@@ -5,8 +5,7 @@ declare module 'productCatalog/ProductList' {
 }
 
 declare module 'productCatalog/ProductDetail' {
-  import type { ComponentType } from 'react';
-
+  import { ComponentType } from 'react';
   const ProductDetail: ComponentType<{ productId: string }>;
   export default ProductDetail;
 }
@@ -23,7 +22,8 @@ declare module 'shoppingCart/CartButton' {
   export default CartButton;
 }
 
-// Type for cart store
 declare module 'shoppingCart/CartStore' {
-  export const useCartStore: any;
+  import { StoreApi, UseBoundStore } from 'zustand';
+  import { CartStore } from '@ecommerce/shared';
+  export const useCartStore: UseBoundStore<StoreApi<CartStore>>;
 }

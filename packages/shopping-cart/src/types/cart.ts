@@ -24,7 +24,6 @@ export interface CartActions {
 
 export type CartStore = CartState &
   CartActions & {
-    // Computed values
     totalItems: number;
     totalPrice: number;
     getItemQuantity: (id: string) => number;

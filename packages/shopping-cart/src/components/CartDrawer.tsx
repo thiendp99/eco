@@ -74,7 +74,7 @@ export const CartDrawer = () => {
               cursor: 'pointer',
             }}
           >
-            ×
+            ✕
           </button>
         </div>
 

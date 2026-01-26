@@ -7,7 +7,7 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
@@ -29,17 +29,22 @@ export const LoginPage = () => {
   return (
     <div style={{ maxWidth: '400px', margin: '2rem auto' }}>
       <h2>Login</h2>
-      
-      <div style={{
-        padding: '1rem',
-        backgroundColor: '#e7f3ff',
-        borderRadius: '4px',
-        marginBottom: '1rem',
-        fontSize: '0.875rem',
-      }}>
-        <strong>Test Accounts:</strong><br />
-        Admin: admin@test.com / admin123<br />
+
+      <div
+        style={{
+          padding: '1rem',
+          backgroundColor: '#f7f3ff',
+          borderRadius: '4px',
+          marginBottom: '1rem',
+          fontSize: '0.875rem',
+        }}
+      >
+        <strong>Test Accounts:</strong>
+        <br />
+        Admin: admin@test.com
+        <br />
         User: user@test.com / user123
+        <br />
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -80,13 +85,15 @@ export const LoginPage = () => {
         </div>
 
         {error && (
-          <div style={{
-            padding: '0.5rem',
-            backgroundColor: '#f8d7da',
-            color: '#721c24',
-            borderRadius: '4px',
-            marginBottom: '1rem',
-          }}>
+          <div
+            style={{
+              padding: '0.5rem',
+              backgroundColor: '#f8d7da',
+              color: '#721c24',
+              borderRadius: '4px',
+              marginBottom: '1rem',
+            }}
+          >
             {error}
           </div>
         )}

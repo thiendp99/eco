@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { useProducts } from '../hooks/useProducts';
+import { useEffect, useState } from 'react';
 import { ProductCard } from './ProductCard';
 import { ProductFilters } from './ProductFilters';
 import { ProductFilters as Filters } from '../types/product';
+import { useProducts } from '../hooks/useProducts';
 
 const ProductList = () => {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Filters>({});
 
-  const { data, isLoading, error, isFetching } = useProducts(page, 12, filters);
+  useEffect(() => {}, [filters]);
+
+  const { data, isLoading, error, isFetching } = useProducts(page, 6, filters);
 
   const handleViewDetails = (id: string) => {
-    // In real app, this would navigate using React Router
     alert(`Navigate to product detail: ${id}`);
-    // window.location.href = `/products/${id}`;
   };
 
   if (error) {
@@ -27,7 +27,7 @@ const ProductList = () => {
 
   return (
     <div>
-      <h1 style={{ marginBottom: '1.5rem' }}>Product Catalog</h1>
+      <h2 style={{ marginBottom: '1.5rem' }}>Product Catalog</h2>
 
       <ProductFilters filters={filters} onFiltersChange={setFilters} />
 
@@ -37,7 +37,14 @@ const ProductList = () => {
         </div>
       ) : (
         <>
-          <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div
+            style={{
+              marginBottom: '1rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <div>
               Showing {data?.products.length} of {data?.total} products
             </div>
@@ -45,6 +52,7 @@ const ProductList = () => {
           </div>
 
           <div
+            data-testid="product-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
@@ -63,7 +71,13 @@ const ProductList = () => {
 
           {/* Pagination */}
           {data && data.totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '0.5rem',
+              }}
+            >
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
