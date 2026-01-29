@@ -1,45 +1,38 @@
 import { useCartStore } from '../stores/cartStore';
+import { useThemeStore } from '../stores/themeStore';
 
 const CartButton = () => {
   const totalItems = useCartStore((state) => state.totalItems);
   const toggleCart = useCartStore((state) => state.toggleCart);
+  const { theme } = useThemeStore();
+  const isDark = theme === 'dark';
 
   return (
     <button
       onClick={toggleCart}
-      style={{
-        position: 'relative',
-        padding: '0.5rem 1rem',
-        backgroundColor: '#007bff',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        fontSize: '1rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.5rem',
-      }}
+      className={`
+        relative px-6 py-3 rounded-xl font-bold text-base uppercase tracking-wide
+        flex items-center gap-3 text-white
+        transition-all duration-300
+        shadow-lg hover:shadow-xl hover:-translate-y-1
+        ${isDark
+          ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
+          : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
+        }
+      `}
     >
-      🛒 Cart
+      <span className="text-xl">🛒</span>
+      <span>Cart</span>
       {totalItems > 0 && (
-        <span
-          style={{
-            position: 'absolute',
-            top: '-8px',
-            right: '-8px',
-            backgroundColor: '#dc3545',
-            color: 'white',
-            borderRadius: '50%',
-            width: '24px',
-            height: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '0.75rem',
-            fontWeight: 'bold',
-          }}
-        >
+        <span className={`
+          absolute -top-2 -right-2 min-w-[28px] h-7
+          flex items-center justify-center
+          px-2 rounded-full
+          text-xs font-extrabold text-white
+          bg-gradient-to-r from-red-600 to-red-700
+          shadow-lg animate-bounce
+          ${isDark ? 'border-2 border-gray-900' : 'border-2 border-white'}
+        `}>
           {totalItems > 99 ? '99+' : totalItems}
         </span>
       )}

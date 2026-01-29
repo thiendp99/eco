@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ProductFilters as Filters } from '../types/product';
 import { useCategories } from '../hooks/useProducts';
+import { useThemeStore } from '../stores/themeStore';
 
 interface ProductFiltersProps {
   filters: Filters;
@@ -13,6 +14,8 @@ export const ProductFilters = ({
 }: ProductFiltersProps) => {
   const { data: categories } = useCategories();
   const [localFilters, setLocalFilters] = useState(filters);
+  const { theme } = useThemeStore();
+  const isDark = theme === 'dark';
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -28,96 +31,63 @@ export const ProductFilters = ({
     onFiltersChange(emptyFilters);
   };
 
-  const inputStyle = {
-    width: '100%',
-    padding: '0.625rem 0.75rem',
-    borderRadius: '6px',
-    border: '1px solid #d0d0d0',
-    fontSize: '0.9rem',
-    transition: 'all 0.2s ease',
-    outline: 'none',
-  };
-
-  const labelStyle = {
-    display: 'block',
-    marginBottom: '0.5rem',
-    fontSize: '0.875rem',
-    fontWeight: 500,
-    color: '#333',
-  };
-
   const hasActiveFilters = Object.keys(localFilters).some(
     (key) => localFilters[key as keyof Filters]
   );
 
   return (
-    <div
-      style={{
-        padding: '1.75rem',
-        backgroundColor: '#f9f9f9',
-        borderRadius: '10px',
-        marginBottom: '1.5rem',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.25rem',
-        }}
-      >
-        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>
-          Filters
-        </h3>
-        {hasActiveFilters && (
-          <span
-            style={{
-              fontSize: '0.75rem',
-              color: '#666',
-              backgroundColor: '#e9ecef',
-              padding: '0.25rem 0.5rem',
-              borderRadius: '4px',
-            }}
-          >
-            Active
-          </span>
-        )}
+    <div className={`
+      p-8 rounded-2xl mb-8 border transition-all duration-300
+      ${isDark 
+        ? 'bg-gray-800 border-gray-700 shadow-2xl' 
+        : 'bg-white border-gray-100 shadow-lg'
+      }
+    `}>
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3.5">
+          <h3 className={`text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            🔍 Filters
+          </h3>
+          {hasActiveFilters && (
+            <span className="animate-pulse px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md">
+              {Object.keys(localFilters).length} Active
+            </span>
+          )}
+        </div>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gap: '1.25rem',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        }}
-      >
-        {/* Search */}
-        <div style={{ gridColumn: 'span 2' }}>
-          <label style={labelStyle}>Search</label>
+      {/* Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 items-start">
+        {/* Search - Full Width */}
+        <div className="md:col-span-2 lg:col-span-2 xl:col-span-2">
+          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Search Products
+          </label>
           <input
             type="text"
             value={localFilters.search || ''}
             onChange={(e) =>
               setLocalFilters({ ...localFilters, search: e.target.value })
             }
-            placeholder="Search products..."
-            style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#007bff';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#d0d0d0';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
+            placeholder="Search by name or description..."
+            className={`
+              w-full px-4 py-3.5 rounded-xl border font-medium
+              transition-all duration-300
+              focus:outline-none focus:ring-4 focus:-translate-y-0.5
+              ${isDark
+                ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-indigo-500/20'
+                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20'
+              }
+            `}
           />
         </div>
 
         {/* Category */}
-        <div>
-          <label style={labelStyle}>Category</label>
+        <div className="lg:col-span-1">
+          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Category
+          </label>
           <select
             value={localFilters.category || ''}
             onChange={(e) =>
@@ -126,14 +96,20 @@ export const ProductFilters = ({
                 category: e.target.value || undefined,
               })
             }
-            style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#007bff';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#d0d0d0';
-              e.currentTarget.style.boxShadow = 'none';
+            className={`
+              w-full px-4 py-3.5 rounded-xl border font-medium cursor-pointer
+              appearance-none bg-no-repeat bg-right pr-10
+              transition-all duration-300
+              focus:outline-none focus:ring-4 focus:-translate-y-0.5
+              ${isDark
+                ? 'bg-gray-900 border-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500/20'
+                : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20'
+              }
+            `}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23999' : '%23666'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+              backgroundPosition: 'right 1rem center',
+              backgroundSize: '1.25rem',
             }}
           >
             <option value="">All Categories</option>
@@ -145,81 +121,37 @@ export const ProductFilters = ({
           </select>
         </div>
 
-        {/* Price Range */}
-        <div>
-          <label style={labelStyle}>Min Price</label>
-          <input
-            type="number"
-            value={localFilters.minPrice || ''}
-            onChange={(e) =>
-              setLocalFilters({
-                ...localFilters,
-                minPrice: e.target.value ? Number(e.target.value) : undefined,
-              })
-            }
-            placeholder="0"
-            min="0"
-            style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#007bff';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#d0d0d0';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          />
-        </div>
-
-        <div>
-          <label style={labelStyle}>Max Price</label>
-          <input
-            type="number"
-            value={localFilters.maxPrice || ''}
-            onChange={(e) =>
-              setLocalFilters({
-                ...localFilters,
-                maxPrice: e.target.value ? Number(e.target.value) : undefined,
-              })
-            }
-            placeholder="9999"
-            min="0"
-            style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#007bff';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#d0d0d0';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          />
-        </div>
-
-        {/* Sort */}
-        <div>
-          <label style={labelStyle}>Sort By</label>
+        {/* Sort By */}
+        <div className="lg:col-span-1">
+          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Sort By
+          </label>
           <select
             value={localFilters.sortBy || ''}
             onChange={(e) =>
               setLocalFilters({
                 ...localFilters,
-                sortBy:
-                  (e.target.value || undefined) as
-                    | 'name'
-                    | 'price'
-                    | 'rating'
-                    | undefined,
+                sortBy: (e.target.value || undefined) as
+                  | 'name'
+                  | 'price'
+                  | 'rating'
+                  | undefined,
               })
             }
-            style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#007bff';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#d0d0d0';
-              e.currentTarget.style.boxShadow = 'none';
+            className={`
+              w-full px-4 py-3.5 rounded-xl border font-medium cursor-pointer
+              appearance-none bg-no-repeat bg-right pr-10
+              transition-all duration-300
+              focus:outline-none focus:ring-4 focus:-translate-y-0.5
+              ${isDark
+                ? 'bg-gray-900 border-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500/20'
+                : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20'
+              }
+            `}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23999' : '%23666'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+              backgroundPosition: 'right 1rem center',
+              backgroundSize: '1.25rem',
             }}
           >
             <option value="">Default</option>
@@ -229,8 +161,11 @@ export const ProductFilters = ({
           </select>
         </div>
 
-        <div>
-          <label style={labelStyle}>Order</label>
+        {/* Order */}
+        <div className="lg:col-span-1">
+          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Order
+          </label>
           <select
             value={localFilters.sortOrder || 'asc'}
             onChange={(e) =>
@@ -239,81 +174,110 @@ export const ProductFilters = ({
                 sortOrder: e.target.value as 'asc' | 'desc',
               })
             }
-            style={inputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = '#007bff';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(0, 123, 255, 0.1)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '#d0d0d0';
-              e.currentTarget.style.boxShadow = 'none';
+            className={`
+              w-full px-4 py-3.5 rounded-xl border font-medium cursor-pointer
+              appearance-none bg-no-repeat bg-right pr-10
+              transition-all duration-300
+              focus:outline-none focus:ring-4 focus:-translate-y-0.5
+              ${isDark
+                ? 'bg-gray-900 border-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500/20'
+                : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20'
+              }
+            `}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23999' : '%23666'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+              backgroundPosition: 'right 1rem center',
+              backgroundSize: '1.25rem',
             }}
           >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
+            <option value="asc">↑ Ascending</option>
+            <option value="desc">↓ Descending</option>
           </select>
+        </div>
+
+        {/* Price Range */}
+        <div className="lg:col-span-2">
+          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Price Range
+          </label>
+          <div className="flex items-center gap-2.5">
+            <input
+              type="number"
+              value={localFilters.minPrice || ''}
+              onChange={(e) =>
+                setLocalFilters({
+                  ...localFilters,
+                  minPrice: e.target.value ? Number(e.target.value) : undefined,
+                })
+              }
+              placeholder="Min ($)"
+              min="0"
+              className={`
+                flex-1 px-4 py-3.5 rounded-xl border font-medium
+                transition-all duration-300
+                focus:outline-none focus:ring-4 focus:-translate-y-0.5
+                ${isDark
+                  ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-indigo-500/20'
+                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20'
+                }
+              `}
+            />
+            <span className={`text-xl font-bold ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>—</span>
+            <input
+              type="number"
+              value={localFilters.maxPrice || ''}
+              onChange={(e) =>
+                setLocalFilters({
+                  ...localFilters,
+                  maxPrice: e.target.value ? Number(e.target.value) : undefined,
+                })
+              }
+              placeholder="Max ($)"
+              min="0"
+              className={`
+                flex-1 px-4 py-3.5 rounded-xl border font-medium
+                transition-all duration-300
+                focus:outline-none focus:ring-4 focus:-translate-y-0.5
+                ${isDark
+                  ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-indigo-500/20'
+                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20'
+                }
+              `}
+            />
+          </div>
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'flex',
-          gap: '0.75rem',
-          marginTop: '1.5rem',
-          flexWrap: 'wrap',
-        }}
-      >
-        <button
-          onClick={handleApply}
-          style={{
-            padding: '0.625rem 1.75rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: 500,
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#0056b3';
-            e.currentTarget.style.transform = 'translateY(-1px)';
-            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0, 123, 255, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#007bff';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
-        >
-          Apply Filters
-        </button>
+      {/* Actions */}
+      <div className="flex justify-end gap-3.5 mt-8 pt-8 border-t-2 border-gray-200 dark:border-gray-700">
         <button
           onClick={handleReset}
-          style={{
-            padding: '0.625rem 1.75rem',
-            backgroundColor: '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: 500,
-            transition: 'all 0.2s ease',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#5a6268';
-            e.currentTarget.style.transform = 'translateY(-1px)';
-            e.currentTarget.style.boxShadow = '0 2px 4px rgba(108, 117, 125, 0.3)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#6c757d';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
+          className={`
+            px-8 py-3.5 rounded-xl text-sm font-bold uppercase tracking-wide
+            border-2 border-transparent
+            transition-all duration-300
+            ${isDark
+              ? 'text-gray-400 hover:bg-gray-700 hover:text-white hover:border-gray-600'
+              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300'
+            }
+          `}
         >
-          Reset
+          ✕ Reset
+        </button>
+        <button
+          onClick={handleApply}
+          className={`
+            px-8 py-3.5 rounded-xl text-sm font-bold uppercase tracking-wide
+            text-white shadow-lg
+            transition-all duration-300
+            hover:-translate-y-0.5 hover:shadow-xl
+            ${isDark
+              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
+              : 'bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700'
+            }
+          `}
+        >
+          ✓ Apply Filters
         </button>
       </div>
     </div>

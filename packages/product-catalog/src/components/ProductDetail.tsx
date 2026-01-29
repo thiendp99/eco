@@ -1,4 +1,6 @@
 import { useProduct } from '../hooks/useProducts';
+import { useCartStore } from 'shoppingCart/CartStore';
+import { useThemeStore } from '../stores/themeStore';
 
 interface ProductDetailProps {
   productId: string;
@@ -6,200 +8,225 @@ interface ProductDetailProps {
 
 const ProductDetail = ({ productId }: ProductDetailProps) => {
   const { data: product, isLoading, error } = useProduct(productId);
+  const addItem = useCartStore((state) => state.addItem);
+  const openCart = useCartStore((state) => state.openCart);
+  const { theme } = useThemeStore();
+  const isDark = theme === 'dark';
+
+  const handleAddToCart = () => {
+    if (product && product.stock > 0) {
+      addItem(product);
+      openCart();
+    }
+  };
 
   if (isLoading) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <div style={{ fontSize: '1.5rem' }}>Loading product details...</div>
+      <div className="flex items-center justify-center min-h-[60vh] p-8">
+        <div className="text-center">
+          <div className={`
+            w-16 h-16 mx-auto mb-6 rounded-full
+            border-4 border-t-4 animate-spin
+            ${isDark ? 'border-gray-700 border-t-indigo-500' : 'border-gray-200 border-t-blue-600'}
+          `} />
+          <div className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            Loading product details...
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error || !product) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', color: '#dc3545' }}>
-        <h2>Product not found</h2>
-        <p>{error instanceof Error ? error.message : 'Unknown error'}</p>
+      <div className="flex items-center justify-center min-h-[60vh] p-8">
+        <div className={`
+          max-w-lg p-8 rounded-2xl border-2 border-red-500
+          ${isDark ? 'bg-gray-800 shadow-2xl' : 'bg-white shadow-xl'}
+        `}>
+          <div className="text-5xl mb-4 text-center">⚠️</div>
+          <h2 className="text-2xl font-bold text-red-500 mb-4 text-center">
+            Product not found
+          </h2>
+          <p className={`text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            {error instanceof Error ? error.message : 'Unknown error'}
+          </p>
+        </div>
       </div>
     );
   }
 
+  const formattedPrice = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(product.price);
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div
-        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}
-      >
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      {/* Product Main Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
         {/* Product Image */}
         <div>
-          <img
-            src={product.image}
-            alt={product.name}
-            style={{
-              width: '100%',
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            }}
-          />
+          <div className={`
+            relative rounded-2xl overflow-hidden
+            ${isDark 
+              ? 'shadow-2xl bg-gradient-to-br from-gray-800 to-gray-900' 
+              : 'shadow-xl bg-gradient-to-br from-gray-100 to-gray-300'
+            }
+          `}>
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full aspect-square object-cover"
+            />
+            {product.stock === 0 && (
+              <div className="absolute top-4 left-4 px-4 py-2 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white font-bold text-sm uppercase tracking-wide shadow-lg">
+                Sold Out
+              </div>
+            )}
+            {product.stock > 0 && product.stock < 5 && (
+              <div className="absolute top-4 left-4 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-extrabold text-sm uppercase tracking-wide shadow-lg">
+                Only {product.stock} left
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Product Info */}
         <div>
-          <div
-            style={{
-              fontSize: '0.875rem',
-              color: '#666',
-              textTransform: 'uppercase',
-              marginBottom: '0.5rem',
-            }}
-          >
+          <div className={`text-xs font-bold uppercase tracking-widest mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
             {product.category}
           </div>
 
-          <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+          <h1 className={`text-4xl font-extrabold mb-5 tracking-tight leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {product.name}
           </h1>
 
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              marginBottom: '1rem',
-            }}
-          >
-            <div
-              style={{ fontSize: '2rem', fontWeight: 'bold', color: '#007bff' }}
-            >
-              ${product.price.toFixed(2)}
+          <div className={`
+            flex items-center gap-6 py-4 mb-6
+            border-t border-b
+            ${isDark ? 'border-gray-700' : 'border-gray-200'}
+          `}>
+            <div className="text-4xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+              {formattedPrice}
             </div>
-            <div>
-              ⭐ {product.rating} ({product.reviews} reviews)
+            <div className={`flex items-center gap-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
+              <span className="text-yellow-400 text-xl">★</span>
+              <span className="font-semibold text-lg">{product.rating}</span>
+              <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                ({product.reviews} reviews)
+              </span>
             </div>
           </div>
 
-          <p
-            style={{
-              fontSize: '1.125rem',
-              lineHeight: '1.6',
-              marginBottom: '1.5rem',
-            }}
-          >
+          <p className={`text-lg leading-relaxed mb-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
             {product.description}
           </p>
 
-          <div
-            style={{
-              padding: '1rem',
-              backgroundColor: '#f9f9f9',
-              borderRadius: '8px',
-              marginBottom: '1.5rem',
-            }}
-          >
-            <div style={{ marginBottom: '0.5rem' }}>
-              <strong>Stock:</strong>{' '}
-              <span
-                style={{
-                  color: product.stock > 10 ? '#28a745' : '#dc3545',
-                }}
-              >
-                {product.stock > 0
-                  ? `${product.stock} available`
-                  : 'Out of stock'}
+          <div className={`
+            p-6 rounded-xl mb-8 border
+            ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}
+          `}>
+            <div className="flex items-center gap-3 mb-4">
+              <strong className={isDark ? 'text-white' : 'text-gray-900'}>Stock:</strong>
+              <span className={`
+                px-3 py-1 rounded-lg font-semibold
+                ${product.stock > 10 
+                  ? 'bg-green-100 text-green-700' 
+                  : 'bg-red-100 text-red-700'
+                }
+              `}>
+                {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
               </span>
             </div>
-            <div>
-              <strong>SKU:</strong> {product.id}
+            <div className="flex items-center gap-3">
+              <strong className={isDark ? 'text-white' : 'text-gray-900'}>SKU:</strong>
+              <span className={`font-mono ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {product.id}
+              </span>
             </div>
           </div>
 
           <button
             disabled={product.stock === 0}
-            style={{
-              width: '100%',
-              padding: '1rem',
-              fontSize: '1.125rem',
-              backgroundColor: product.stock > 0 ? '#28a745' : '#6c757d',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: product.stock > 0 ? 'pointer' : 'not-allowed',
-            }}
-            onClick={() => {
-              if (product.stock > 0) {
-                alert(`Added ${product.name} to cart!`);
-                // In real app: dispatch to cart store
-                // useCartStore.getState().addItem(product);
+            onClick={handleAddToCart}
+            className={`
+              w-full py-5 rounded-xl text-lg font-bold uppercase tracking-widest
+              transition-all duration-300
+              ${product.stock > 0
+                ? 'bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white shadow-lg hover:shadow-xl hover:-translate-y-1'
+                : isDark
+                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }
-            }}
+            `}
           >
-            {product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+            {product.stock > 0 ? '🛒 Add to Cart' : 'Out of Stock'}
           </button>
         </div>
       </div>
 
       {/* Additional Product Information */}
-      <div style={{ marginTop: '3rem' }}>
-        <h2 style={{ marginBottom: '1rem' }}>Product Details</h2>
-        <div
-          style={{
-            padding: '1.5rem',
-            backgroundColor: '#f9f9f9',
-            borderRadius: '8px',
-          }}
-        >
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <tbody>
-              <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td
-                  style={{
-                    padding: '0.75rem',
-                    fontWeight: 'bold',
-                    width: '30%',
-                  }}
-                >
-                  Category
-                </td>
-                <td style={{ padding: '0.75rem' }}>{product.category}</td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
-                  Price
-                </td>
-                <td style={{ padding: '0.75rem' }}>
-                  ${product.price.toFixed(2)}
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
-                  Rating
-                </td>
-                <td style={{ padding: '0.75rem' }}>
-                  {product.rating} ({product.reviews} reviews)
-                </td>
-              </tr>
-              <tr style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
-                  Availability
-                </td>
-                <td style={{ padding: '0.75rem' }}>
+      <div className={`
+        p-8 rounded-2xl border
+        ${isDark 
+          ? 'bg-gray-800 border-gray-700 shadow-2xl' 
+          : 'bg-white border-gray-200 shadow-lg'
+        }
+      `}>
+        <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          Product Details
+        </h2>
+        <table className="w-full">
+          <tbody>
+            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <td className={`py-4 font-semibold w-1/3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Category
+              </td>
+              <td className={`py-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {product.category}
+              </td>
+            </tr>
+            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Price
+              </td>
+              <td className={`py-4 font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                {formattedPrice}
+              </td>
+            </tr>
+            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Rating
+              </td>
+              <td className={`py-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                <span className="text-yellow-400">★</span> {product.rating} ({product.reviews} reviews)
+              </td>
+            </tr>
+            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Availability
+              </td>
+              <td className="py-4">
+                <span className={`font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
-                </td>
-              </tr>
-              <tr>
-                <td style={{ padding: '0.75rem', fontWeight: 'bold' }}>
-                  Added Date
-                </td>
-                <td style={{ padding: '0.75rem' }}>
-                  {new Date(product.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                Added Date
+              </td>
+              <td className={`py-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                {new Date(product.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
