@@ -1,5 +1,5 @@
 import { useCartStore } from '../stores/cartStore';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '@ecommerce/shared';
 import { CartItemComponent } from './CartItem';
 import { useEffect } from 'react';
 
@@ -49,21 +49,26 @@ export const CartDrawer = () => {
       />
 
       {/* Drawer */}
-      <div className={`
+      <div
+        className={`
         fixed top-0 right-0 bottom-0 w-full max-w-md
         flex flex-col z-[1000]
         shadow-2xl animate-slideInRight
         ${isDark ? 'bg-gray-900' : 'bg-white'}
-      `}>
+      `}
+      >
         {/* Header */}
-        <div className={`
+        <div
+          className={`
           p-6 flex justify-between items-center
-          ${isDark 
-            ? 'bg-gradient-to-br from-gray-800 to-gray-900' 
-            : 'bg-gradient-to-br from-indigo-500 to-purple-600'
+          ${
+            isDark
+              ? 'bg-gradient-to-br from-gray-800 to-gray-900'
+              : 'bg-gradient-to-br from-indigo-500 to-purple-600'
           }
           text-white shadow-lg
-        `}>
+        `}
+        >
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight">
               🛒 Your Cart
@@ -81,17 +86,23 @@ export const CartDrawer = () => {
         </div>
 
         {/* Items */}
-        <div className={`
+        <div
+          className={`
           flex-1 overflow-y-auto
           ${isDark ? 'bg-gray-900' : 'bg-gray-50'}
-        `}>
+        `}
+        >
           {items.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center p-12 text-center">
               <div className="text-6xl mb-4 animate-bounce">🛒</div>
-              <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <h3
+                className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}
+              >
                 Your cart is empty
               </h3>
-              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              <p
+                className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+              >
                 Start shopping to add items!
               </p>
             </div>
@@ -102,9 +113,10 @@ export const CartDrawer = () => {
                   key={item.id}
                   className={`
                     rounded-xl overflow-hidden border
-                    ${isDark 
-                      ? 'bg-gray-800 border-gray-700' 
-                      : 'bg-white border-gray-200'
+                    ${
+                      isDark
+                        ? 'bg-gray-800 border-gray-700'
+                        : 'bg-white border-gray-200'
                     }
                     shadow-md
                   `}
@@ -118,30 +130,43 @@ export const CartDrawer = () => {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className={`
+          <div
+            className={`
             p-6 border-t-2 shadow-2xl
-            ${isDark 
-              ? 'bg-gray-800 border-gray-700' 
-              : 'bg-white border-gray-200'
+            ${
+              isDark
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-white border-gray-200'
             }
-          `}>
+          `}
+          >
             {/* Subtotal */}
-            <div className={`flex justify-between mb-3 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <div
+              className={`flex justify-between mb-3 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+            >
               <span>Subtotal:</span>
-              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <span
+                className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}
+              >
                 ${totalPrice.toFixed(2)}
               </span>
             </div>
 
             {/* Tax */}
-            <div className={`flex justify-between mb-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+            <div
+              className={`flex justify-between mb-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+            >
               <span>Tax (10%):</span>
-              <span className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              <span
+                className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}
+              >
                 ${tax.toFixed(2)}
               </span>
             </div>
 
-            <hr className={`my-4 border-2 ${isDark ? 'border-gray-700' : 'border-gray-200'}`} />
+            <hr
+              className={`my-4 border-2 ${isDark ? 'border-gray-700' : 'border-gray-200'}`}
+            />
 
             {/* Total */}
             <div className="flex justify-between text-xl font-extrabold mb-6 p-4 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600">
@@ -160,7 +185,9 @@ export const CartDrawer = () => {
               💳 Checkout
             </button>
 
-            <p className={`mt-4 text-xs text-center ${isDark ? 'text-gray-500' : 'text-gray-600'}`}>
+            <p
+              className={`mt-4 text-xs text-center ${isDark ? 'text-gray-500' : 'text-gray-600'}`}
+            >
               🔒 Secure checkout
             </p>
           </div>

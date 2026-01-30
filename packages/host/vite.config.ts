@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => {
           'react-router-dom': { singleton: true },
           zustand: { singleton: true },
           '@tanstack/react-query': { singleton: true },
-          //@ecommerce/shared: { singleton: true } // Share cả package type chung để đảm bảo consistent (optional logic)
+          '@ecommerce/shared': { singleton: true },
         },
       }),
     ],

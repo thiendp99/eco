@@ -1,6 +1,6 @@
 import { useProduct } from '../hooks/useProducts';
 import { useCartStore } from 'shoppingCart/CartStore';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '@ecommerce/shared';
 
 interface ProductDetailProps {
   productId: string;
@@ -22,15 +22,19 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] p-8">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className={`
-            w-16 h-16 mx-auto mb-6 rounded-full
-            border-4 border-t-4 animate-spin
-            ${isDark ? 'border-gray-700 border-t-indigo-500' : 'border-gray-200 border-t-blue-600'}
-          `} />
-          <div className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Loading product details...
+          <div
+            className={`
+            w-12 h-12 mx-auto mb-4 rounded-full
+            border-2 border-t-transparent animate-spin
+            ${isDark ? 'border-gray-700' : 'border-gray-300'}
+          `}
+          />
+          <div
+            className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+          >
+            Loading...
           </div>
         </div>
       </div>
@@ -40,16 +44,21 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
   if (error || !product) {
     return (
       <div className="flex items-center justify-center min-h-[60vh] p-8">
-        <div className={`
-          max-w-lg p-8 rounded-2xl border-2 border-red-500
-          ${isDark ? 'bg-gray-800 shadow-2xl' : 'bg-white shadow-xl'}
-        `}>
-          <div className="text-5xl mb-4 text-center">⚠️</div>
-          <h2 className="text-2xl font-bold text-red-500 mb-4 text-center">
+        <div
+          className={`max-w-md p-8 text-center ${isDark ? 'bg-gray-900' : 'bg-white'}`}
+        >
+          <div className="text-4xl mb-4">⚠️</div>
+          <h2
+            className={`text-xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}
+          >
             Product not found
           </h2>
-          <p className={`text-center ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            {error instanceof Error ? error.message : 'Unknown error'}
+          <p
+            className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+          >
+            {error instanceof Error
+              ? error.message
+              : 'The product you are looking for does not exist'}
           </p>
         </div>
       </div>
@@ -62,171 +71,264 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
   }).format(product.price);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Product Main Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
-        {/* Product Image */}
-        <div>
-          <div className={`
-            relative rounded-2xl overflow-hidden
-            ${isDark 
-              ? 'shadow-2xl bg-gradient-to-br from-gray-800 to-gray-900' 
-              : 'shadow-xl bg-gradient-to-br from-gray-100 to-gray-300'
-            }
-          `}>
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full aspect-square object-cover"
-            />
-            {product.stock === 0 && (
-              <div className="absolute top-4 left-4 px-4 py-2 rounded-full bg-gradient-to-r from-red-600 to-red-700 text-white font-bold text-sm uppercase tracking-wide shadow-lg">
-                Sold Out
+    <div className={`min-h-screen ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        {/* Breadcrumb - Shopify style */}
+        <nav className="mb-8">
+          <ol className="flex items-center gap-2 text-sm">
+            <li>
+              <a
+                href="/"
+                className={`hover:underline ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+              >
+                Home
+              </a>
+            </li>
+            <li className={isDark ? 'text-gray-600' : 'text-gray-400'}>/</li>
+            <li>
+              <a
+                href="/products"
+                className={`hover:underline ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+              >
+                Products
+              </a>
+            </li>
+            <li className={isDark ? 'text-gray-600' : 'text-gray-400'}>/</li>
+            <li className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+              {product.category}
+            </li>
+          </ol>
+        </nav>
+
+        {/* Product Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+          {/* Product Image */}
+          <div className="lg:sticky lg:top-8 h-fit">
+            <div className="relative aspect-square overflow-hidden bg-gray-50">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+              {product.stock === 0 && (
+                <div className="absolute top-4 left-4 px-3 py-1.5 bg-white text-gray-900 text-sm font-medium">
+                  Sold out
+                </div>
+              )}
+              {product.stock > 0 && product.stock < 5 && (
+                <div className="absolute top-4 left-4 px-3 py-1.5 bg-amber-400 text-gray-900 text-sm font-medium">
+                  Only {product.stock} left
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Product Info */}
+          <div>
+            {/* Category */}
+            <div
+              className={`text-sm uppercase tracking-wider mb-3 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+            >
+              {product.category}
+            </div>
+
+            {/* Product Title */}
+            <h1
+              className={`text-3xl lg:text-4xl font-normal mb-4 leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}
+            >
+              {product.name}
+            </h1>
+
+            {/* Rating */}
+            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-gray-200 dark:border-gray-800">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <span
+                    key={i}
+                    className={`text-base ${
+                      i < Math.floor(product.rating)
+                        ? 'text-yellow-400'
+                        : isDark
+                          ? 'text-gray-700'
+                          : 'text-gray-300'
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
               </div>
-            )}
-            {product.stock > 0 && product.stock < 5 && (
-              <div className="absolute top-4 left-4 px-4 py-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-extrabold text-sm uppercase tracking-wide shadow-lg">
-                Only {product.stock} left
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Product Info */}
-        <div>
-          <div className={`text-xs font-bold uppercase tracking-widest mb-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            {product.category}
-          </div>
-
-          <h1 className={`text-4xl font-extrabold mb-5 tracking-tight leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            {product.name}
-          </h1>
-
-          <div className={`
-            flex items-center gap-6 py-4 mb-6
-            border-t border-b
-            ${isDark ? 'border-gray-700' : 'border-gray-200'}
-          `}>
-            <div className="text-4xl font-extrabold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
-              {formattedPrice}
-            </div>
-            <div className={`flex items-center gap-2 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-              <span className="text-yellow-400 text-xl">★</span>
-              <span className="font-semibold text-lg">{product.rating}</span>
-              <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
-                ({product.reviews} reviews)
+              <span
+                className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+              >
+                {product.rating} ({product.reviews} reviews)
               </span>
             </div>
-          </div>
 
-          <p className={`text-lg leading-relaxed mb-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            {product.description}
-          </p>
-
-          <div className={`
-            p-6 rounded-xl mb-8 border
-            ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-50 border-gray-200'}
-          `}>
-            <div className="flex items-center gap-3 mb-4">
-              <strong className={isDark ? 'text-white' : 'text-gray-900'}>Stock:</strong>
-              <span className={`
-                px-3 py-1 rounded-lg font-semibold
-                ${product.stock > 10 
-                  ? 'bg-green-100 text-green-700' 
-                  : 'bg-red-100 text-red-700'
-                }
-              `}>
-                {product.stock > 0 ? `${product.stock} available` : 'Out of stock'}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <strong className={isDark ? 'text-white' : 'text-gray-900'}>SKU:</strong>
-              <span className={`font-mono ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {product.id}
-              </span>
-            </div>
-          </div>
-
-          <button
-            disabled={product.stock === 0}
-            onClick={handleAddToCart}
-            className={`
-              w-full py-5 rounded-xl text-lg font-bold uppercase tracking-widest
-              transition-all duration-300
-              ${product.stock > 0
-                ? 'bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white shadow-lg hover:shadow-xl hover:-translate-y-1'
-                : isDark
-                ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              }
-            `}
-          >
-            {product.stock > 0 ? '🛒 Add to Cart' : 'Out of Stock'}
-          </button>
-        </div>
-      </div>
-
-      {/* Additional Product Information */}
-      <div className={`
-        p-8 rounded-2xl border
-        ${isDark 
-          ? 'bg-gray-800 border-gray-700 shadow-2xl' 
-          : 'bg-white border-gray-200 shadow-lg'
-        }
-      `}>
-        <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          Product Details
-        </h2>
-        <table className="w-full">
-          <tbody>
-            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <td className={`py-4 font-semibold w-1/3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Category
-              </td>
-              <td className={`py-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {product.category}
-              </td>
-            </tr>
-            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Price
-              </td>
-              <td className={`py-4 font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            {/* Price */}
+            <div className="mb-6">
+              <div
+                className={`text-3xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}
+              >
                 {formattedPrice}
-              </td>
-            </tr>
-            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Rating
-              </td>
-              <td className={`py-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                <span className="text-yellow-400">★</span> {product.rating} ({product.reviews} reviews)
-              </td>
-            </tr>
-            <tr className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
-              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Availability
-              </td>
-              <td className="py-4">
-                <span className={`font-semibold ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="mb-8">
+              <p
+                className={`text-base leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+              >
+                {product.description}
+              </p>
+            </div>
+
+            {/* Stock Status */}
+            <div className="mb-6">
+              <div className="flex items-center gap-2 text-sm">
+                <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                  Availability:
                 </span>
-              </td>
-            </tr>
-            <tr>
-              <td className={`py-4 font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Added Date
-              </td>
-              <td className={`py-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {new Date(product.createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                <span
+                  className={`font-medium ${
+                    product.stock > 0
+                      ? 'text-green-600 dark:text-green-500'
+                      : 'text-red-600 dark:text-red-500'
+                  }`}
+                >
+                  {product.stock > 0
+                    ? `In stock (${product.stock} available)`
+                    : 'Out of stock'}
+                </span>
+              </div>
+            </div>
+
+            {/* Add to Cart Button - Shopify style */}
+            <div className="mb-8">
+              <button
+                disabled={product.stock === 0}
+                onClick={handleAddToCart}
+                className={`
+                  w-full py-4 px-6 text-base font-medium
+                  transition-all duration-200
+                  ${
+                    product.stock > 0
+                      ? isDark
+                        ? 'bg-white text-gray-900 hover:bg-gray-100'
+                        : 'bg-gray-900 text-white hover:bg-gray-800'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600'
+                  }
+                `}
+              >
+                {product.stock > 0 ? 'Add to cart' : 'Sold out'}
+              </button>
+            </div>
+
+            {/* Additional Info - Shopify collapsible style */}
+            <div
+              className={`border-t ${isDark ? 'border-gray-800' : 'border-gray-200'}`}
+            >
+              {/* Product Details */}
+              <details
+                className={`group border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`}
+              >
+                <summary
+                  className={`
+                  py-4 cursor-pointer flex items-center justify-between
+                  text-base font-medium
+                  ${isDark ? 'text-white' : 'text-gray-900'}
+                `}
+                >
+                  <span>Product Details</span>
+                  <svg
+                    className="w-5 h-5 transition-transform group-open:rotate-180"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div
+                  className={`pb-4 text-sm space-y-3 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                >
+                  <div className="flex justify-between">
+                    <span>Category:</span>
+                    <span
+                      className={isDark ? 'text-gray-300' : 'text-gray-900'}
+                    >
+                      {product.category}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>SKU:</span>
+                    <span
+                      className={`font-mono text-xs ${isDark ? 'text-gray-300' : 'text-gray-900'}`}
+                    >
+                      {product.id}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Added:</span>
+                    <span
+                      className={isDark ? 'text-gray-300' : 'text-gray-900'}
+                    >
+                      {new Date(product.createdAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </details>
+
+              {/* Shipping & Returns */}
+              <details
+                className={`group border-b ${isDark ? 'border-gray-800' : 'border-gray-200'}`}
+              >
+                <summary
+                  className={`
+                  py-4 cursor-pointer flex items-center justify-between
+                  text-base font-medium
+                  ${isDark ? 'text-white' : 'text-gray-900'}
+                `}
+                >
+                  <span>Shipping & Returns</span>
+                  <svg
+                    className="w-5 h-5 transition-transform group-open:rotate-180"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </summary>
+                <div
+                  className={`pb-4 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                >
+                  <p className="mb-3">
+                    Free shipping on orders over $50. Standard delivery in 5-7
+                    business days.
+                  </p>
+                  <p>
+                    30-day return policy. Items must be in original condition
+                    with tags attached.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

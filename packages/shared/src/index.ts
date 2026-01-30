@@ -1,3 +1,5 @@
+export * from './stores/themeStore';
+
 export interface Product {
   id: string;
   name: string;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ProductFilters as Filters } from '../types/product';
 import { useCategories } from '../hooks/useProducts';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '@ecommerce/shared';
 
 interface ProductFiltersProps {
   filters: Filters;
@@ -36,249 +36,274 @@ export const ProductFilters = ({
   );
 
   return (
-    <div className={`
-      p-8 rounded-2xl mb-8 border transition-all duration-300
-      ${isDark 
-        ? 'bg-gray-800 border-gray-700 shadow-2xl' 
-        : 'bg-white border-gray-100 shadow-lg'
-      }
-    `}>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-3.5">
-          <h3 className={`text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            🔍 Filters
-          </h3>
+    <div className={`mb-8 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+      {/* Mobile Filter Toggle - Shopify style */}
+      <div className="lg:hidden mb-4">
+        <button
+          className={`
+            w-full py-3 px-4 flex items-center justify-between
+            border ${isDark ? 'border-gray-800' : 'border-gray-200'}
+            text-sm font-medium
+            ${isDark ? 'text-white' : 'text-gray-900'}
+          `}
+        >
+          <span>Filters</span>
           {hasActiveFilters && (
-            <span className="animate-pulse px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-md">
-              {Object.keys(localFilters).length} Active
+            <span className="px-2 py-0.5 bg-gray-900 text-white dark:bg-white dark:text-gray-900 text-xs">
+              {Object.keys(localFilters).length}
             </span>
           )}
-        </div>
+        </button>
       </div>
 
-      {/* Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6 items-start">
-        {/* Search - Full Width */}
-        <div className="md:col-span-2 lg:col-span-2 xl:col-span-2">
-          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Search Products
-          </label>
-          <input
-            type="text"
-            value={localFilters.search || ''}
-            onChange={(e) =>
-              setLocalFilters({ ...localFilters, search: e.target.value })
-            }
-            placeholder="Search by name or description..."
-            className={`
-              w-full px-4 py-3.5 rounded-xl border font-medium
-              transition-all duration-300
-              focus:outline-none focus:ring-4 focus:-translate-y-0.5
-              ${isDark
-                ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-indigo-500/20'
-                : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20'
-              }
-            `}
-          />
+      {/* Filters Section */}
+      <div
+        className={`border-b ${isDark ? 'border-gray-800' : 'border-gray-200'} pb-6 mb-6`}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h3>Filter and sort</h3>
+          {hasActiveFilters && (
+            <button
+              onClick={handleReset}
+              className={`text-sm underline ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+            >
+              Clear all
+            </button>
+          )}
         </div>
 
-        {/* Category */}
-        <div className="lg:col-span-1">
-          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Category
-          </label>
-          <select
-            value={localFilters.category || ''}
-            onChange={(e) =>
-              setLocalFilters({
-                ...localFilters,
-                category: e.target.value || undefined,
-              })
-            }
-            className={`
-              w-full px-4 py-3.5 rounded-xl border font-medium cursor-pointer
-              appearance-none bg-no-repeat bg-right pr-10
-              transition-all duration-300
-              focus:outline-none focus:ring-4 focus:-translate-y-0.5
-              ${isDark
-                ? 'bg-gray-900 border-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500/20'
-                : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20'
-              }
-            `}
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23999' : '%23666'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundPosition: 'right 1rem center',
-              backgroundSize: '1.25rem',
-            }}
-          >
-            <option value="">All Categories</option>
-            {categories?.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Sort By */}
-        <div className="lg:col-span-1">
-          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Sort By
-          </label>
-          <select
-            value={localFilters.sortBy || ''}
-            onChange={(e) =>
-              setLocalFilters({
-                ...localFilters,
-                sortBy: (e.target.value || undefined) as
-                  | 'name'
-                  | 'price'
-                  | 'rating'
-                  | undefined,
-              })
-            }
-            className={`
-              w-full px-4 py-3.5 rounded-xl border font-medium cursor-pointer
-              appearance-none bg-no-repeat bg-right pr-10
-              transition-all duration-300
-              focus:outline-none focus:ring-4 focus:-translate-y-0.5
-              ${isDark
-                ? 'bg-gray-900 border-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500/20'
-                : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20'
-              }
-            `}
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23999' : '%23666'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundPosition: 'right 1rem center',
-              backgroundSize: '1.25rem',
-            }}
-          >
-            <option value="">Default</option>
-            <option value="name">Name</option>
-            <option value="price">Price</option>
-            <option value="rating">Rating</option>
-          </select>
-        </div>
-
-        {/* Order */}
-        <div className="lg:col-span-1">
-          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Order
-          </label>
-          <select
-            value={localFilters.sortOrder || 'asc'}
-            onChange={(e) =>
-              setLocalFilters({
-                ...localFilters,
-                sortOrder: e.target.value as 'asc' | 'desc',
-              })
-            }
-            className={`
-              w-full px-4 py-3.5 rounded-xl border font-medium cursor-pointer
-              appearance-none bg-no-repeat bg-right pr-10
-              transition-all duration-300
-              focus:outline-none focus:ring-4 focus:-translate-y-0.5
-              ${isDark
-                ? 'bg-gray-900 border-gray-700 text-white focus:border-indigo-500 focus:ring-indigo-500/20'
-                : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-indigo-500 focus:ring-indigo-500/20'
-              }
-            `}
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23999' : '%23666'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundPosition: 'right 1rem center',
-              backgroundSize: '1.25rem',
-            }}
-          >
-            <option value="asc">↑ Ascending</option>
-            <option value="desc">↓ Descending</option>
-          </select>
-        </div>
-
-        {/* Price Range */}
-        <div className="lg:col-span-2">
-          <label className={`block text-xs font-bold uppercase tracking-widest mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Price Range
-          </label>
-          <div className="flex items-center gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Search */}
+          <div className="md:col-span-2">
+            <label
+              className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+            >
+              Search
+            </label>
             <input
-              type="number"
-              value={localFilters.minPrice || ''}
+              type="text"
+              value={localFilters.search || ''}
               onChange={(e) =>
-                setLocalFilters({
-                  ...localFilters,
-                  minPrice: e.target.value ? Number(e.target.value) : undefined,
-                })
+                setLocalFilters({ ...localFilters, search: e.target.value })
               }
-              placeholder="Min ($)"
-              min="0"
+              placeholder="Search products..."
               className={`
-                flex-1 px-4 py-3.5 rounded-xl border font-medium
-                transition-all duration-300
-                focus:outline-none focus:ring-4 focus:-translate-y-0.5
-                ${isDark
-                  ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-indigo-500/20'
-                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20'
-                }
-              `}
-            />
-            <span className={`text-xl font-bold ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>—</span>
-            <input
-              type="number"
-              value={localFilters.maxPrice || ''}
-              onChange={(e) =>
-                setLocalFilters({
-                  ...localFilters,
-                  maxPrice: e.target.value ? Number(e.target.value) : undefined,
-                })
-              }
-              placeholder="Max ($)"
-              min="0"
-              className={`
-                flex-1 px-4 py-3.5 rounded-xl border font-medium
-                transition-all duration-300
-                focus:outline-none focus:ring-4 focus:-translate-y-0.5
-                ${isDark
-                  ? 'bg-gray-900 border-gray-700 text-white placeholder-gray-500 focus:border-indigo-500 focus:ring-indigo-500/20'
-                  : 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20'
+                w-full px-4 py-2.5 border text-sm
+                transition-colors duration-200
+                focus:outline-none focus:ring-2
+                ${
+                  isDark
+                    ? 'bg-gray-950 border-gray-800 text-white placeholder-gray-500 focus:border-white focus:ring-white/20'
+                    : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:ring-gray-900/10'
                 }
               `}
             />
           </div>
-        </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex justify-end gap-3.5 mt-8 pt-8 border-t-2 border-gray-200 dark:border-gray-700">
-        <button
-          onClick={handleReset}
-          className={`
-            px-8 py-3.5 rounded-xl text-sm font-bold uppercase tracking-wide
-            border-2 border-transparent
-            transition-all duration-300
-            ${isDark
-              ? 'text-gray-400 hover:bg-gray-700 hover:text-white hover:border-gray-600'
-              : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 hover:border-gray-300'
-            }
-          `}
-        >
-          ✕ Reset
-        </button>
-        <button
-          onClick={handleApply}
-          className={`
-            px-8 py-3.5 rounded-xl text-sm font-bold uppercase tracking-wide
-            text-white shadow-lg
-            transition-all duration-300
-            hover:-translate-y-0.5 hover:shadow-xl
-            ${isDark
-              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
-              : 'bg-gradient-to-r from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700'
-            }
-          `}
-        >
-          ✓ Apply Filters
-        </button>
+          {/* Category */}
+          <div>
+            <label
+              className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+            >
+              Category
+            </label>
+            <select
+              value={localFilters.category || ''}
+              onChange={(e) =>
+                setLocalFilters({
+                  ...localFilters,
+                  category: e.target.value || undefined,
+                })
+              }
+              className={`
+                w-full px-4 py-2.5 border text-sm
+                appearance-none bg-no-repeat
+                transition-colors duration-200
+                focus:outline-none focus:ring-2
+                ${
+                  isDark
+                    ? 'bg-gray-950 border-gray-800 text-white focus:border-white focus:ring-white/20'
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-gray-900 focus:ring-gray-900/10'
+                }
+              `}
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23fff' : '%23000'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                backgroundPosition: 'right 0.75rem center',
+                backgroundSize: '1rem',
+              }}
+            >
+              <option value="">All categories</option>
+              {categories?.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Sort By */}
+          <div>
+            <label
+              className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+            >
+              Sort by
+            </label>
+            <select
+              value={localFilters.sortBy || ''}
+              onChange={(e) =>
+                setLocalFilters({
+                  ...localFilters,
+                  sortBy: (e.target.value || undefined) as
+                    | 'name'
+                    | 'price'
+                    | 'rating'
+                    | undefined,
+                })
+              }
+              className={`
+                w-full px-4 py-2.5 border text-sm
+                appearance-none bg-no-repeat
+                transition-colors duration-200
+                focus:outline-none focus:ring-2
+                ${
+                  isDark
+                    ? 'bg-gray-950 border-gray-800 text-white focus:border-white focus:ring-white/20'
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-gray-900 focus:ring-gray-900/10'
+                }
+              `}
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23fff' : '%23000'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                backgroundPosition: 'right 0.75rem center',
+                backgroundSize: '1rem',
+              }}
+            >
+              <option value="">Featured</option>
+              <option value="name">Name</option>
+              <option value="price">Price</option>
+              <option value="rating">Rating</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Price Range & Order - Second Row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          {/* Price Range */}
+          <div className="md:col-span-2">
+            <label
+              className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+            >
+              Price range
+            </label>
+            <div className="flex items-center gap-3">
+              <input
+                type="number"
+                value={localFilters.minPrice || ''}
+                onChange={(e) =>
+                  setLocalFilters({
+                    ...localFilters,
+                    minPrice: e.target.value
+                      ? Number(e.target.value)
+                      : undefined,
+                  })
+                }
+                placeholder="Min"
+                min="0"
+                className={`
+                  flex-1 px-4 py-2.5 border text-sm
+                  transition-colors duration-200
+                  focus:outline-none focus:ring-2
+                  ${
+                    isDark
+                      ? 'bg-gray-950 border-gray-800 text-white placeholder-gray-500 focus:border-white focus:ring-white/20'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:ring-gray-900/10'
+                  }
+                `}
+              />
+              <span className={isDark ? 'text-gray-600' : 'text-gray-400'}>
+                to
+              </span>
+              <input
+                type="number"
+                value={localFilters.maxPrice || ''}
+                onChange={(e) =>
+                  setLocalFilters({
+                    ...localFilters,
+                    maxPrice: e.target.value
+                      ? Number(e.target.value)
+                      : undefined,
+                  })
+                }
+                placeholder="Max"
+                min="0"
+                className={`
+                  flex-1 px-4 py-2.5 border text-sm
+                  transition-colors duration-200
+                  focus:outline-none focus:ring-2
+                  ${
+                    isDark
+                      ? 'bg-gray-950 border-gray-800 text-white placeholder-gray-500 focus:border-white focus:ring-white/20'
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-900 focus:ring-gray-900/10'
+                  }
+                `}
+              />
+            </div>
+          </div>
+
+          {/* Sort Order */}
+          <div>
+            <label
+              className={`block text-sm font-medium mb-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+            >
+              Order
+            </label>
+            <select
+              value={localFilters.sortOrder || 'asc'}
+              onChange={(e) =>
+                setLocalFilters({
+                  ...localFilters,
+                  sortOrder: e.target.value as 'asc' | 'desc',
+                })
+              }
+              className={`
+                w-full px-4 py-2.5 border text-sm
+                appearance-none bg-no-repeat
+                transition-colors duration-200
+                focus:outline-none focus:ring-2
+                ${
+                  isDark
+                    ? 'bg-gray-950 border-gray-800 text-white focus:border-white focus:ring-white/20'
+                    : 'bg-white border-gray-300 text-gray-900 focus:border-gray-900 focus:ring-gray-900/10'
+                }
+              `}
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='${isDark ? '%23fff' : '%23000'}'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                backgroundPosition: 'right 0.75rem center',
+                backgroundSize: '1rem',
+              }}
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Apply Button - Shopify style */}
+        <div className="mt-6">
+          <button
+            onClick={handleApply}
+            className={`
+              w-full md:w-auto px-6 py-2.5 text-sm font-medium
+              transition-colors duration-200
+              ${
+                isDark
+                  ? 'bg-white text-gray-900 hover:bg-gray-100'
+                  : 'bg-gray-900 text-white hover:bg-gray-800'
+              }
+            `}
+          >
+            Apply filters
+          </button>
+        </div>
       </div>
     </div>
   );

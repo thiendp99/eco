@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '@ecommerce/shared';
 
 export const HomePage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -11,7 +11,8 @@ export const HomePage = () => {
     {
       icon: '🏗️',
       title: 'Micro Frontend Architecture',
-      description: 'Built with Module Federation for scalable, independent deployments',
+      description:
+        'Built with Module Federation for scalable, independent deployments',
     },
     {
       icon: '⚡',
@@ -36,7 +37,8 @@ export const HomePage = () => {
     {
       icon: '📦',
       title: 'Modular Design',
-      description: 'Independent micro frontends for product catalog and shopping cart',
+      description:
+        'Independent micro frontends for product catalog and shopping cart',
     },
   ];
 
@@ -95,7 +97,13 @@ export const HomePage = () => {
 
         {!isAuthenticated ? (
           <div>
-            <p style={{ marginBottom: '1.5rem', fontSize: '1.1rem', opacity: 0.9 }}>
+            <p
+              style={{
+                marginBottom: '1.5rem',
+                fontSize: '1.1rem',
+                opacity: 0.9,
+              }}
+            >
               Please login to start shopping
             </p>
             <Link
@@ -107,7 +115,8 @@ export const HomePage = () => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(255, 255, 255, 0.3)';
+                e.currentTarget.style.boxShadow =
+                  '0 6px 20px rgba(255, 255, 255, 0.3)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'translateY(0)';
@@ -119,7 +128,13 @@ export const HomePage = () => {
           </div>
         ) : (
           <div>
-            <p style={{ marginBottom: '1.5rem', fontSize: '1.1rem', opacity: 0.9 }}>
+            <p
+              style={{
+                marginBottom: '1.5rem',
+                fontSize: '1.1rem',
+                opacity: 0.9,
+              }}
+            >
               Start exploring our products!
             </p>
             <Link
@@ -131,7 +146,8 @@ export const HomePage = () => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(40, 167, 69, 0.4)';
+                e.currentTarget.style.boxShadow =
+                  '0 6px 20px rgba(40, 167, 69, 0.4)';
                 e.currentTarget.style.backgroundColor = '#218838';
               }}
               onMouseLeave={(e) => {
@@ -192,7 +208,9 @@ export const HomePage = () => {
                 e.currentTarget.style.boxShadow = isDark
                   ? '0 2px 8px rgba(0, 0, 0, 0.2)'
                   : '0 2px 8px rgba(0, 0, 0, 0.05)';
-                e.currentTarget.style.borderColor = isDark ? '#404040' : '#e0e0e0';
+                e.currentTarget.style.borderColor = isDark
+                  ? '#404040'
+                  : '#e0e0e0';
               }}
             >
               <div

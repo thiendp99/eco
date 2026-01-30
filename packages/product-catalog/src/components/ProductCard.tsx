@@ -1,6 +1,6 @@
 import { Product } from '@ecommerce/shared';
 import { useCartStore } from 'shoppingCart/CartStore';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '@ecommerce/shared';
 
 interface ProductCardProps {
   product: Product;
@@ -30,55 +30,69 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
     <div
       onClick={() => onViewDetails(product.id)}
       className={`
-        group cursor-pointer rounded-2xl overflow-hidden
+        group relative cursor-pointer
         flex flex-col h-full
-        transition-all duration-300 ease-out
-        hover:-translate-y-2 hover:shadow-2xl
-        ${isDark 
-          ? 'bg-gray-800 border border-gray-700 shadow-lg hover:shadow-black/40' 
-          : 'bg-white border border-transparent shadow-md hover:shadow-xl'
-        }
+        transition-all duration-200 ease-in-out
+        ${isDark ? 'bg-gray-900 hover:bg-gray-850' : 'bg-white hover:shadow-lg'}
       `}
     >
-      {/* Image Area */}
-      <div className="relative w-full aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-100 to-gray-300">
+      {/* Image Container - Shopify style with subtle hover zoom */}
+      <div className="relative w-full aspect-square overflow-hidden bg-gray-50">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
-        {/* Badges */}
+        {/* Quick Add Button - Shopify style overlay */}
+        <div className="absolute inset-x-0 bottom-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <button
+            onClick={handleAddToCart}
+            disabled={!isStockAvailable}
+            className={`
+              w-full py-3 px-4 text-sm font-medium
+              transition-all duration-200
+              ${
+                isStockAvailable
+                  ? isDark
+                    ? 'bg-white text-gray-900 hover:bg-gray-100'
+                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }
+            `}
+          >
+            {isStockAvailable ? 'Add to cart' : 'Sold out'}
+          </button>
+        </div>
+
+        {/* Stock Badge - Top left */}
         {!isStockAvailable && (
-          <span className="absolute top-3 left-3 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg backdrop-blur-sm z-10">
-            Sold Out
-          </span>
+          <div className="absolute top-3 left-3 px-2.5 py-1 bg-white text-gray-900 text-xs font-medium">
+            Sold out
+          </div>
         )}
         {isStockAvailable && product.stock < 5 && (
-          <span className="absolute top-3 left-3 px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wide bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 shadow-lg backdrop-blur-sm z-10">
-            Only {product.stock} left
-          </span>
+          <div className="absolute top-3 left-3 px-2.5 py-1 bg-amber-400 text-gray-900 text-xs font-medium">
+            Low stock
+          </div>
         )}
       </div>
 
-      {/* Content Area */}
-      <div className="p-5 flex flex-col flex-grow gap-2.5">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-1">
-          <span className={`text-xs font-bold uppercase tracking-widest ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-            {product.category}
-          </span>
-          <div className={`flex items-center gap-1 text-sm font-semibold ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-            <span className="text-yellow-400 text-base">★</span>
-            {product.rating}
-          </div>
+      {/* Content Area - Clean Shopify spacing */}
+      <div className="p-4 flex flex-col flex-grow gap-2">
+        {/* Category - Small uppercase text */}
+        <div
+          className={`text-xs uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+        >
+          {product.category}
         </div>
 
-        {/* Title */}
+        {/* Product Name - Shopify's clean typography */}
         <h3
           className={`
-            text-base font-bold leading-snug tracking-tight
-            line-clamp-2 min-h-[2.8em]
+            text-base font-normal leading-tight
+            line-clamp-2 min-h-[2.5rem]
+            group-hover:underline
             ${isDark ? 'text-white' : 'text-gray-900'}
           `}
           title={product.name}
@@ -86,37 +100,38 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
           {product.name}
         </h3>
 
-        {/* Description */}
-        <p className={`text-sm leading-relaxed line-clamp-2 min-h-[2.8em] ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-          {product.description}
-        </p>
+        {/* Rating - Inline style */}
+        <div className="flex items-center gap-1.5">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <span
+                key={i}
+                className={`text-sm ${
+                  i < Math.floor(product.rating || 0)
+                    ? 'text-yellow-400'
+                    : isDark
+                      ? 'text-gray-700'
+                      : 'text-gray-300'
+                }`}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          <span
+            className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+          >
+            {product.rating}
+          </span>
+        </div>
 
-        {/* Footer: Price & Action */}
-        <div className={`flex justify-between items-center mt-auto pt-4 border-t ${isDark ? 'border-gray-700' : 'border-gray-100'}`}>
-          <div className={`text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+        {/* Price - Bold and prominent */}
+        <div className="mt-auto pt-2">
+          <div
+            className={`text-lg font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}
+          >
             {formattedPrice}
           </div>
-
-          <button
-            onClick={handleAddToCart}
-            disabled={!isStockAvailable}
-            className={`
-              px-5 py-2.5 rounded-xl text-sm font-bold uppercase tracking-wide
-              min-w-[90px] shadow-md
-              transition-all duration-300
-              ${isStockAvailable
-                ? isDark
-                  ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white hover:-translate-y-0.5 hover:shadow-lg'
-                  : 'bg-gray-900 hover:bg-gray-800 text-white hover:-translate-y-0.5 hover:shadow-lg'
-                : isDark
-                ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-60'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-60'
-              }
-            `}
-            title={isStockAvailable ? 'Add to Cart' : 'Out of Stock'}
-          >
-            {isStockAvailable ? 'Add' : '—'}
-          </button>
         </div>
       </div>
     </div>

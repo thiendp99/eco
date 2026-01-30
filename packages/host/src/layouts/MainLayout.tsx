@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-import { useThemeStore } from '../stores/themeStore';
+import { useThemeStore } from '../../../shared/src/stores/themeStore';
 import { Suspense, lazy } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 
@@ -62,7 +62,14 @@ export const MainLayout = () => {
           transition: 'background-color 0.3s ease, border-color 0.3s ease',
         }}
       >
-        <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '2rem',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>
             <Link
               to="/"
@@ -79,7 +86,9 @@ export const MainLayout = () => {
           </h1>
 
           {isAuthenticated && (
-            <nav style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <nav
+              style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
+            >
               <Link
                 to="/products"
                 style={{
@@ -137,9 +146,18 @@ export const MainLayout = () => {
           )}
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           {isAuthenticated && (
-            <Suspense fallback={<div style={{ fontSize: '0.875rem' }}>Loading...</div>}>
+            <Suspense
+              fallback={<div style={{ fontSize: '0.875rem' }}>Loading...</div>}
+            >
               <ErrorBoundary>
                 <CartButton />
               </ErrorBoundary>
@@ -157,11 +175,15 @@ export const MainLayout = () => {
               justifyContent: 'center',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = isDark ? '#505050' : '#d0d0d0';
+              e.currentTarget.style.backgroundColor = isDark
+                ? '#505050'
+                : '#d0d0d0';
               e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = isDark ? '#404040' : '#e0e0e0';
+              e.currentTarget.style.backgroundColor = isDark
+                ? '#404040'
+                : '#e0e0e0';
               e.currentTarget.style.transform = 'scale(1)';
             }}
             aria-label="Toggle theme"
@@ -262,7 +284,13 @@ export const MainLayout = () => {
           transition: 'background-color 0.3s ease, border-color 0.3s ease',
         }}
       >
-        <p style={{ margin: 0, fontSize: '0.875rem', color: isDark ? '#b0b0b0' : '#666' }}>
+        <p
+          style={{
+            margin: 0,
+            fontSize: '0.875rem',
+            color: isDark ? '#b0b0b0' : '#666',
+          }}
+        >
           © {new Date().getFullYear()} E-Commerce Micro Frontend Platform
         </p>
       </footer>
