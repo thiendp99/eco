@@ -72,7 +72,7 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
 
   return (
     <div className={`min-h-screen ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-4 lg:py-4">
         {/* Breadcrumb - Shopify style */}
         <nav className="mb-8">
           <ol className="flex items-center gap-2 text-sm">
@@ -103,7 +103,7 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
         {/* Product Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Product Image */}
-          <div className="lg:sticky lg:top-8 h-fit">
+          <div className="h-fit">
             <div className="relative aspect-square overflow-hidden bg-gray-50">
               <img
                 src={product.image}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ProductCard } from './ProductCard';
 import { ProductFilters } from './ProductFilters';
+import ProductDetail from './ProductDetail';
 import { ProductFilters as Filters } from '../types/product';
 import { useProducts } from '../hooks/useProducts';
 import { useThemeStore } from '@ecommerce/shared';
@@ -8,6 +9,7 @@ import { useThemeStore } from '@ecommerce/shared';
 const ProductList = () => {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Filters>({});
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const { theme } = useThemeStore();
   const isDark = theme === 'dark';
 
@@ -18,7 +20,11 @@ const ProductList = () => {
   const { data, isLoading, error, isFetching } = useProducts(page, 6, filters);
 
   const handleViewDetails = (id: string) => {
-    alert(`Navigate to product detail: ${id}`);
+    setSelectedProductId(id);
+  };
+
+  const handleCloseDetail = () => {
+    setSelectedProductId(null);
   };
 
   if (error) {
@@ -243,6 +249,48 @@ const ProductList = () => {
               </div>
             )}
           </>
+        )}
+        
+        {/* Product Detail Modal */}
+        {selectedProductId && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            {/* Backdrop */}
+            <div 
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={handleCloseDetail}
+            />
+            
+            {/* Modal Content */}
+            <div className="relative min-h-screen flex items-center justify-center p-4">
+              <div className={`
+                relative max-w-4xl w-full max-h-[90vh] overflow-hidden
+                rounded-3xl shadow-2xl
+                ${isDark ? 'bg-gray-900' : 'bg-white'}
+              `}>
+                {/* Close Button */}
+                <button
+                  onClick={handleCloseDetail}
+                  className={`
+                    absolute top-4 right-4 z-10 p-2 rounded-full
+                    transition-colors duration-200
+                    ${isDark 
+                      ? 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700' 
+                      : 'bg-gray-100 text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                    }
+                  `}
+                >
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                
+                {/* Product Detail Component */}
+                <div className="p-6 lg:p-8 max-h-[90vh] overflow-y-auto scrollbar-custom">
+                  <ProductDetail productId={selectedProductId} />
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

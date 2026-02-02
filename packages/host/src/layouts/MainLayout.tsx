@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-import { useThemeStore } from '../../../shared/src/stores/themeStore';
+import { useThemeStore } from '@ecommerce/shared';
 import { Suspense, lazy } from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 

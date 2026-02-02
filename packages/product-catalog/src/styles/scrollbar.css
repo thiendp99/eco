@@ -1,0 +1,39 @@
+/* Custom Scrollbar - Minimalist Modern */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: currentColor;
+  opacity: 0.2;
+  border-radius: 3px;
+  transition: opacity 0.2s ease;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  opacity: 0.4;
+}
+
+/* Dark mode specific */
+.dark .scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  opacity: 0.15;
+}
+
+.dark .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  opacity: 0.25;
+}
+
+/* Light mode specific */
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: #000614d3;
+  opacity: 0.15;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  opacity: 0.25;
+}
