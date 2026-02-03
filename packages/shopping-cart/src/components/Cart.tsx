@@ -16,27 +16,21 @@ const Cart = () => {
 
   if (items.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] p-8">
+      <div className="flex items-center justify-center min-h-[60vh] px-4">
         <div
           className={`
-          max-w-lg p-12 rounded-2xl border text-center
-          ${
-            isDark
-              ? 'bg-gray-800 border-gray-700 shadow-2xl'
-              : 'bg-white border-gray-200 shadow-xl'
-          }
-        `}
+            max-w-md w-full p-10 rounded-2xl text-center border
+            ${isDark ? 'bg-gray-900 border-gray-800 text-gray-300' : 'bg-white border-gray-200 text-gray-600'}
+          `}
         >
-          <div className="text-7xl mb-6 animate-bounce">🛒</div>
+          <div className="text-5xl mb-6">🛒</div>
           <h2
-            className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}
+            className={`text-2xl font-medium mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}
           >
             Your cart is empty
           </h2>
-          <p
-            className={`text-lg leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            Add some amazing products to get started!
+          <p className="text-sm leading-relaxed">
+            Looks like you haven’t added anything yet.
           </p>
         </div>
       </div>
@@ -48,58 +42,35 @@ const Cart = () => {
   const total = totalPrice * 1.1;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div
-        className={`
-        flex justify-between items-center mb-8 p-8 rounded-2xl text-white
-        ${
-          isDark
-            ? 'bg-gradient-to-br from-gray-800 to-gray-900 shadow-2xl'
-            : 'bg-gradient-to-br from-indigo-500 to-purple-600 shadow-xl'
-        }
-      `}
-      >
-        <div>
-          <h1 className="text-4xl font-extrabold tracking-tight mb-2">
-            🛍️ Shopping Cart
-          </h1>
-          <p className="text-lg opacity-90">
-            {totalItems} {totalItems === 1 ? 'item' : 'items'}
-          </p>
-        </div>
+    <div className="max-w-5xl mx-auto px-4 py-10">
+      <div className="flex items-center justify-between mb-10">
+        <h1
+          className={`text-2xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}
+        >
+          Shopping Cart
+        </h1>
         <button
           onClick={clearCart}
-          className="px-6 py-3 rounded-xl bg-red-500/90 hover:bg-red-600 text-white font-semibold text-sm uppercase tracking-wide transition-all duration-300 backdrop-blur-lg hover:-translate-y-1 hover:shadow-lg"
+          className="text-sm text-red-500 hover:underline"
         >
-          🗑️ Clear Cart
+          Clear cart
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-8">
-        {/* Cart Items */}
-        <div>
-          <h3
-            className={`text-xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}
-          >
-            Items in Your Cart
-          </h3>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
           <div
             className={`
-            rounded-2xl border overflow-hidden
-            ${
-              isDark
-                ? 'bg-gray-800 border-gray-700 shadow-2xl'
-                : 'bg-white border-gray-200 shadow-lg'
-            }
-          `}
+              rounded-xl border overflow-hidden
+              ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-200'}
+            `}
           >
             {items.map((item, index) => (
               <div key={item.id}>
                 <CartItemComponent item={item} />
                 {index < items.length - 1 && (
                   <hr
-                    className={isDark ? 'border-gray-700' : 'border-gray-100'}
+                    className={isDark ? 'border-gray-800' : 'border-gray-100'}
                   />
                 )}
               </div>
@@ -107,74 +78,67 @@ const Cart = () => {
           </div>
         </div>
 
-        {/* Cart Summary */}
         <div
           className={`
-          p-8 rounded-2xl border sticky top-8
-          ${
-            isDark
-              ? 'bg-gray-800 border-gray-700 shadow-2xl'
-              : 'bg-gray-50 border-gray-200 shadow-lg'
-          }
-        `}
+            p-6 rounded-xl border h-fit
+            ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-200'}
+          `}
         >
           <h3
-            className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}
+            className={`text-lg font-medium mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}
           >
-            📋 Order Summary
+            Order summary
           </h3>
 
-          <div
-            className={`flex justify-between mb-4 text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            <span>Subtotal ({totalItems} items):</span>
-            <span
-              className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}
-            >
-              ${subtotal.toFixed(2)}
-            </span>
-          </div>
+          <div className="space-y-4 text-sm">
+            <div className="flex justify-between">
+              <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                Subtotal
+              </span>
+              <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                ${subtotal.toFixed(2)}
+              </span>
+            </div>
 
-          <div
-            className={`flex justify-between mb-4 text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            <span>Shipping:</span>
-            <span className="font-bold text-green-600 px-2 py-0.5 rounded-lg bg-green-100">
-              FREE
-            </span>
-          </div>
+            <div className="flex justify-between">
+              <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>
+                Tax
+              </span>
+              <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                ${tax.toFixed(2)}
+              </span>
+            </div>
 
-          <div
-            className={`flex justify-between mb-6 text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            <span>Tax (10%):</span>
-            <span
-              className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}
-            >
-              ${tax.toFixed(2)}
-            </span>
-          </div>
+            <hr className={isDark ? 'border-gray-800' : 'border-gray-200'} />
 
-          <hr
-            className={`my-6 border-2 ${isDark ? 'border-gray-700' : 'border-gray-300'}`}
-          />
-
-          <div className="flex justify-between text-2xl font-extrabold mb-8 p-4 rounded-xl text-white bg-gradient-to-r from-indigo-500 to-purple-600">
-            <span>Total:</span>
-            <span>${total.toFixed(2)}</span>
+            <div className="flex justify-between text-base font-medium">
+              <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                Total
+              </span>
+              <span className={isDark ? 'text-white' : 'text-gray-900'}>
+                ${total.toFixed(2)}
+              </span>
+            </div>
           </div>
 
           <button
             onClick={handleCheckout}
-            className="w-full py-5 rounded-xl text-lg font-bold uppercase tracking-widest text-white bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            className={`
+              mt-8 w-full py-3 text-sm font-medium transition
+              ${
+                isDark
+                  ? 'bg-white text-gray-900 hover:bg-gray-100'
+                  : 'bg-gray-900 text-white hover:bg-gray-800'
+              }
+            `}
           >
-            💳 Proceed to Checkout
+            Checkout
           </button>
 
           <p
-            className={`mt-4 text-xs text-center ${isDark ? 'text-gray-500' : 'text-gray-600'}`}
+            className={`mt-3 text-xs text-center ${isDark ? 'text-gray-500' : 'text-gray-500'}`}
           >
-            🔒 Secure checkout powered by Stripe
+            Secure checkout
           </p>
         </div>
       </div>

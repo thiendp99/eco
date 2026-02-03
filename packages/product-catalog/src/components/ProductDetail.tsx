@@ -74,7 +74,7 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
     <div className={`min-h-screen ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-4 lg:py-4">
         {/* Breadcrumb - Shopify style */}
-        <nav className="mb-8">
+        <nav className="mb-6">
           <ol className="flex items-center gap-2 text-sm">
             <li>
               <a
@@ -104,7 +104,7 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {/* Product Image */}
           <div className="h-fit">
-            <div className="relative aspect-square overflow-hidden bg-gray-50">
+            <div className="relative aspect-square overflow-hidden bg-gray-50 rounded-xl">
               <img
                 src={product.image}
                 alt={product.name}
@@ -209,7 +209,7 @@ const ProductDetail = ({ productId }: ProductDetailProps) => {
                 onClick={handleAddToCart}
                 className={`
                   w-full py-4 px-6 text-base font-medium
-                  transition-all duration-200
+                  transition-all duration-200 rounded-lg shadow-sm
                   ${
                     product.stock > 0
                       ? isDark

@@ -8,8 +8,7 @@ export const MOCK_PRODUCTS: Product[] = [
       'Powerful laptop with 11th Gen Intel Core i7, 16GB RAM, 512GB SSD',
     price: 1299.99,
     category: 'Electronics',
-    image:
-      '../assets/images/dell-xps-15-2023-1.webp',
+    image: '../assets/images/dell-xps-15-2023-1.webp',
     stock: 15,
     rating: 4.5,
     reviews: 128,
@@ -21,7 +20,8 @@ export const MOCK_PRODUCTS: Product[] = [
     description: 'Latest iPhone with A17 Pro chip, titanium design, 256GB',
     price: 999.99,
     category: 'Electronics',
-    image: '../assets/images/iphone-15-pro-max.png',
+    image:
+      'https://s13emagst.akamaized.net/products/60458/60457155/images/res_bc44fa0bbdf0de65a3c655809352aba9.jpg',
     stock: 25,
     rating: 4.8,
     reviews: 342,
@@ -100,5 +100,3 @@ export const MOCK_PRODUCTS: Product[] = [
     createdAt: '2024-01-30',
   },
 ];
-
-

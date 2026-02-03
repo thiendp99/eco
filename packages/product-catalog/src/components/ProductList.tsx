@@ -9,7 +9,9 @@ import { useThemeStore } from '@ecommerce/shared';
 const ProductList = () => {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Filters>({});
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
   const { theme } = useThemeStore();
   const isDark = theme === 'dark';
 
@@ -55,7 +57,7 @@ const ProductList = () => {
         {/* Header - Shopify minimalist style */}
         <div className="mb-12">
           <h1
-            className={`text-3xl lg:text-4xl font-normal mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}
+            className={`text-3xl lg:text-4xl font-normal mb-3 tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}
           >
             All Products
           </h1>
@@ -122,7 +124,7 @@ const ProductList = () => {
                 {/* Product Count with Loading Indicator */}
                 <div className="flex items-center justify-between mb-6">
                   <div
-                    className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                    className={`text-sm uppercase tracking-wide ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
                   >
                     Showing {data?.products.length} of {data?.total} products
                   </div>
@@ -143,7 +145,7 @@ const ProductList = () => {
                 {/* Grid - Shopify style responsive grid */}
                 <div
                   data-testid="product-grid"
-                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-10 mb-12"
+                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-6 lg:gap-y-10 mb-12"
                 >
                   {data?.products.map((product) => (
                     <ProductCard
@@ -196,7 +198,7 @@ const ProductList = () => {
                           onClick={() => setPage(pageNum)}
                           className={`
                             min-w-[2.5rem] px-3 py-2 text-sm font-medium
-                            transition-colors duration-200
+                            transition-colors duration-200 rounded-md
                             ${
                               page === pageNum
                                 ? isDark
@@ -250,40 +252,53 @@ const ProductList = () => {
             )}
           </>
         )}
-        
+
         {/* Product Detail Modal */}
         {selectedProductId && (
-          <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="fixed inset-0 z-50 overflow-y-auto ">
             {/* Backdrop */}
-            <div 
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            <div
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
               onClick={handleCloseDetail}
             />
-            
+
             {/* Modal Content */}
             <div className="relative min-h-screen flex items-center justify-center p-4">
-              <div className={`
+              <div
+                className={`
                 relative max-w-4xl w-full max-h-[90vh] overflow-hidden
                 rounded-3xl shadow-2xl
                 ${isDark ? 'bg-gray-900' : 'bg-white'}
-              `}>
+              `}
+              >
                 {/* Close Button */}
                 <button
                   onClick={handleCloseDetail}
                   className={`
-                    absolute top-4 right-4 z-10 p-2 rounded-full
+                    absolute top-4 right-4 z-10 p-3 rounded-full
                     transition-colors duration-200
-                    ${isDark 
-                      ? 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700' 
-                      : 'bg-gray-100 text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                    ${
+                      isDark
+                        ? 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700'
+                        : 'bg-gray-100 text-gray-600 hover:text-gray-900 hover:bg-gray-200'
                     }
                   `}
                 >
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
-                
+
                 {/* Product Detail Component */}
                 <div className="p-6 lg:p-8 max-h-[90vh] overflow-y-auto scrollbar-custom">
                   <ProductDetail productId={selectedProductId} />

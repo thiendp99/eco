@@ -4,16 +4,12 @@ import federation from '@originjs/vite-plugin-federation';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(({ mode }) => {
-  // const env = loadEnv(mode, process.cwd());
+  const env = loadEnv(mode, process.cwd());
 
-  // Cấu hình URL mặc định cho Local Development
-  // const PRODUCT_CATALOG_URL =
-  //   env.VITE_PRODUCT_CATALOG_URL || 'http://localhost:3001';
-  // const SHOPPING_CART_URL =
-  //   env.VITE_SHOPPING_CART_URL || 'http://localhost:3002';
-
-  const PRODUCT_CATALOG_URL = 'http://localhost:3001';
-  const SHOPPING_CART_URL = 'http://localhost:3002';
+  const PRODUCT_CATALOG_URL =
+    env.VITE_PRODUCT_CATALOG_URL || 'http://localhost:3001';
+  const SHOPPING_CART_URL =
+    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002';
 
   return {
     server: {

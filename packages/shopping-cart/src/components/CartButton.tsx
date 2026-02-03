@@ -11,30 +11,25 @@ const CartButton = () => {
     <button
       onClick={toggleCart}
       className={`
-        relative px-6 py-3 rounded-xl font-bold text-base uppercase tracking-wide
-        flex items-center gap-3 text-white
-        transition-all duration-300
-        shadow-lg hover:shadow-xl hover:-translate-y-1
+        relative h-10 px-4 rounded-full text-sm font-medium
+        flex items-center gap-2 transition
         ${
           isDark
-            ? 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
-            : 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700'
+            ? 'bg-gray-800 text-white hover:bg-gray-700'
+            : 'bg-gray-900 text-white hover:bg-gray-800'
         }
       `}
     >
-      <span className="text-xl">🛒</span>
+      <span>🛒</span>
       <span>Cart</span>
+
       {totalItems > 0 && (
         <span
-          className={`
-          absolute -top-2 -right-2 min-w-[28px] h-7
-          flex items-center justify-center
-          px-2 rounded-full
-          text-xs font-extrabold text-white
-          bg-gradient-to-r from-red-600 to-red-700
-          shadow-lg animate-bounce
-          ${isDark ? 'border-2 border-gray-900' : 'border-2 border-white'}
-        `}
+          className="
+            absolute -top-1 -right-1 min-w-[18px] h-[18px]
+            rounded-full bg-red-500 text-white
+            text-[11px] leading-[18px] text-center
+          "
         >
           {totalItems > 99 ? '99+' : totalItems}
         </span>

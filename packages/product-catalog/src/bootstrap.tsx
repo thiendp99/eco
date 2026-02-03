@@ -25,9 +25,7 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <div style={{ padding: '2rem' }}>
-        <ProductList />
-      </div>
+      <ProductList />
     </QueryClientProvider>
   );
 };

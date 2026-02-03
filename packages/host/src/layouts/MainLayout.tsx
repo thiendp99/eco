@@ -18,281 +18,194 @@ export const MainLayout = () => {
 
   const isDark = theme === 'dark';
 
-  const linkStyle = {
-    color: 'inherit',
-    textDecoration: 'none',
-    padding: '0.5rem 0.75rem',
-    borderRadius: '6px',
-    transition: 'all 0.2s ease',
-    fontWeight: 500,
-    fontSize: '0.95rem',
-  };
-
-  const buttonStyle = {
-    padding: '0.5rem 1rem',
-    border: 'none',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    transition: 'all 0.2s ease',
-    fontSize: '0.9rem',
-    fontWeight: 500,
-  };
-
   return (
     <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
-        color: isDark ? '#ffffff' : '#000000',
-        transition: 'background-color 0.3s ease, color 0.3s ease',
-      }}
+      className={`
+        min-h-screen flex flex-col transition-colors duration-300
+        ${isDark ? 'bg-gray-950 text-white' : 'bg-white text-gray-900'}
+      `}
     >
+      {/* Header */}
       <header
-        style={{
-          padding: '1rem 2rem',
-          backgroundColor: isDark ? '#2d2d2d' : '#f5f5f5',
-          borderBottom: `1px solid ${isDark ? '#404040' : '#e0e0e0'}`,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1rem',
-          transition: 'background-color 0.3s ease, border-color 0.3s ease',
-        }}
+        className={`
+          sticky top-0 z-40
+          border-b transition-colors duration-300
+          ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-200'}
+        `}
       >
-        <div
-          style={{
-            display: 'flex',
-            gap: '2rem',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 600 }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          {/* Left */}
+          <div className="flex items-center gap-8">
             <Link
               to="/"
-              style={{
-                textDecoration: 'none',
-                color: 'inherit',
-                transition: 'opacity 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+              className="text-lg font-semibold tracking-tight hover:opacity-80 transition-opacity"
             >
               E-Commerce
             </Link>
-          </h1>
 
-          {isAuthenticated && (
-            <nav
-              style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}
-            >
-              <Link
-                to="/products"
-                style={{
-                  ...linkStyle,
-                  backgroundColor: 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark
-                    ? 'rgba(255, 255, 255, 0.1)'
-                    : 'rgba(0, 0, 0, 0.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                Products
-              </Link>
-              <Link
-                to="/cart"
-                style={{
-                  ...linkStyle,
-                  backgroundColor: 'transparent',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark
-                    ? 'rgba(255, 255, 255, 0.1)'
-                    : 'rgba(0, 0, 0, 0.05)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                Cart
-              </Link>
-              {user?.role === 'admin' && (
+            {isAuthenticated && (
+              <nav className="hidden md:flex items-center gap-1">
                 <Link
-                  to="/dashboard"
-                  style={{
-                    ...linkStyle,
-                    backgroundColor: 'transparent',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = isDark
-                      ? 'rgba(255, 255, 255, 0.1)'
-                      : 'rgba(0, 0, 0, 0.05)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
+                  to="/products"
+                  className={`
+                    px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    ${isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'}
+                  `}
                 >
-                  Dashboard
+                  Products
                 </Link>
-              )}
-            </nav>
-          )}
-        </div>
+                <Link
+                  to="/cart"
+                  className={`
+                    px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    ${isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'}
+                  `}
+                >
+                  Cart
+                </Link>
+                {user?.role === 'admin' && (
+                  <Link
+                    to="/dashboard"
+                    className={`
+                      px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                      ${isDark ? 'hover:bg-white/10' : 'hover:bg-black/5'}
+                    `}
+                  >
+                    Dashboard
+                  </Link>
+                )}
+              </nav>
+            )}
+          </div>
 
-        <div
-          style={{
-            display: 'flex',
-            gap: '1rem',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          {isAuthenticated && (
-            <Suspense
-              fallback={<div style={{ fontSize: '0.875rem' }}>Loading...</div>}
+          {/* Right */}
+          <div className="flex items-center gap-3">
+            {isAuthenticated && (
+              <Suspense fallback={<div className="text-sm">Loading...</div>}>
+                <ErrorBoundary>
+                  <CartButton />
+                </ErrorBoundary>
+              </Suspense>
+            )}
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              className={`
+                h-10 w-10 rounded-lg flex items-center justify-center
+                transition-all duration-200
+                ${
+                  isDark
+                    ? 'bg-gray-800 hover:bg-gray-700'
+                    : 'bg-gray-200 hover:bg-gray-300'
+                }
+              `}
             >
-              <ErrorBoundary>
-                <CartButton />
-              </ErrorBoundary>
-            </Suspense>
-          )}
-          <button
-            onClick={toggleTheme}
-            style={{
-              ...buttonStyle,
-              backgroundColor: isDark ? '#404040' : '#e0e0e0',
-              color: 'inherit',
-              minWidth: '44px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = isDark
-                ? '#505050'
-                : '#d0d0d0';
-              e.currentTarget.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = isDark
-                ? '#404040'
-                : '#e0e0e0';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
-            aria-label="Toggle theme"
-          >
-            {isDark ? '🌙' : '☀️'}
-          </button>
-          {isAuthenticated ? (
-            <>
-              <span
-                style={{
-                  fontSize: '0.9rem',
-                  padding: '0.5rem 0.75rem',
-                  color: isDark ? '#b0b0b0' : '#666',
-                }}
+              {isDark ? '🌙' : '☀️'}
+            </button>
+
+            {isAuthenticated ? (
+              <>
+                <span
+                  className={`
+                    hidden sm:block text-sm
+                    ${isDark ? 'text-gray-400' : 'text-gray-600'}
+                  `}
+                >
+                  {user?.name}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="
+                    px-4 py-2 rounded-lg text-sm font-medium
+                    bg-red-600 text-white
+                    hover:bg-red-700 transition-all
+                  "
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="
+                  px-4 py-2 rounded-lg text-sm font-medium
+                  bg-gray-900 text-white
+                  hover:bg-gray-800 transition-all
+                "
               >
-                {user?.name}
-              </span>
-              <button
-                onClick={handleLogout}
-                style={{
-                  ...buttonStyle,
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#c82333';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#dc3545';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <Link
-              to="/login"
-              style={{
-                ...buttonStyle,
-                backgroundColor: '#007bff',
-                color: 'white',
-                textDecoration: 'none',
-                display: 'inline-block',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#0056b3';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#007bff';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              Login
-            </Link>
-          )}
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       </header>
 
-      <main
-        style={{
-          padding: '2rem',
-          flex: 1,
-          maxWidth: '1400px',
-          width: '100%',
-          margin: '0 auto',
-          transition: 'padding 0.3s ease',
-        }}
-      >
-        <ErrorBoundary>
-          <Suspense
-            fallback={
-              <div
-                style={{
-                  textAlign: 'center',
-                  padding: '3rem',
-                  color: isDark ? '#b0b0b0' : '#666',
-                }}
-              >
-                Loading page...
-              </div>
-            }
-          >
-            <Outlet />
-          </Suspense>
-        </ErrorBoundary>
+      {/* Main */}
+      <main className="flex-1 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <ErrorBoundary>
+            <Suspense
+              fallback={
+                <div
+                  className={`
+                    text-center py-20 text-sm
+                    ${isDark ? 'text-gray-400' : 'text-gray-600'}
+                  `}
+                >
+                  Loading page...
+                </div>
+              }
+            >
+              <Outlet />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </main>
 
+      {/* Footer */}
       <footer
-        style={{
-          padding: '1.5rem 2rem',
-          backgroundColor: isDark ? '#2d2d2d' : '#f5f5f5',
-          borderTop: `1px solid ${isDark ? '#404040' : '#e0e0e0'}`,
-          textAlign: 'center',
-          marginTop: 'auto',
-          transition: 'background-color 0.3s ease, border-color 0.3s ease',
-        }}
+        className={`
+    border-t transition-colors duration-300
+    ${isDark ? 'bg-gray-900 border-gray-800' : 'bg-gray-50 border-gray-200'}
+  `}
       >
-        <p
-          style={{
-            margin: 0,
-            fontSize: '0.875rem',
-            color: isDark ? '#b0b0b0' : '#666',
-          }}
-        >
-          © {new Date().getFullYear()} E-Commerce Micro Frontend Platform
-        </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            {/* Left */}
+            <div
+              className={`
+          text-sm tracking-wide
+          ${isDark ? 'text-gray-400' : 'text-gray-600'}
+        `}
+            >
+              © {new Date().getFullYear()}{' '}
+              <span
+                className={`
+            font-medium
+            ${isDark ? 'text-gray-200' : 'text-gray-900'}
+          `}
+              >
+                E-Commerce
+              </span>
+              <span className="hidden sm:inline">
+                {' '}
+                · Micro Frontend Platform
+              </span>
+            </div>
+
+            {/* Right */}
+            <div
+              className={`
+          text-xs
+          ${isDark ? 'text-gray-500' : 'text-gray-400'}
+        `}
+            >
+              Built with React & TailwindCSS
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );

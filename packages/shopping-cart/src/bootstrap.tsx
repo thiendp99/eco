@@ -19,7 +19,8 @@ const mockProducts = [
     id: '2',
     name: 'iPhone 15 Pro',
     price: 999.99,
-    image: 'https://images.unsplash.com/photo-1592286927505-8b4c4b2e4f6c?w=400',
+    image:
+      'https://images.unsplash.com/photo-1739617148480-f7bb4eb33c2d?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     stock: 25,
   },
 ];
@@ -28,40 +29,59 @@ const TestApp = () => {
   const addItem = useCartStore((state) => state.addItem);
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <div
-        style={{
-          marginBottom: '2rem',
-          display: 'flex',
-          gap: '1rem',
-          alignItems: 'center',
-        }}
-      >
-        <h1>Shopping Cart Test</h1>
-        <CartButton />
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-10">
+          <h1 className="text-2xl font-medium tracking-tight">
+            Shopping Cart Playground
+          </h1>
+          <CartButton />
+        </div>
+
+        {/* Mock products */}
+        <div className="mb-12">
+          <h2 className="text-lg font-medium mb-4">Test products</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {mockProducts.map((product) => (
+              <div
+                key={product.id}
+                className="flex items-center justify-between gap-4 p-4 rounded-xl border bg-white"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-16 h-16 rounded-lg object-cover border"
+                  />
+                  <div>
+                    <div className="text-sm font-medium">{product.name}</div>
+                    <div className="text-xs text-gray-500">
+                      ${product.price.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => addItem(product)}
+                  className="
+                    px-4 py-2 rounded-lg text-sm font-medium
+                    bg-gray-900 text-white
+                    hover:bg-gray-800 transition
+                  "
+                >
+                  Add to cart
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Full cart page */}
+        <Cart />
       </div>
 
-      {/* Test buttons */}
-      <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
-        {mockProducts.map((product) => (
-          <button
-            key={product.id}
-            onClick={() => addItem(product)}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
-          >
-            Add {product.name}
-          </button>
-        ))}
-      </div>
-
-      <Cart />
+      {/* Drawer overlay */}
       <CartDrawer />
     </div>
   );

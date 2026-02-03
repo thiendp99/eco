@@ -27,94 +27,93 @@ export const LoginPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto' }}>
-      <h2>Login</h2>
-
-      <div
-        style={{
-          padding: '1rem',
-          backgroundColor: '#f7f3ff',
-          borderRadius: '4px',
-          marginBottom: '1rem',
-          fontSize: '0.875rem',
-        }}
-      >
-        <strong>Test Accounts:</strong>
-        <br />
-        Admin: admin@test.com
-        <br />
-        User: user@test.com / user123
-        <br />
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Email:
-          </label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem' }}>
-            Password:
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{
-              width: '100%',
-              padding: '0.5rem',
-              borderRadius: '4px',
-              border: '1px solid #ccc',
-            }}
-          />
-        </div>
-
-        {error && (
-          <div
-            style={{
-              padding: '0.5rem',
-              backgroundColor: '#f8d7da',
-              color: '#721c24',
-              borderRadius: '4px',
-              marginBottom: '1rem',
-            }}
-          >
-            {error}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md">
+        {/* Card */}
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
+          {/* Header */}
+          <div className="mb-8 text-center">
+            <h2 className="text-2xl font-medium text-gray-900 mb-2">Sign in</h2>
+            <p className="text-sm text-gray-500">
+              Welcome back, please login to your account
+            </p>
           </div>
-        )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            opacity: loading ? 0.6 : 1,
-          }}
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+          {/* Test Accounts */}
+          <div className="mb-6 rounded-xl bg-gray-50 border border-gray-200 p-4 text-sm text-gray-700">
+            <div className="font-medium text-gray-900 mb-1">Test Accounts</div>
+            <div className="text-gray-600">
+              Admin: <span className="font-mono">admin@test.com</span>
+            </div>
+            <div className="text-gray-600">
+              User: <span className="font-mono">user@test.com</span> /{' '}
+              <span className="font-mono">user123</span>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="
+              w-full rounded-lg border border-gray-300
+              px-4 py-2.5 text-sm
+              focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900
+            "
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="
+              w-full rounded-lg border border-gray-300
+              px-4 py-2.5 text-sm
+              focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900
+            "
+              />
+            </div>
+
+            {/* Error */}
+            {error && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`
+            w-full rounded-lg py-3 text-sm font-medium
+            transition-all duration-200
+            ${
+              loading
+                ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }
+          `}
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

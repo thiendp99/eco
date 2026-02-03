@@ -34,9 +34,10 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
         flex flex-col h-full
         rounded-xl overflow-hidden
         transition-all duration-300 ease-out
-        ${isDark 
-          ? 'bg-gray-800/30 hover:bg-gray-800/50 border border-gray-700 hover:border-gray-600' 
-          : 'bg-white hover:shadow-xl border border-gray-100 hover:border-gray-200'
+        ${
+          isDark
+            ? 'bg-gray-800/30 hover:bg-gray-800/50 border border-gray-700 hover:border-gray-600'
+            : 'bg-white hover:shadow-xl border border-gray-100 hover:border-gray-200'
         }
       `}
     >
@@ -54,7 +55,7 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
             onClick={handleAddToCart}
             disabled={!isStockAvailable}
             className={`
-              w-full py-3 px-4 rounded-lg text-sm font-semibold
+              w-full py-2.5 px-4 rounded-lg text-sm font-medium
               transition-all duration-200
               ${
                 isStockAvailable
@@ -67,8 +68,18 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
           >
             {isStockAvailable ? (
               <span className="flex items-center justify-center gap-2">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Add to Cart
               </span>
@@ -126,7 +137,9 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
                       ? 'text-gray-700'
                       : 'text-gray-300'
                 }`}
-                fill={i < Math.floor(product.rating || 0) ? 'currentColor' : 'none'}
+                fill={
+                  i < Math.floor(product.rating || 0) ? 'currentColor' : 'none'
+                }
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
