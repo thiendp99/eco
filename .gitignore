@@ -17,6 +17,8 @@ dist
 
 # Testing
 coverage
+test-results
+playwright-report
 
 # Environment
 .env*.local
