@@ -31,12 +31,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-        
-      - name: Build shared first
-        run: pnpm --filter @ecommerce/shared build
-
-      - name: Build packages
-        run: pnpm run build:all
       - name: Type check
         run: pnpm run type-check
 
@@ -49,6 +43,8 @@ jobs:
       - name: Test
         run: pnpm run test
 
+      - name: Build packages
+        run: pnpm run build:all
 
   deploy-preview:
     name: Deploy Preview
