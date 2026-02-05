@@ -6,28 +6,28 @@ services:
       context: ./packages/host
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - product-catalog
       - shopping-cart
     networks:
       - ecommerce-network
-      
+
   product-catalog:
     build:
       context: ./packages/product-catalog
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - '3001:3001'
     networks:
       - ecommerce-network
-      
+
   shopping-cart:
     build:
       context: ./packages/shopping-cart
       dockerfile: Dockerfile
     ports:
-      - "3002:3002"
+      - '3002:3002'
     networks:
       - ecommerce-network
 
