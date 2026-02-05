@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Test version node
+        run: node -v
+
       - name: Type check
         run: pnpm run type-check
 
