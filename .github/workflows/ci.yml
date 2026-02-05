@@ -30,6 +30,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Build shared first
+        run: pnpm --filter @ecommerce/shared build
         
       - name: Build packages
         run: pnpm run build:all
