@@ -44,7 +44,9 @@ jobs:
         run: pnpm run test
 
       - name: Build packages
-        run: pnpm run build:all
+        run: |
+          cd packages
+          pnpm run build:all
 
   deploy-preview:
     name: Deploy Preview
