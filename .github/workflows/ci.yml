@@ -44,9 +44,8 @@ jobs:
         run: pnpm run test
 
       - name: Build packages
-        run: |
-          cd packages
-          pnpm run build:all
+        run:
+          pnpm --filter @ecommerce/shared build && pnpm --filter @ecommerce/product-catalog build && pnpm --filter @ecommerce/shopping-cart build && pnpm --filter @ecommerce/host build
 
   deploy-preview:
     name: Deploy Preview
