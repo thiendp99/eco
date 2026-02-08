@@ -33,7 +33,7 @@ jobs:
           echo "=== Shopping Cart Files ==="
           ls -la packages/shopping-cart/src/components/
           echo "=== Git tracked files ==="
-          git ls-files packages/shopping-cart/src/components/"
+          git ls-files packages/shopping-cart/src/components/
 
       - name: Install dependencies
         run: pnpm install
