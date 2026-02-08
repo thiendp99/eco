@@ -28,6 +28,13 @@ jobs:
           node-version: '22'
           cache: 'pnpm'
 
+      - name: List files
+        run: |
+          echo "=== Shopping Cart Files ==="
+          ls -la packages/shopping-cart/src/components/
+          echo "=== Git tracked files ==="
+          git ls-files packages/shopping-cart/src/components/"
+
       - name: Install dependencies
         run: pnpm install
 
@@ -45,7 +52,6 @@ jobs:
 
       - name: Build packages
         run:
-          cd packages
           pnpm --filter @ecommerce/shared build && pnpm --filter @ecommerce/product-catalog build && pnpm --filter @ecommerce/shopping-cart build && pnpm --filter @ecommerce/host build
 
   deploy-preview:
