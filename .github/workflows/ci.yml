@@ -30,10 +30,12 @@ jobs:
 
       - name: List files
         run: |
-          echo "=== Shopping Cart Files ==="
+          echo "=== Shopping Cart Files ==="  
           ls -la packages/shopping-cart/src/components/
           echo "=== Git tracked files ==="
           git ls-files packages/shopping-cart/src/components/
+          echo "=== Check .gitignore ==="
+          git check-ignore -v packages/shopping-cart/src/components/*.tsx || echo "No files ignored"
 
       - name: Install dependencies
         run: pnpm install
