@@ -34,7 +34,7 @@ jobs:
         run: pnpm run validate
 
       - name: Build
-        run: pnpm run build:all
+        run: pnpm run build
 
       - name: Generate changelog
         id: changelog

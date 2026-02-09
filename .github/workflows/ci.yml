@@ -30,7 +30,7 @@ jobs:
       - name: Validate Project
         run: pnpm run validate
       - name: Build packages
-        run: pnpm run build:all
+        run: pnpm run build
       - name: Upload Host Artifact
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
@@ -58,7 +58,7 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - run: pnpm install
-      - run: pnpm run build:all
+      - run: pnpm run build
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
