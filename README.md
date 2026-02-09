@@ -59,8 +59,9 @@ docker-compose up -d  # Run all services
 **Lighthouse CI Requirements:**
 
 - Performance: ≥ 80
+- Accessibility: ≥ 89
 - Best Practices: ≥ 80
-- SEO: ≥ 89
+- SEO: ≥ 80
 
 ### Required Secrets
 
