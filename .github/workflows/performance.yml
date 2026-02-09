@@ -72,5 +72,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
-        run: pnpm run build:all
+      - name: Analyze bundle size
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          pattern: './packages/*/dist/**/*.{js,css,html}'
+          exclude: '{./**/*.map,./**/node_modules/**}'
+          build-script: 'build:all'
