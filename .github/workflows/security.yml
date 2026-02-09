@@ -32,7 +32,7 @@ jobs:
         run: pnpm install
 
       - name: Audit dependencies
-        run: pnpm audit --audit-level moderate
+        run: pnpm audit --audit-level high
 
       - name: Run Snyk Security Scan
         uses: snyk/actions/node@master
