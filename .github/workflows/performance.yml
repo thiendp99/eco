@@ -31,7 +31,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build
+        run: pnpm run build:all
 
       - name: Start application
         run: |
@@ -73,7 +73,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build
+        run: pnpm run build:all
 
       - name: Analyze bundle size
         uses: preactjs/compressed-size-action@v2
