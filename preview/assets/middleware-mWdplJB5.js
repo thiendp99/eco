@@ -334,4 +334,4 @@ const persistImpl = (config, baseOptions) => {
 };
 const persist = persistImpl;
 
-export { createJSONStorage as c, persist as p };
+export { persist as p };

@@ -1,7 +1,7 @@
-import { i as importShared } from './_virtual___federation_fn_import-CyrdDHW1.js';
+import { i as importShared } from './_virtual___federation_fn_import-CaENf_Oj.js';
 import { j as jsxRuntimeExports } from './jsx-runtime-CyoIsdjr.js';
 import { r as reactDomExports } from './index-COvqqES_.js';
-import { p as persist } from './middleware-DqsRACVM.js';
+import { p as persist } from './middleware-mWdplJB5.js';
 
 true&&(function polyfill() {
   const relList = document.createElement("link").relList;
@@ -485,7 +485,7 @@ const remotesMap = {
 
                 const wrapShareModule = remoteFrom => {
                   return merge({
-                    'react':{'18.3.1':{get:()=>get(new URL('__federation_shared_react-BCcI129A.js', import.meta.url).href, remoteFrom), loaded:1}},'react-dom':{'18.3.1':{get:()=>get(new URL('__federation_shared_react-dom-BN8Au471.js', import.meta.url).href, remoteFrom), loaded:1}},'react-router-dom':{'6.30.3':{get:()=>get(new URL('__federation_shared_react-router-dom-DWMg6_tN.js', import.meta.url).href, remoteFrom), loaded:1}},'zustand':{'4.5.7':{get:()=>get(new URL('__federation_shared_zustand-CBALVyVZ.js', import.meta.url).href, remoteFrom), loaded:1}},'@tanstack/react-query':{'5.90.20':{get:()=>get(new URL('__federation_shared_@tanstack/react-query-BU7d7bxL.js', import.meta.url).href, remoteFrom), loaded:1}},'@ecommerce/shared':{'1.0.0':{get:()=>get(new URL('__federation_shared_@ecommerce/shared-DYlCYPni.js', import.meta.url).href, remoteFrom), loaded:1}}
+                    'react':{'18.3.1':{get:()=>get(new URL('__federation_shared_react-BCcI129A.js', import.meta.url).href, remoteFrom), loaded:1}},'react-dom':{'18.3.1':{get:()=>get(new URL('__federation_shared_react-dom-BN8Au471.js', import.meta.url).href, remoteFrom), loaded:1}},'react-router-dom':{'6.30.3':{get:()=>get(new URL('__federation_shared_react-router-dom-DQcZejdR.js', import.meta.url).href, remoteFrom), loaded:1}},'zustand':{'4.5.7':{get:()=>get(new URL('__federation_shared_zustand-_TN9rUqN.js', import.meta.url).href, remoteFrom), loaded:1}},'@tanstack/react-query':{'5.90.20':{get:()=>get(new URL('__federation_shared_@tanstack/react-query-CNlfy7dF.js', import.meta.url).href, remoteFrom), loaded:1}},'@ecommerce/shared':{'1.0.0':{get:()=>get(new URL('__federation_shared_@ecommerce/shared-CnrfoO0W.js', import.meta.url).href, remoteFrom), loaded:1}}
                   }, (globalThis.__federation_shared__ || {})['default'] || {});
                 };
 
