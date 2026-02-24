@@ -22,7 +22,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "type-check": "pnpm -r type-check",
-    "validate": "pnpm run build:shared && pnpm run type-check && pnpm run lint && pnpm run format && pnpm run format:check && pnpm run test",
+    "validate": "pnpm run build:shared && pnpm run type-check && pnpm run lint && pnpm run format && pnpm run test",
     "test": "pnpm -r test",
     "test:watch": "pnpm -r exec vitest --watch",
     "test:e2e": "playwright test",
