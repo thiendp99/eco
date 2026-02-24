@@ -108,8 +108,11 @@ jobs:
       - name: Install Playwright
         run: pnpm exec playwright install --with-deps
 
+      - name: Install wait-on
+        run: npm install -g wait-on
+
       - name: Wait for deployment
-        run: sleep 60
+        run: npx wait-on ${{ env.BASE_URL }} -t 300000
 
       - name: Run E2E tests
         run: pnpm run test:e2e
