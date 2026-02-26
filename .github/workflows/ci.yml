@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 jobs:
-  # 1. Job kiểm tra chất lượng code
+  # 1. Job validate code
   validate:
     name: Validate & Build
     runs-on: ubuntu-latest
@@ -44,11 +44,11 @@ jobs:
           name: host-dist
           path: packages/host/dist
 
-  # 2. Job Deploy Preview (Chạy sau khi validate xong)
+  # 2. Job Deploy Preview
   deploy-preview:
     name: Deploy Preview
     runs-on: ubuntu-latest
-    needs: validate # Chờ job validate thành công
+    needs: validate
     if: github.ref == 'refs/heads/develop'
 
     permissions:
@@ -58,7 +58,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # (Cần bước build lại hoặc download artifact từ job trên)
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -70,21 +69,39 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - run: pnpm install
-      - run: pnpm run build:all
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build All Packages
+        env:
+          VITE_PRODUCT_CATALOG_URL: ./remotes/product-catalog
+          VITE_SHOPPING_CART_URL: ./remotes/shopping-cart
+        run: pnpm run build:all
+
+      - name: Aggregate Build Outputs
+        run: |
+          mkdir -p deploy-dist
+          cp -r packages/host/dist/* deploy-dist/
+
+          mkdir -p deploy-dist/remotes/product-catalog
+          cp -r packages/product-catalog/dist/* deploy-dist/remotes/product-catalog/
+
+          mkdir -p deploy-dist/remotes/shopping-cart
+          cp -r packages/shopping-cart/dist/* deploy-dist/remotes/shopping-cart/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/host/dist
+          publish_dir: ./deploy-dist
           destination_dir: preview
 
-  # 3. Job E2E (Chờ deploy xong mới chạy)
+  # 3. Job E2E
   e2e-tests:
     name: E2E Tests
     runs-on: ubuntu-latest
-    needs: deploy-preview # Bây giờ job này đã tồn tại
-    if: github.event_name == 'pull_request' # Lưu ý: PR không trigger branch develop nên cần xem lại logic trigger
+    needs: deploy-preview
+    if: github.event_name == 'pull_request'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

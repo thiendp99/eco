@@ -33,6 +33,7 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  base: './',
   build: {
     target: 'esnext',
     minify: false,

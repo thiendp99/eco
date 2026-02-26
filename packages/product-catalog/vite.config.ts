@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
+    base: './',
     build: {
       target: 'esnext',
       minify: false,
