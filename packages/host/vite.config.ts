@@ -15,13 +15,17 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
     },
+    preview: {
+      port: 3000,
+      strictPort: true,
+    },
     plugins: [
       react(),
       federation({
         name: 'host',
         remotes: {
-          productCatalog: `${PRODUCT_CATALOG_URL}/assets/remoteEntry.js`,
-          shoppingCart: `${SHOPPING_CART_URL}/assets/remoteEntry.js`,
+          productCatalog: `${PRODUCT_CATALOG_URL}/remoteEntry.js`,
+          shoppingCart: `${SHOPPING_CART_URL}/remoteEntry.js`,
         },
         shared: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

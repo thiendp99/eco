@@ -9,6 +9,14 @@ export default defineConfig(({ mode }) => {
     env.VITE_SHOPPING_CART_URL || 'http://localhost:3002';
 
   return {
+    server: {
+      port: 3001,
+      strictPort: true,
+    },
+    preview: {
+      port: 3001,
+      strictPort: true,
+    },
     plugins: [
       react(),
       federation({
@@ -19,7 +27,7 @@ export default defineConfig(({ mode }) => {
           './ProductDetail': './src/components/ProductDetail',
         },
         remotes: {
-          shoppingCart: `${SHOPPING_CART_URL}/assets/remoteEntry.js`,
+          shoppingCart: `${SHOPPING_CART_URL}/remoteEntry.js`,
         },
         shared: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,6 +51,7 @@ export default defineConfig(({ mode }) => {
       target: 'esnext',
       minify: false,
       cssCodeSplit: false,
+      assetsDir: '',
     },
   };
 });
