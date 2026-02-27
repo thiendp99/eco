@@ -4,7 +4,7 @@
 @source "../../shopping-cart/src/";
 @source "../../shared/src/";
 
-@import "../../product-catalog/src/styles/scrollbar.css";
+@import '../../product-catalog/src/styles/scrollbar.css';
 
 body {
   font-family:
