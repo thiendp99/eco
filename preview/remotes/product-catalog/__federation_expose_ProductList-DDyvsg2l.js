@@ -1,6 +1,6 @@
 import { importShared } from './__federation_fn_import-Cs4znd9T.js';
 import { j as jsxRuntimeExports } from './jsx-runtime-CyoIsdjr.js';
-import ProductDetail, { _ as __federation_method_getRemote, u as useCategories, a as useProducts } from './__federation_expose_ProductDetail-Bfqu67Iz.js';
+import ProductDetail, { _ as __federation_method_getRemote, u as useCategories, a as useProducts } from './__federation_expose_ProductDetail-DLyZYxeA.js';
 
 const __federation_var_shoppingCartCartStore = await __federation_method_getRemote("shoppingCart" , "./CartStore");
  let {useCartStore} = __federation_var_shoppingCartCartStore;

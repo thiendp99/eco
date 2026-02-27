@@ -2,7 +2,7 @@ import { importShared } from './__federation_fn_import-Cs4znd9T.js';
 import { j as jsxRuntimeExports } from './jsx-runtime-CyoIsdjr.js';
 
 const remotesMap = {
-'shoppingCart':{url:'./remotes/shopping-cart/assets/remoteEntry.js',format:'esm',from:'vite'}
+'shoppingCart':{url:'./remotes/shopping-cart/remoteEntry.js',format:'esm',from:'vite'}
 };
                 const currentImports = {};
 

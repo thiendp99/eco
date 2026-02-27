@@ -451,8 +451,8 @@ const HomePage = () => {
 };
 
 const remotesMap = {
-'productCatalog':{url:'./remotes/product-catalog/assets/remoteEntry.js',format:'esm',from:'vite'},
-  'shoppingCart':{url:'./remotes/shopping-cart/assets/remoteEntry.js',format:'esm',from:'vite'}
+'productCatalog':{url:'./remotes/product-catalog/remoteEntry.js',format:'esm',from:'vite'},
+  'shoppingCart':{url:'./remotes/shopping-cart/remoteEntry.js',format:'esm',from:'vite'}
 };
                 const currentImports = {};
                 const loadJS = async (url, fn) => {

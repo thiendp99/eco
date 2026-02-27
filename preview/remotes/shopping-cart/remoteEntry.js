@@ -1,12 +1,15 @@
 const currentImports = {};
       const exportSet = new Set(['Module', '__esModule', 'default', '_export_sfc']);
       let moduleMap = {
-"./ProductList":()=>{
-      dynamicLoadingCss(["style-BXk8WZk1.css"], false, './ProductList');
-      return __federation_import('./assets/__federation_expose_ProductList-Bxy_fGkk.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
-"./ProductDetail":()=>{
-      dynamicLoadingCss(["style-BXk8WZk1.css"], false, './ProductDetail');
-      return __federation_import('./assets/__federation_expose_ProductDetail-Bfqu67Iz.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
+"./Cart":()=>{
+      dynamicLoadingCss(["style-2-utF1l6.css"], false, './Cart');
+      return __federation_import('./__federation_expose_Cart-6x9FyRN0.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+"./CartButton":()=>{
+      dynamicLoadingCss(["style-2-utF1l6.css"], false, './CartButton');
+      return __federation_import('./__federation_expose_CartButton-bvpfNR9h.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+"./CartStore":()=>{
+      dynamicLoadingCss(["style-2-utF1l6.css"], false, './CartStore');
+      return __federation_import('./__federation_expose_CartStore-BpJHBzYR.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
       const seen = {};
       const dynamicLoadingCss = (cssFilePaths, dontAppendStylesToHead, exposeItemName) => {
         const metaUrl = import.meta.url;
@@ -17,7 +20,7 @@ const currentImports = {};
 
         const curUrl = metaUrl.substring(0, metaUrl.lastIndexOf('remoteEntry.js'));
         const base = './';
-        'assets';
+        '';
 
         cssFilePaths.forEach(cssPath => {
          let href = '';
@@ -47,7 +50,7 @@ const currentImports = {};
          }
          
           if (dontAppendStylesToHead) {
-            const key = 'css__productCatalog__' + exposeItemName;
+            const key = 'css__shoppingCart__' + exposeItemName;
             window[key] = window[key] || [];
             window[key].push(href);
             return;
