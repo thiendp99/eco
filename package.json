@@ -52,11 +52,5 @@
   "engines": {
     "node": ">=20.0.0 <23.0.0",
     "pnpm": ">=8.0.0"
-  },
-  "pnpm": {
-    "overrides": {
-      "minimatch": "^10.2.1",
-      "rollup": "^4.59.0"
-    }
   }
 }
