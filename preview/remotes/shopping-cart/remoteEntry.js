@@ -2,13 +2,16 @@ const currentImports = {};
       const exportSet = new Set(['Module', '__esModule', 'default', '_export_sfc']);
       let moduleMap = {
 "./Cart":()=>{
-      dynamicLoadingCss(["style-2-utF1l6.css"], false, './Cart');
-      return __federation_import('./__federation_expose_Cart-6x9FyRN0.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+      
+      return __federation_import('./__federation_expose_Cart-CactP83c.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./CartButton":()=>{
-      dynamicLoadingCss(["style-2-utF1l6.css"], false, './CartButton');
+      
       return __federation_import('./__federation_expose_CartButton-bvpfNR9h.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+"./CartDrawer":()=>{
+      
+      return __federation_import('./__federation_expose_CartDrawer-C7puGaKM.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./CartStore":()=>{
-      dynamicLoadingCss(["style-2-utF1l6.css"], false, './CartStore');
+      
       return __federation_import('./__federation_expose_CartStore-BpJHBzYR.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
       const seen = {};
       const dynamicLoadingCss = (cssFilePaths, dontAppendStylesToHead, exposeItemName) => {

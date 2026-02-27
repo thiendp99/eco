@@ -583,6 +583,7 @@ const {useThemeStore} = await importShared('@ecommerce/shared');
 
 const {Suspense: Suspense$1,lazy: lazy$1} = await importShared('react');
 const CartButton = lazy$1(() => __federation_method_getRemote("shoppingCart" , "./CartButton").then(module=>__federation_method_wrapDefault(module, true)));
+const CartDrawer = lazy$1(() => __federation_method_getRemote("shoppingCart" , "./CartDrawer").then(module=>__federation_method_wrapDefault(module, true)));
 const MainLayout = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
@@ -604,41 +605,41 @@ const MainLayout = () => {
           "header",
           {
             className: `
-          sticky top-0 z-40
-          border-b transition-colors duration-300
-          ${isDark ? "bg-gray-900 border-gray-800" : "bg-gray-50 border-gray-200"}
-        `,
+    sticky top-0 z-40
+    border-b transition-colors duration-300 backdrop-blur-md
+    ${isDark ? "bg-gray-950/80 border-gray-800" : "bg-white/80 border-gray-200"}
+  `,
             children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-8", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Link$1,
-                  {
-                    to: "/",
-                    className: "text-lg font-semibold tracking-tight hover:opacity-80 transition-opacity",
-                    children: "E-Commerce"
-                  }
-                ),
-                isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden md:flex items-center gap-1", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-10", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(Link$1, { to: "/", className: "flex items-center gap-2.5 group", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "div",
+                    {
+                      className: `
+          w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm transition-transform group-hover:scale-105
+          ${isDark ? "bg-white text-gray-900" : "bg-gray-900 text-white"}
+        `,
+                      children: "E"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "span",
+                    {
+                      className: `text-lg font-bold tracking-tight ${isDark ? "text-white" : "text-gray-900"}`,
+                      children: "Commerce"
+                    }
+                  )
+                ] }),
+                isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden md:flex items-center gap-6", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     Link$1,
                     {
                       to: "/products",
                       className: `
-                    px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                    ${isDark ? "hover:bg-white/10" : "hover:bg-black/5"}
-                  `,
+              text-sm font-medium transition-colors duration-200
+              ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-900"}
+            `,
                       children: "Products"
-                    }
-                  ),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Link$1,
-                    {
-                      to: "/cart",
-                      className: `
-                    px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                    ${isDark ? "hover:bg-white/10" : "hover:bg-black/5"}
-                  `,
-                      children: "Cart"
                     }
                   ),
                   user?.role === "admin" && /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -646,37 +647,81 @@ const MainLayout = () => {
                     {
                       to: "/dashboard",
                       className: `
-                      px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                      ${isDark ? "hover:bg-white/10" : "hover:bg-black/5"}
-                    `,
+                text-sm font-medium transition-colors duration-200
+                ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-900"}
+              `,
                       children: "Dashboard"
                     }
                   )
                 ] })
               ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3", children: [
-                isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(Suspense$1, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm", children: "Loading..." }), children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartButton, {}) }) }),
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 sm:gap-4", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2", children: [
+                  isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    Suspense$1,
+                    {
+                      fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-full" }),
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartButton, {}) })
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "button",
+                    {
+                      onClick: toggleTheme,
+                      "aria-label": "Toggle theme",
+                      className: `
+            p-2 rounded-full transition-colors duration-200
+            ${isDark ? "text-gray-400 hover:text-white hover:bg-gray-800" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"}
+          `,
+                      children: isDark ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "svg",
+                        {
+                          className: "w-5 h-5",
+                          fill: "none",
+                          viewBox: "0 0 24 24",
+                          stroke: "currentColor",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "path",
+                            {
+                              strokeLinecap: "round",
+                              strokeLinejoin: "round",
+                              strokeWidth: 2,
+                              d: "M20.354 15.354A9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                            }
+                          )
+                        }
+                      ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "svg",
+                        {
+                          className: "w-5 h-5",
+                          fill: "none",
+                          viewBox: "0 0 24 24",
+                          stroke: "currentColor",
+                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                            "path",
+                            {
+                              strokeLinecap: "round",
+                              strokeLinejoin: "round",
+                              strokeWidth: 2,
+                              d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z"
+                            }
+                          )
+                        }
+                      )
+                    }
+                  )
+                ] }),
                 /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
+                  "div",
                   {
-                    onClick: toggleTheme,
-                    "aria-label": "Toggle theme",
-                    className: `
-                h-10 w-10 rounded-lg flex items-center justify-center
-                transition-all duration-200
-                ${isDark ? "bg-gray-800 hover:bg-gray-700" : "bg-gray-200 hover:bg-gray-300"}
-              `,
-                    children: isDark ? "🌙" : "☀️"
+                    className: `hidden sm:block w-px h-5 ${isDark ? "bg-gray-800" : "bg-gray-200"}`
                   }
                 ),
-                isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+                isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4 pl-1", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "span",
                     {
-                      className: `
-                    hidden sm:block text-sm
-                    ${isDark ? "text-gray-400" : "text-gray-600"}
-                  `,
+                      className: `hidden sm:block text-sm font-medium ${isDark ? "text-gray-300" : "text-gray-700"}`,
                       children: user?.name
                     }
                   ),
@@ -684,16 +729,22 @@ const MainLayout = () => {
                     "button",
                     {
                       onClick: handleLogout,
-                      className: "\n                    px-4 py-2 rounded-lg text-sm font-medium\n                    bg-red-600 text-white\n                    hover:bg-red-700 transition-all\n                  ",
-                      children: "Logout"
+                      className: `
+              text-sm font-medium transition-colors duration-200
+              ${isDark ? "text-gray-500 hover:text-gray-300" : "text-gray-500 hover:text-gray-900"}
+            `,
+                      children: "Log out"
                     }
                   )
                 ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
                   Link$1,
                   {
                     to: "/login",
-                    className: "\n                  px-4 py-2 rounded-lg text-sm font-medium\n                  bg-gray-900 text-white\n                  hover:bg-gray-800 transition-all\n                ",
-                    children: "Login"
+                    className: `
+            px-5 py-2 rounded-full text-sm font-medium transition-all duration-200
+            ${isDark ? "bg-white text-gray-900 hover:bg-gray-200" : "bg-gray-900 text-white hover:bg-gray-800"}
+          `,
+                    children: "Sign in"
                   }
                 )
               ] })
@@ -764,7 +815,8 @@ const MainLayout = () => {
               )
             ] }) })
           }
-        )
+        ),
+        isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(Suspense$1, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartDrawer, {}) }) })
       ]
     }
   );
@@ -807,6 +859,9 @@ const remoteRegistry = {
     Cart: lazy(() => __federation_method_getRemote("shoppingCart" , "./Cart").then(module=>__federation_method_wrapDefault(module, true))),
     CartButton: lazy(
       () => __federation_method_getRemote("shoppingCart" , "./CartButton").then(module=>__federation_method_wrapDefault(module, true))
+    ),
+    CartDrawer: lazy(
+      () => __federation_method_getRemote("shoppingCart" , "./CartDrawer").then(module=>__federation_method_wrapDefault(module, true))
     )
   }
 };
