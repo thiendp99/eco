@@ -21,3 +21,9 @@ declare module 'shoppingCart/CartButton' {
   const CartButton: ComponentType;
   export default CartButton;
 }
+
+declare module 'shoppingCart/CartDrawer' {
+  import { ComponentType } from 'react';
+  const CartDrawer: ComponentType;
+  export default CartDrawer;
+}

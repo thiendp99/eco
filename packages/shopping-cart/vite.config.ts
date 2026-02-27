@@ -18,6 +18,7 @@ export default defineConfig({
       exposes: {
         './Cart': './src/components/Cart',
         './CartButton': './src/components/CartButton',
+        './CartDrawer': './src/components/CartDrawer',
         './CartStore': './src/stores/cartStore',
       },
       shared: {
