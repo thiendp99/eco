@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Cart from './components/Cart';
 import CartButton from './components/CartButton';
-import { CartDrawer } from './components/CartDrawer';
 import { useCartStore } from './stores/cartStore';
 import './index.css';
 
@@ -80,9 +79,6 @@ const TestApp = () => {
         {/* Full cart page */}
         <Cart />
       </div>
-
-      {/* Drawer overlay */}
-      <CartDrawer />
     </div>
   );
 };

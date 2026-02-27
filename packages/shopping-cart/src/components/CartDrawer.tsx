@@ -3,7 +3,7 @@ import { useThemeStore } from '@ecommerce/shared';
 import { CartItemComponent } from './CartItem';
 import { useEffect } from 'react';
 
-export const CartDrawer = () => {
+const CartDrawer = () => {
   const isOpen = useCartStore((state) => state.isOpen);
   const closeCart = useCartStore((state) => state.closeCart);
   const items = useCartStore((state) => state.items);
@@ -119,3 +119,5 @@ export const CartDrawer = () => {
     </>
   );
 };
+
+export default CartDrawer;

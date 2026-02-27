@@ -24,6 +24,9 @@ const remoteRegistry: Record<string, Record<string, RemoteComponent>> = {
     CartButton: lazy(
       () => import('shoppingCart/CartButton')
     ) as RemoteComponent,
+    CartDrawer: lazy(
+      () => import('shoppingCart/CartDrawer')
+    ) as RemoteComponent,
   },
 };
 
