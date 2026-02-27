@@ -1,5 +1,11 @@
 ﻿@import 'tailwindcss';
 
+@source "../../product-catalog/src/";
+@source "../../shopping-cart/src/";
+@source "../../shared/src/";
+
+@import "../../product-catalog/src/styles/scrollbar.css";
+
 body {
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',

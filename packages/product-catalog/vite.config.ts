@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'esnext',
       minify: false,
-      cssCodeSplit: false,
+      cssCodeSplit: true,
       assetsDir: '',
     },
   };
