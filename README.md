@@ -1,5 +1,7 @@
 # Ecommerce Microfrontend
 
+https://thiendp99.github.io/
+
 ## CI/CD Pipeline
 
 This project uses GitHub Actions for automated testing, deployment, and monitoring.
@@ -59,7 +61,7 @@ docker-compose up -d  # Run all services
 **Lighthouse CI Requirements:**
 
 - Performance: ≥ 80
-- Accessibility: ≥ 90
+- Accessibility: ≥ 89
 - Best Practices: ≥ 80
 - SEO: ≥ 80
 

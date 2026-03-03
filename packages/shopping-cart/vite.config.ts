@@ -18,6 +18,7 @@ export default defineConfig({
       exposes: {
         './Cart': './src/components/Cart',
         './CartButton': './src/components/CartButton',
+        './CartDrawer': './src/components/CartDrawer',
         './CartStore': './src/stores/cartStore',
       },
       shared: {
@@ -33,9 +34,11 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
+  base: './',
   build: {
     target: 'esnext',
     minify: false,
-    cssCodeSplit: false,
+    cssCodeSplit: true,
+    assetsDir: '',
   },
 });

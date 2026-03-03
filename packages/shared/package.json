@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build --force"
   },
   "dependencies": {
     "react": "^18.2.0",
