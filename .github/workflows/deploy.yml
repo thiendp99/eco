@@ -1,0 +1,73 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - feature/github-pages-deployment
+      - develop
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build applications
+        env:
+          VITE_PRODUCT_CATALOG_URL: /eco/product-catalog
+          VITE_SHOPPING_CART_URL: /eco/shopping-cart
+        run: pnpm run build
+
+      - name: Assemble deployment artifacts
+        run: |
+          mkdir -p dist-pages
+          cp -r packages/host/dist/* dist-pages/
+          
+          mkdir -p dist-pages/product-catalog
+          cp -r packages/product-catalog/dist/* dist-pages/product-catalog/
+          
+          mkdir -p dist-pages/shopping-cart
+          cp -r packages/shopping-cart/dist/* dist-pages/shopping-cart/
+          
+          # Fix for client-side routing on GitHub Pages
+          cp dist-pages/index.html dist-pages/404.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist-pages'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

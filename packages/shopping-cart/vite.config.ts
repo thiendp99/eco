@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
 import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   server: {
     port: 3002,
   },
@@ -34,11 +34,11 @@ export default defineConfig({
     }),
     tailwindcss(),
   ],
-  base: './',
+  base: mode === 'production' ? '/eco/shopping-cart/' : '/',
   build: {
     target: 'esnext',
     minify: false,
     cssCodeSplit: true,
     assetsDir: '',
   },
-});
+}));

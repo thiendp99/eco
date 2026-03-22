@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
-    base: './',
+    base: mode === 'production' ? '/eco/product-catalog/' : '/',
     build: {
       target: 'esnext',
       minify: false,
