@@ -14,7 +14,7 @@ permissions:
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
-  group: "pages"
+  group: 'pages'
   cancel-in-progress: false
 
 jobs:
@@ -50,13 +50,13 @@ jobs:
         run: |
           mkdir -p dist-pages
           cp -r packages/host/dist/* dist-pages/
-          
+
           mkdir -p dist-pages/product-catalog
           cp -r packages/product-catalog/dist/* dist-pages/product-catalog/
-          
+
           mkdir -p dist-pages/shopping-cart
           cp -r packages/shopping-cart/dist/* dist-pages/shopping-cart/
-          
+
           # Fix for client-side routing on GitHub Pages
           cp dist-pages/index.html dist-pages/404.html
 
