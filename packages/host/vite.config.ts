@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
-    base: process.env.VERCEL ? '/' : (mode === 'production' ? '/eco/' : '/'),
+    base: process.env.VERCEL ? '/' : mode === 'production' ? '/eco/' : '/',
     build: {
       target: 'esnext',
       minify: false,
