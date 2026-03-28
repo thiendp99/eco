@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const SHOPPING_CART_URL =
-    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002';
+    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002/eco/shopping-cart';
 
   return {
     server: {
@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
-    base: mode === 'production' ? '/eco/product-catalog/' : '/',
+    base: process.env.VERCEL ? '/' : (mode === 'production' ? '/eco/product-catalog/' : '/'),
     build: {
       target: 'esnext',
       minify: false,

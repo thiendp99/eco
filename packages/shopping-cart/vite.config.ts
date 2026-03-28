@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => ({
     }),
     tailwindcss(),
   ],
-  base: mode === 'production' ? '/eco/shopping-cart/' : '/',
+  base: process.env.VERCEL ? '/' : (mode === 'production' ? '/eco/shopping-cart/' : '/'),
   build: {
     target: 'esnext',
     minify: false,

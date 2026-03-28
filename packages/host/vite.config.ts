@@ -7,9 +7,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   const PRODUCT_CATALOG_URL =
-    env.VITE_PRODUCT_CATALOG_URL || 'http://localhost:3001';
+    env.VITE_PRODUCT_CATALOG_URL || 'http://localhost:3001/eco/product-catalog';
   const SHOPPING_CART_URL =
-    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002';
+    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002/eco/shopping-cart';
 
   return {
     server: {
@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
-    base: mode === 'production' ? '/eco/' : '/',
+    base: process.env.VERCEL ? '/' : (mode === 'production' ? '/eco/' : '/'),
     build: {
       target: 'esnext',
       minify: false,
