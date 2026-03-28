@@ -113,7 +113,7 @@ The `prepare` script will automatically set up Git hooks.
 ```bash
 pnpm dev          # Start all packages in development
 pnpm start        # Start production servers
-pnpm build:all    # Build all packages
+pnpm build    # Build all packages
 pnpm validate     # Run full validation (type-check + lint + format + test)
 ```
 

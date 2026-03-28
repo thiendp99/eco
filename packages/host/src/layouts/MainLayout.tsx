@@ -87,15 +87,15 @@ export const MainLayout = () => {
           <div className="flex items-center gap-2 sm:gap-4">
             <div className="flex items-center gap-1 sm:gap-2">
               {isAuthenticated && (
-                <Suspense
-                  fallback={
-                    <div className="w-8 h-8 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-full" />
-                  }
-                >
-                  <ErrorBoundary>
+                <ErrorBoundary>
+                  <Suspense
+                    fallback={
+                      <div className="w-8 h-8 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-full" />
+                    }
+                  >
                     <CartButton />
-                  </ErrorBoundary>
-                </Suspense>
+                  </Suspense>
+                </ErrorBoundary>
               )}
 
               {/* Theme Toggle - Ghost Button & SVG Icon */}
@@ -243,18 +243,18 @@ export const MainLayout = () => {
           ${isDark ? 'text-gray-500' : 'text-gray-400'}
         `}
             >
-              Built with React & TailwindCSS
+              Built with React &amp; TailwindCSS
             </div>
           </div>
         </div>
       </footer>
 
       {isAuthenticated && (
-        <Suspense fallback={null}>
-          <ErrorBoundary>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
             <CartDrawer />
-          </ErrorBoundary>
-        </Suspense>
+          </Suspense>
+        </ErrorBoundary>
       )}
     </div>
   );
