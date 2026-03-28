@@ -32,14 +32,14 @@ jobs:
 
       - name: Build
         env:
-          VERCEL: "1"
-          VITE_PRODUCT_CATALOG_URL: "http://localhost:3001"
-          VITE_SHOPPING_CART_URL: "http://localhost:3002"
+          VERCEL: '1'
+          VITE_PRODUCT_CATALOG_URL: 'http://localhost:3001'
+          VITE_SHOPPING_CART_URL: 'http://localhost:3002'
         run: pnpm run build
 
       - name: Start application
         env:
-          VERCEL: "1"
+          VERCEL: '1'
         run: |
           pnpm run serve:all &
           npx wait-on http://localhost:3000/ http://localhost:3001/remoteEntry.js http://localhost:3002/remoteEntry.js -t 60000
