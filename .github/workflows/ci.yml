@@ -35,7 +35,7 @@ jobs:
         run: pnpm run validate
 
       - name: Build packages
-        run: pnpm run build:all
+        run: pnpm run build
 
       - name: Upload Host Artifact
         if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
@@ -76,7 +76,7 @@ jobs:
         env:
           VITE_PRODUCT_CATALOG_URL: ./remotes/product-catalog
           VITE_SHOPPING_CART_URL: ./remotes/shopping-cart
-        run: pnpm run build:all
+        run: pnpm run build
 
       - name: Aggregate Build Outputs
         run: |
