@@ -78,4 +78,4 @@ jobs:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
           pattern: './packages/*/dist/**/*.{js,css,html}'
           exclude: '{./**/*.map,./**/node_modules/**}'
-          build-script: 'build:all'
+          build-script: 'build'
