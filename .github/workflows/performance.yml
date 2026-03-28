@@ -31,7 +31,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build:all
+        run: pnpm run build
 
       - name: Start application
         run: |
