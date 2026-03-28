@@ -10,6 +10,9 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,7 +37,7 @@ jobs:
         run: pnpm run validate
 
       - name: Build
-        run: pnpm run build:all
+        run: pnpm run build
 
       - name: Generate changelog
         id: changelog

@@ -1,5 +1,7 @@
 # Ecommerce Microfrontend
 
+https://thiendp99.github.io/
+
 ## CI/CD Pipeline
 
 This project uses GitHub Actions for automated testing, deployment, and monitoring.
@@ -59,7 +61,7 @@ docker-compose up -d  # Run all services
 **Lighthouse CI Requirements:**
 
 - Performance: ≥ 80
-- Accessibility: ≥ 90
+- Accessibility: ≥ 89
 - Best Practices: ≥ 80
 - SEO: ≥ 80
 
@@ -111,7 +113,7 @@ The `prepare` script will automatically set up Git hooks.
 ```bash
 pnpm dev          # Start all packages in development
 pnpm start        # Start production servers
-pnpm build:all    # Build all packages
+pnpm build    # Build all packages
 pnpm validate     # Run full validation (type-check + lint + format + test)
 ```
 

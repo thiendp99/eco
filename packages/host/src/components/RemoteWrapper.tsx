@@ -10,7 +10,7 @@ type RemoteComponent = LazyExoticComponent<
   ComponentType<Record<string, unknown>>
 >;
 
-const remoteRegistry: Record<string, Record<string, RemoteComponent>> = {
+const remoteRegistry = {
   productCatalog: {
     ProductList: lazy(
       () => import('productCatalog/ProductList')
@@ -21,21 +21,22 @@ const remoteRegistry: Record<string, Record<string, RemoteComponent>> = {
   },
   shoppingCart: {
     Cart: lazy(() => import('shoppingCart/Cart')) as RemoteComponent,
-    CartButton: lazy(
-      () => import('shoppingCart/CartButton')
-    ) as RemoteComponent,
   },
-};
+} as const;
 
-interface RemoteWrapperProps {
-  module: string;
-  component: string;
+type RemoteModules = keyof typeof remoteRegistry;
+type RemoteComponents<M extends RemoteModules> =
+  keyof (typeof remoteRegistry)[M];
+
+interface RemoteWrapperProps<M extends RemoteModules> {
+  module: M;
+  component: RemoteComponents<M>;
   props?: Record<string, unknown>;
 }
 
 const Loading = () => (
-  <div style={{ padding: '20px', textAlign: 'center' }}>
-    <div>Loading...</div>
+  <div className="py-12 text-center">
+    <div className="text-sm text-gray-500">Loading...</div>
   </div>
 );
 
@@ -69,23 +70,23 @@ const ErrorFallback = ({
   </div>
 );
 
-export const RemoteWrapper = ({
+export const RemoteWrapper = <M extends RemoteModules>({
   module,
   component,
   props = {},
-}: RemoteWrapperProps) => {
-  // 2. Retrieve Component from Registry based on props string
-  const SelectedComponent = remoteRegistry[module]?.[component];
+}: RemoteWrapperProps<M>) => {
+  const moduleRegistry = remoteRegistry[module];
+  const SelectedComponent = moduleRegistry?.[
+    component as keyof typeof moduleRegistry
+  ] as RemoteComponent | undefined;
 
-  // 3. Handle case where component is not found in Registry (Incorrect code)
   if (!SelectedComponent) {
     console.error(
-      `RemoteWrapper: Component '${component}' not found in module '${module}'. Check remoteRegistry.`
+      `RemoteWrapper: Component '${String(component)}' not found in module '${module}'. Check remoteRegistry.`
     );
-    return <ErrorFallback module={module} component={component} />;
+    return <ErrorFallback module={module} component={String(component)} />;
   }
 
-  // 4. Render safely with ErrorBoundary and Suspense
   return (
     <ErrorBoundary>
       <Suspense fallback={<Loading />}>

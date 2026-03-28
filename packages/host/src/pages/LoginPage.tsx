@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
+import { TEST_ACCOUNTS } from '../constants/testAccounts';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -9,7 +10,17 @@ export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const login = useAuthStore((state) => state.login);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Redirect to the page user originally wanted, or /products
+  const from =
+    (location.state as { from?: Location })?.from?.pathname ?? '/products';
+
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +29,7 @@ export const LoginPage = () => {
 
     try {
       await login(email, password);
-      navigate('/products');
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
@@ -42,13 +53,13 @@ export const LoginPage = () => {
           {/* Test Accounts */}
           <div className="mb-6 rounded-xl bg-gray-50 border border-gray-200 p-4 text-sm text-gray-700">
             <div className="font-medium text-gray-900 mb-1">Test Accounts</div>
-            <div className="text-gray-600">
-              Admin: <span className="font-mono">admin@test.com</span>
-            </div>
-            <div className="text-gray-600">
-              User: <span className="font-mono">user@test.com</span> /{' '}
-              <span className="font-mono">user123</span>
-            </div>
+            {TEST_ACCOUNTS.map((account) => (
+              <div key={account.role} className="text-gray-600">
+                {account.role}:{' '}
+                <span className="font-mono">{account.email}</span> /{' '}
+                <span className="font-mono">{account.password}</span>
+              </div>
+            ))}
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -62,6 +73,7 @@ export const LoginPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                autoComplete="email"
                 className="
               w-full rounded-lg border border-gray-300
               px-4 py-2.5 text-sm
@@ -80,6 +92,7 @@ export const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="current-password"
                 className="
               w-full rounded-lg border border-gray-300
               px-4 py-2.5 text-sm
