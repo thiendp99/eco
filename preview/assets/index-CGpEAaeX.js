@@ -68,22 +68,37 @@ const queryClient = new QueryClient({
   }
 });
 
+const TEST_ACCOUNTS = [
+  {
+    role: "Admin",
+    email: "admin@test.com",
+    password: "admin123"
+  },
+  {
+    role: "User",
+    email: "user@test.com",
+    password: "user123"
+  }
+];
+
 const {create} = await importShared('zustand');
 const mockLogin = async (email, password) => {
   await new Promise((resolve) => setTimeout(resolve, 1e3));
-  if (email === "admin@test.com" && password === "admin123") {
+  const adminAccount = TEST_ACCOUNTS.find((a) => a.role === "Admin");
+  if (email === adminAccount?.email && password === adminAccount?.password) {
     return {
       id: "1",
       name: "Admin User",
-      email: "admin@test.com",
+      email: adminAccount.email,
       role: "admin"
     };
   }
-  if (email === "user@test.com" && password === "user123") {
+  const userAccount = TEST_ACCOUNTS.find((a) => a.role === "User");
+  if (email === userAccount?.email && password === userAccount?.password) {
     return {
       id: "2",
       name: "Regular User",
-      email: "user@test.com",
+      email: userAccount.email,
       role: "user"
     };
   }
@@ -106,29 +121,58 @@ const useAuthStore = create()(
       }
     }),
     {
-      name: "auth-storage"
-      // LocalStorage key
+      name: "auth-storage",
+      // Gracefully skip persistence if localStorage is unavailable
+      // (e.g., private browsing mode or storage quota exceeded)
+      storage: {
+        getItem: (name) => {
+          try {
+            const value = localStorage.getItem(name);
+            return value ? JSON.parse(value) : null;
+          } catch {
+            return null;
+          }
+        },
+        setItem: (name, value) => {
+          try {
+            localStorage.setItem(name, JSON.stringify(value));
+          } catch {
+          }
+        },
+        removeItem: (name) => {
+          try {
+            localStorage.removeItem(name);
+          } catch {
+          }
+        }
+      }
     }
   )
 );
 
 const {useState} = await importShared('react');
 
-const {useNavigate: useNavigate$1} = await importShared('react-router-dom');
+const {Navigate: Navigate$1,useNavigate: useNavigate$1,useLocation: useLocation$1} = await importShared('react-router-dom');
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const login = useAuthStore((state) => state.login);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate$1();
+  const location = useLocation$1();
+  const from = location.state?.from?.pathname ?? "/products";
+  if (isAuthenticated) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate$1, { to: from, replace: true });
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
       await login(email, password);
-      navigate("/products");
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
@@ -142,17 +186,15 @@ const LoginPage = () => {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 rounded-xl bg-gray-50 border border-gray-200 p-4 text-sm text-gray-700", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium text-gray-900 mb-1", children: "Test Accounts" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gray-600", children: [
-        "Admin: ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "admin@test.com" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gray-600", children: [
-        "User: ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "user@test.com" }),
+      TEST_ACCOUNTS.map((account) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gray-600", children: [
+        account.role,
+        ":",
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: account.email }),
         " /",
         " ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: "user123" })
-      ] })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: account.password })
+      ] }, account.role))
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-5", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -164,6 +206,7 @@ const LoginPage = () => {
             value: email,
             onChange: (e) => setEmail(e.target.value),
             required: true,
+            autoComplete: "email",
             className: "\n              w-full rounded-lg border border-gray-300\n              px-4 py-2.5 text-sm\n              focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900\n            "
           }
         )
@@ -177,6 +220,7 @@ const LoginPage = () => {
             value: password,
             onChange: (e) => setPassword(e.target.value),
             required: true,
+            autoComplete: "current-password",
             className: "\n              w-full rounded-lg border border-gray-300\n              px-4 py-2.5 text-sm\n              focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900\n            "
           }
         )
@@ -199,158 +243,73 @@ const LoginPage = () => {
   ] }) }) });
 };
 
-const {Link: Link$2} = await importShared('react-router-dom');
-const {useThemeStore: useThemeStore$1} = await importShared('@ecommerce/shared');
+const {Link: Link$3} = await importShared('react-router-dom');
+const {useThemeStore: useThemeStore$2} = await importShared('@ecommerce/shared');
 
+const features = [
+  {
+    icon: "🏗️",
+    title: "Micro Frontend Architecture",
+    description: "Built with Module Federation for scalable, independent deployments"
+  },
+  {
+    icon: "⚡",
+    title: "Blazing Fast",
+    description: "Powered by Vite for lightning-fast development and builds"
+  },
+  {
+    icon: "🔄",
+    title: "State Management",
+    description: "React Query for server state, Zustand for client state"
+  },
+  {
+    icon: "🧪",
+    title: "Testing Ready",
+    description: "Vitest for unit tests, Playwright for E2E testing"
+  },
+  {
+    icon: "🌓",
+    title: "Theme Support",
+    description: "Dark and light themes with persistent preferences"
+  },
+  {
+    icon: "📦",
+    title: "Modular Design",
+    description: "Independent micro frontends for product catalog and shopping cart"
+  }
+];
 const HomePage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const { theme } = useThemeStore$1();
+  const { theme } = useThemeStore$2();
   const isDark = theme === "dark";
-  const features = [
-    {
-      icon: "🏗️",
-      title: "Micro Frontend Architecture",
-      description: "Built with Module Federation for scalable, independent deployments"
-    },
-    {
-      icon: "⚡",
-      title: "Blazing Fast",
-      description: "Powered by Vite for lightning-fast development and builds"
-    },
-    {
-      icon: "🔄",
-      title: "State Management",
-      description: "React Query for server state, Zustand for client state"
-    },
-    {
-      icon: "🧪",
-      title: "Testing Ready",
-      description: "Vitest for unit tests, Playwright for E2E testing"
-    },
-    {
-      icon: "🌓",
-      title: "Theme Support",
-      description: "Dark and light themes with persistent preferences"
-    },
-    {
-      icon: "📦",
-      title: "Modular Design",
-      description: "Independent micro frontends for product catalog and shopping cart"
-    }
-  ];
-  const buttonStyle = {
-    display: "inline-block",
-    padding: "0.875rem 2rem",
-    borderRadius: "8px",
-    textDecoration: "none",
-    fontSize: "1rem",
-    fontWeight: 500,
-    transition: "all 0.3s ease",
-    border: "none",
-    cursor: "pointer"
-  };
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }, children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-5xl mx-auto", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       "div",
       {
-        style: {
-          textAlign: "center",
-          padding: "4rem 2rem",
-          marginBottom: "4rem",
-          background: isDark ? "linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)" : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          borderRadius: "16px",
-          color: isDark ? "#ffffff" : "#ffffff",
-          boxShadow: isDark ? "0 4px 20px rgba(0, 0, 0, 0.3)" : "0 4px 20px rgba(102, 126, 234, 0.3)"
-        },
+        className: `
+          text-center px-8 py-16 mb-12 rounded-2xl
+          ${isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-[0_4px_20px_rgba(0,0,0,0.3)]" : "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-[0_4px_20px_rgba(102,126,234,0.3)]"}
+        `,
         children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "h1",
-            {
-              style: {
-                fontSize: "2.5rem",
-                marginBottom: "1rem",
-                fontWeight: 700,
-                lineHeight: 1.2
-              },
-              children: "Welcome to E-Commerce Platform"
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "p",
-            {
-              style: {
-                fontSize: "1.25rem",
-                marginBottom: "2rem",
-                opacity: 0.95,
-                maxWidth: "600px",
-                margin: "0 auto 2rem"
-              },
-              children: "A modern micro frontend application built with React, Vite, and Module Federation"
-            }
-          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-bold leading-tight mb-4", children: "Welcome to E-Commerce Platform" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg opacity-90 max-w-xl mx-auto mb-8", children: "A modern micro frontend application built with React, Vite, and Module Federation" }),
           !isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base opacity-90 mb-6", children: "Please login to start shopping" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "p",
-              {
-                style: {
-                  marginBottom: "1.5rem",
-                  fontSize: "1.1rem",
-                  opacity: 0.9
-                },
-                children: "Please login to start shopping"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Link$2,
+              Link$3,
               {
                 to: "/login",
-                style: {
-                  ...buttonStyle,
-                  backgroundColor: "#ffffff",
-                  color: "#667eea"
-                },
-                onMouseEnter: (e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 255, 255, 0.3)";
-                },
-                onMouseLeave: (e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                },
+                className: "\n                inline-block px-8 py-3.5 rounded-lg\n                bg-white text-indigo-600 font-medium\n                transition-all duration-200\n                hover:-translate-y-0.5 hover:shadow-lg\n              ",
                 children: "Go to Login"
               }
             )
           ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base opacity-90 mb-6", children: "Start exploring our products!" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "p",
-              {
-                style: {
-                  marginBottom: "1.5rem",
-                  fontSize: "1.1rem",
-                  opacity: 0.9
-                },
-                children: "Start exploring our products!"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Link$2,
+              Link$3,
               {
                 to: "/products",
-                style: {
-                  ...buttonStyle,
-                  backgroundColor: "#28a745",
-                  color: "#ffffff"
-                },
-                onMouseEnter: (e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(40, 167, 69, 0.4)";
-                  e.currentTarget.style.backgroundColor = "#218838";
-                },
-                onMouseLeave: (e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.backgroundColor = "#28a745";
-                },
+                className: "\n                inline-block px-8 py-3.5 rounded-lg\n                bg-green-500 hover:bg-green-600 text-white font-medium\n                transition-all duration-200\n                hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(40,167,69,0.4)]\n              ",
                 children: "Browse Products"
               }
             )
@@ -362,90 +321,38 @@ const HomePage = () => {
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "h2",
         {
-          style: {
-            textAlign: "center",
-            fontSize: "2rem",
-            marginBottom: "3rem",
-            fontWeight: 600,
-            color: isDark ? "#ffffff" : "#333"
-          },
+          className: `text-center text-3xl font-semibold mb-10 ${isDark ? "text-white" : "text-gray-800"}`,
           children: "Platform Features"
         }
       ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8", children: features.map((feature) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "div",
         {
-          style: {
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "1.5rem",
-            marginBottom: "2rem"
-          },
-          children: features.map((feature, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            "div",
-            {
-              style: {
-                padding: "2rem",
-                backgroundColor: isDark ? "#2d2d2d" : "#ffffff",
-                borderRadius: "12px",
-                border: `1px solid ${isDark ? "#404040" : "#e0e0e0"}`,
-                transition: "all 0.3s ease",
-                boxShadow: isDark ? "0 2px 8px rgba(0, 0, 0, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.05)"
-              },
-              onMouseEnter: (e) => {
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = isDark ? "0 8px 24px rgba(0, 0, 0, 0.3)" : "0 8px 24px rgba(0, 0, 0, 0.1)";
-                e.currentTarget.style.borderColor = isDark ? "#555" : "#007bff";
-              },
-              onMouseLeave: (e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = isDark ? "0 2px 8px rgba(0, 0, 0, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.05)";
-                e.currentTarget.style.borderColor = isDark ? "#404040" : "#e0e0e0";
-              },
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "div",
-                  {
-                    style: {
-                      fontSize: "3rem",
-                      marginBottom: "1rem",
-                      textAlign: "center"
-                    },
-                    children: feature.icon
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "h3",
-                  {
-                    style: {
-                      fontSize: "1.25rem",
-                      marginBottom: "0.75rem",
-                      fontWeight: 600,
-                      color: isDark ? "#ffffff" : "#333",
-                      textAlign: "center"
-                    },
-                    children: feature.title
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "p",
-                  {
-                    style: {
-                      fontSize: "0.95rem",
-                      color: isDark ? "#b0b0b0" : "#666",
-                      lineHeight: 1.6,
-                      textAlign: "center",
-                      margin: 0
-                    },
-                    children: feature.description
-                  }
-                )
-              ]
-            },
-            index
-          ))
-        }
-      )
+          className: `
+                p-8 rounded-xl border transition-all duration-300
+                hover:-translate-y-1
+                ${isDark ? "bg-gray-900 border-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:border-gray-500 hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]" : "bg-white border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:border-blue-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]"}
+              `,
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-5xl mb-4 text-center", children: feature.icon }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "h3",
+              {
+                className: `text-lg font-semibold mb-2 text-center ${isDark ? "text-white" : "text-gray-800"}`,
+                children: feature.title
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: `text-sm leading-relaxed text-center ${isDark ? "text-gray-400" : "text-gray-500"}`,
+                children: feature.description
+              }
+            )
+          ]
+        },
+        feature.title
+      )) })
     ] })
   ] });
 };
@@ -578,15 +485,15 @@ class ErrorBoundary extends Component {
   }
 }
 
-const {Outlet,Link: Link$1,useNavigate} = await importShared('react-router-dom');
-const {useThemeStore} = await importShared('@ecommerce/shared');
+const {Outlet,Link: Link$2,useNavigate} = await importShared('react-router-dom');
+const {useThemeStore: useThemeStore$1} = await importShared('@ecommerce/shared');
 
 const {Suspense: Suspense$1,lazy: lazy$1} = await importShared('react');
 const CartButton = lazy$1(() => __federation_method_getRemote("shoppingCart" , "./CartButton").then(module=>__federation_method_wrapDefault(module, true)));
 const CartDrawer = lazy$1(() => __federation_method_getRemote("shoppingCart" , "./CartDrawer").then(module=>__federation_method_wrapDefault(module, true)));
 const MainLayout = () => {
   const { user, isAuthenticated, logout } = useAuthStore();
-  const { theme, toggleTheme } = useThemeStore();
+  const { theme, toggleTheme } = useThemeStore$1();
   const navigate = useNavigate();
   const handleLogout = () => {
     logout();
@@ -611,7 +518,7 @@ const MainLayout = () => {
   `,
             children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-10", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(Link$1, { to: "/", className: "flex items-center gap-2.5 group", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(Link$2, { to: "/", className: "flex items-center gap-2.5 group", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "div",
                     {
@@ -632,7 +539,7 @@ const MainLayout = () => {
                 ] }),
                 isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsxs("nav", { className: "hidden md:flex items-center gap-6", children: [
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Link$1,
+                    Link$2,
                     {
                       to: "/products",
                       className: `
@@ -643,7 +550,7 @@ const MainLayout = () => {
                     }
                   ),
                   user?.role === "admin" && /* @__PURE__ */ jsxRuntimeExports.jsx(
-                    Link$1,
+                    Link$2,
                     {
                       to: "/dashboard",
                       className: `
@@ -657,13 +564,13 @@ const MainLayout = () => {
               ] }),
               /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 sm:gap-4", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-1 sm:gap-2", children: [
-                  isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                     Suspense$1,
                     {
                       fallback: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-8 h-8 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-full" }),
-                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartButton, {}) })
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartButton, {})
                     }
-                  ),
+                  ) }),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
                     "button",
                     {
@@ -737,7 +644,7 @@ const MainLayout = () => {
                     }
                   )
                 ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  Link$1,
+                  Link$2,
                   {
                     to: "/login",
                     className: `
@@ -816,20 +723,20 @@ const MainLayout = () => {
             ] }) })
           }
         ),
-        isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(Suspense$1, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartDrawer, {}) }) })
+        isAuthenticated && /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Suspense$1, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(CartDrawer, {}) }) })
       ]
     }
   );
 };
 
-const {Link} = await importShared('react-router-dom');
+const {Link: Link$1} = await importShared('react-router-dom');
 
 const NotFoundPage = () => {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { textAlign: "center", padding: "3rem" }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { style: { fontSize: "4rem", margin: 0 }, children: "404" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { fontSize: "1.5rem", marginBottom: "2rem" }, children: "Page Not Found" }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Link,
+      Link$1,
       {
         to: "/",
         style: {
@@ -845,6 +752,71 @@ const NotFoundPage = () => {
   ] });
 };
 
+const {Link} = await importShared('react-router-dom');
+const {useThemeStore} = await importShared('@ecommerce/shared');
+
+const DashboardPage = () => {
+  const { user } = useAuthStore();
+  const { theme } = useThemeStore();
+  const isDark = theme === "dark";
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-4xl mx-auto", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "div",
+      {
+        className: `rounded-2xl border p-8 mb-6 ${isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"}`,
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "h1",
+            {
+              className: `text-3xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`,
+              children: "Dashboard"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "p",
+            {
+              className: `text-sm mb-6 ${isDark ? "text-gray-400" : "text-gray-500"}`,
+              children: [
+                "Welcome back,",
+                " ",
+                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-medium", children: user?.name ?? "Admin" })
+              ]
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "div",
+            {
+              className: `rounded-xl border p-6 ${isDark ? "bg-gray-800 border-gray-700" : "bg-gray-50 border-gray-200"}`,
+              children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "p",
+                {
+                  className: `text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`,
+                  children: "🚧 Admin dashboard — coming soon."
+                }
+              )
+            }
+          )
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Link,
+      {
+        to: "/products",
+        className: `inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200 ${isDark ? "text-gray-400 hover:text-white" : "text-gray-500 hover:text-gray-900"}`,
+        children: "← Back to Products"
+      }
+    )
+  ] });
+};
+
+const {Navigate,useLocation} = await importShared('react-router-dom');
+const ProtectedRoute = ({ children }) => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const location = useLocation();
+  return isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate, { to: "/login", replace: true, state: { from: location } });
+};
+
 const {lazy,Suspense} = await importShared('react');
 const remoteRegistry = {
   productCatalog: {
@@ -856,16 +828,10 @@ const remoteRegistry = {
     )
   },
   shoppingCart: {
-    Cart: lazy(() => __federation_method_getRemote("shoppingCart" , "./Cart").then(module=>__federation_method_wrapDefault(module, true))),
-    CartButton: lazy(
-      () => __federation_method_getRemote("shoppingCart" , "./CartButton").then(module=>__federation_method_wrapDefault(module, true))
-    ),
-    CartDrawer: lazy(
-      () => __federation_method_getRemote("shoppingCart" , "./CartDrawer").then(module=>__federation_method_wrapDefault(module, true))
-    )
+    Cart: lazy(() => __federation_method_getRemote("shoppingCart" , "./Cart").then(module=>__federation_method_wrapDefault(module, true)))
   }
 };
-const Loading = () => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { padding: "20px", textAlign: "center" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: "Loading..." }) });
+const Loading = () => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "py-12 text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm text-gray-500", children: "Loading..." }) });
 const ErrorFallback = ({
   module,
   component
@@ -905,53 +871,65 @@ const RemoteWrapper = ({
   component,
   props = {}
 }) => {
-  const SelectedComponent = remoteRegistry[module]?.[component];
+  const moduleRegistry = remoteRegistry[module];
+  const SelectedComponent = moduleRegistry?.[component];
   if (!SelectedComponent) {
     console.error(
-      `RemoteWrapper: Component '${component}' not found in module '${module}'. Check remoteRegistry.`
+      `RemoteWrapper: Component '${String(component)}' not found in module '${module}'. Check remoteRegistry.`
     );
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorFallback, { module, component });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorFallback, { module, component: String(component) });
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorBoundary, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(Suspense, { fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(Loading, {}), children: /* @__PURE__ */ jsxRuntimeExports.jsx(SelectedComponent, { ...props }) }) });
 };
 
-const {createBrowserRouter,Navigate} = await importShared('react-router-dom');
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  return isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate, { to: "/login" });
-};
-const router = createBrowserRouter([
+const {createBrowserRouter} = await importShared('react-router-dom');
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: /* @__PURE__ */ jsxRuntimeExports.jsx(MainLayout, {}),
+      children: [
+        {
+          index: true,
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(HomePage, {})
+        },
+        {
+          path: "login",
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(LoginPage, {})
+        },
+        {
+          path: "products",
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteWrapper, { module: "productCatalog", component: "ProductList" }) })
+        },
+        {
+          path: "products/:id",
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+            RemoteWrapper,
+            {
+              module: "productCatalog",
+              component: "ProductDetail"
+            }
+          ) })
+        },
+        {
+          path: "cart",
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteWrapper, { module: "shoppingCart", component: "Cart" }) })
+        },
+        {
+          path: "dashboard",
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DashboardPage, {}) })
+        },
+        {
+          path: "*",
+          element: /* @__PURE__ */ jsxRuntimeExports.jsx(NotFoundPage, {})
+        }
+      ]
+    }
+  ],
   {
-    path: "/",
-    element: /* @__PURE__ */ jsxRuntimeExports.jsx(MainLayout, {}),
-    children: [
-      {
-        index: true,
-        element: /* @__PURE__ */ jsxRuntimeExports.jsx(HomePage, {})
-      },
-      {
-        path: "login",
-        element: /* @__PURE__ */ jsxRuntimeExports.jsx(LoginPage, {})
-      },
-      {
-        path: "products",
-        element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteWrapper, { module: "productCatalog", component: "ProductList" }) })
-      },
-      {
-        path: "products/:id",
-        element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteWrapper, { module: "productCatalog", component: "ProductDetail" }) })
-      },
-      {
-        path: "cart",
-        element: /* @__PURE__ */ jsxRuntimeExports.jsx(ProtectedRoute, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RemoteWrapper, { module: "shoppingCart", component: "Cart" }) })
-      },
-      {
-        path: "*",
-        element: /* @__PURE__ */ jsxRuntimeExports.jsx(NotFoundPage, {})
-      }
-    ]
+    basename: "/eco/"
   }
-]);
+);
 
 const {RouterProvider} = await importShared('react-router-dom');
 

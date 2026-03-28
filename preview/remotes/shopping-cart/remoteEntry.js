@@ -3,16 +3,16 @@ const currentImports = {};
       let moduleMap = {
 "./Cart":()=>{
       
-      return __federation_import('./__federation_expose_Cart-CactP83c.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+      return __federation_import('/eco/shopping-cart/__federation_expose_Cart-CactP83c.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./CartButton":()=>{
       
-      return __federation_import('./__federation_expose_CartButton-bvpfNR9h.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+      return __federation_import('/eco/shopping-cart/__federation_expose_CartButton-bvpfNR9h.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./CartDrawer":()=>{
       
-      return __federation_import('./__federation_expose_CartDrawer-C7puGaKM.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+      return __federation_import('/eco/shopping-cart/__federation_expose_CartDrawer-C7puGaKM.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./CartStore":()=>{
       
-      return __federation_import('./__federation_expose_CartStore-BpJHBzYR.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
+      return __federation_import('/eco/shopping-cart/__federation_expose_CartStore-BpJHBzYR.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
       const seen = {};
       const dynamicLoadingCss = (cssFilePaths, dontAppendStylesToHead, exposeItemName) => {
         const metaUrl = import.meta.url;
@@ -22,7 +22,7 @@ const currentImports = {};
         }
 
         const curUrl = metaUrl.substring(0, metaUrl.lastIndexOf('remoteEntry.js'));
-        const base = './';
+        const base = '/eco/shopping-cart/';
         '';
 
         cssFilePaths.forEach(cssPath => {

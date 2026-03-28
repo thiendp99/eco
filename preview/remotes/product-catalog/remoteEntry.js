@@ -3,10 +3,10 @@ const currentImports = {};
       let moduleMap = {
 "./ProductList":()=>{
       
-      return __federation_import('./__federation_expose_ProductList-HK_qo8Jn.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
+      return __federation_import('/eco/product-catalog/__federation_expose_ProductList-HK_qo8Jn.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},
 "./ProductDetail":()=>{
       
-      return __federation_import('./__federation_expose_ProductDetail-C82zm1ag.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
+      return __federation_import('/eco/product-catalog/__federation_expose_ProductDetail-C82zm1ag.js').then(module =>Object.keys(module).every(item => exportSet.has(item)) ? () => module.default : () => module)},};
       const seen = {};
       const dynamicLoadingCss = (cssFilePaths, dontAppendStylesToHead, exposeItemName) => {
         const metaUrl = import.meta.url;
@@ -16,7 +16,7 @@ const currentImports = {};
         }
 
         const curUrl = metaUrl.substring(0, metaUrl.lastIndexOf('remoteEntry.js'));
-        const base = './';
+        const base = '/eco/product-catalog/';
         '';
 
         cssFilePaths.forEach(cssPath => {
