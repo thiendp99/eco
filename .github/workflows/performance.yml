@@ -36,14 +36,14 @@ jobs:
       - name: Start application
         run: |
           pnpm run serve:all &
-          npx wait-on http://localhost:3000 http://localhost:3001 http://localhost:3002 -t 60000
+          npx wait-on http://localhost:3000/eco/ http://localhost:3001/eco/product-catalog/ http://localhost:3002/eco/shopping-cart/ -t 60000
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            http://localhost:3000
-            http://localhost:3000/products
+            http://localhost:3000/eco/
+            http://localhost:3000/eco/products
           configPath: './lighthouserc.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
