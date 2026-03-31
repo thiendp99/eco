@@ -1,4 +1,28 @@
-# Ecommerce Microfrontend
+# Ecommerce Microfrontend Project
+
+### 📝 Project Overview
+
+A scalable e-commerce frontend built using a Microfrontend Architecture. It is divided into multiple independent applications (Host, Product Catalog, Shopping Cart) managed within a monorepo, allowing them to be developed, tested, and deployed independently.
+
+### 🛠️ Tech Stack & Tools
+
+- **Core Frameworks:** React 18, TypeScript, Tailwind CSS
+- **Architecture:** Vite Module Federation (`@originjs/vite-plugin-federation`), PNPM Workspace
+- **State Tracking & Data:** Zustand, React Query, React Router DOM
+- **Testing & Quality:** Vitest (Unit), Playwright (E2E), ESLint, Prettier, Husky, Commitlint
+- **DevOps CI/CD:** GitHub Actions, Docker, Docker Compose, GitHub Pages
+- **Monitoring & Security:** Lighthouse CI, Snyk Security, CodeQL
+
+### 🚀 Key Responsibilities & Contributions
+
+- **Architecture Setup:** Architected with **Vite Module Federation** into targeted domains, isolating concerns and increasing independent development speed.
+- **Monorepo Config:** Organized via **PNPM Workspace** to efficiently share React components, types, and common utilities seamlessly.
+- **Workflow Automation:** Constructed **GitHub Actions** CI/CD pipelines to automate linting, type-checking, and rapid deployment routines.
+- **Code Quality & Sec:** Implemented automated dependency/static-analysis with **Snyk** and **CodeQL**, coupled with **Lighthouse CI** benchmarking to maintain strict accessibility parameters.
+- **Containerization Run:** Designed **multi-stage Dockerfiles** and managed services via **docker-compose** for consistent local and production stages; launched dynamically via **GitHub Pages**.
+- **Testing coverage:** Authored robust stability measures executing unit tests with **Vitest** and reliable End-to-End checks via **Playwright**.
+
+---
 
 **Live Demo:** [https://thiendp99.github.io/eco/](https://thiendp99.github.io/eco/)
 
