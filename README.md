@@ -1,6 +1,6 @@
 # Ecommerce Microfrontend
 
-https://thiendp99.github.io/
+**Live Demo:** [https://thiendp99.github.io/eco/](https://thiendp99.github.io/eco/)
 
 ## CI/CD Pipeline
 
@@ -12,10 +12,15 @@ This project uses GitHub Actions for automated testing, deployment, and monitori
 
 - **Triggers:** Push to main/develop, Pull Requests
 - **Jobs:**
-  - **Test & Validate:** Type check, lint, format, test, build
-  - **Deploy Preview:** Deploy PR previews to GitHub Pages
-  - **Deploy Production:** Deploy main branch to production
-  - **E2E Tests:** Run Playwright tests on deployed preview
+  - **Validate & Build:** Type-check, lint, format, test, and build all packages
+  - **Deploy Preview:** Deploy preview environments to GitHub Pages (for `develop` branch)
+  - **E2E Tests:** Run Playwright end-to-end tests against the deployed preview
+
+#### **Production Deployment** (`.github/workflows/deploy.yml`)
+
+- **Triggers:** Push to `develop` or `feature/github-pages-deployment`
+- **Jobs:**
+  - **Deploy:** Build all applications and assemble deployment artifacts for GitHub Pages deployment.
 
 #### **Security Scan** (`.github/workflows/security.yml`)
 
@@ -111,10 +116,10 @@ The `prepare` script will automatically set up Git hooks.
 ## Development
 
 ```bash
-pnpm dev          # Start all packages in development
-pnpm start        # Start production servers
-pnpm build    # Build all packages
-pnpm validate     # Run full validation (type-check + lint + format + test)
+pnpm start        # Start development servers (builds remotes and runs host in dev mode)
+pnpm preview      # Build all packages and serve them in preview mode locally
+pnpm build        # Build all packages (host and remotes)
+pnpm validate     # Run full validation (type-check, lint, format, and test)
 ```
 
 ## Deployment
@@ -138,5 +143,5 @@ docker-compose pull && docker-compose up -d
 
 ### Environment URLs
 
-- **Production:** `https://[username].github.io/[repo]/production/`
-- **Preview:** `https://[username].github.io/[repo]/preview/`
+- **Production:** `https://thiendp99.github.io/eco/`
+- **Preview:** `https://thiendp99.github.io/ecommerce-microfrontend/preview/`
