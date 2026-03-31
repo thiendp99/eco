@@ -150,9 +150,388 @@ const useAuthStore = create()(
   )
 );
 
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const mergeClasses = (...classes) => classes.filter((className, index, array) => {
+  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
+}).join(" ").trim();
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const toCamelCase = (string) => string.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const toPascalCase = (string) => {
+  const camelCase = toCamelCase(string);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+  return false;
+};
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const {createContext,useContext,useMemo,createElement: createElement$2} = await importShared('react');
+
+
+const LucideContext = createContext({});
+const useLucideContext = () => useContext(LucideContext);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const {forwardRef: forwardRef$1,createElement: createElement$1} = await importShared('react');
+
+const Icon = forwardRef$1(
+  ({ color, size, strokeWidth, absoluteStrokeWidth, className = "", children, iconNode, ...rest }, ref) => {
+    const {
+      size: contextSize = 24,
+      strokeWidth: contextStrokeWidth = 2,
+      absoluteStrokeWidth: contextAbsoluteStrokeWidth = false,
+      color: contextColor = "currentColor",
+      className: contextClass = ""
+    } = useLucideContext() ?? {};
+    const calculatedStrokeWidth = absoluteStrokeWidth ?? contextAbsoluteStrokeWidth ? Number(strokeWidth ?? contextStrokeWidth) * 24 / Number(size ?? contextSize) : strokeWidth ?? contextStrokeWidth;
+    return createElement$1(
+      "svg",
+      {
+        ref,
+        ...defaultAttributes,
+        width: size ?? contextSize ?? defaultAttributes.width,
+        height: size ?? contextSize ?? defaultAttributes.height,
+        stroke: color ?? contextColor,
+        strokeWidth: calculatedStrokeWidth,
+        className: mergeClasses("lucide", contextClass, className),
+        ...!children && !hasA11yProp(rest) && { "aria-hidden": "true" },
+        ...rest
+      },
+      [
+        ...iconNode.map(([tag, attrs]) => createElement$1(tag, attrs)),
+        ...Array.isArray(children) ? children : [children]
+      ]
+    );
+  }
+);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const {forwardRef,createElement} = await importShared('react');
+
+const createLucideIcon = (iconName, iconNode) => {
+  const Component = forwardRef(
+    ({ className, ...props }, ref) => createElement(Icon, {
+      ref,
+      iconNode,
+      className: mergeClasses(
+        `lucide-${toKebabCase(toPascalCase(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component.displayName = toPascalCase(iconName);
+  return Component;
+};
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$c = [
+  [
+    "path",
+    {
+      d: "M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2",
+      key: "169zse"
+    }
+  ]
+];
+const Activity = createLucideIcon("activity", __iconNode$c);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$b = [
+  ["path", { d: "m12 19-7-7 7-7", key: "1l729n" }],
+  ["path", { d: "M19 12H5", key: "x3x0zl" }]
+];
+const ArrowLeft = createLucideIcon("arrow-left", __iconNode$b);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$a = [
+  ["path", { d: "M5 12h14", key: "1ays0h" }],
+  ["path", { d: "m12 5 7 7-7 7", key: "xquz4c" }]
+];
+const ArrowRight = createLucideIcon("arrow-right", __iconNode$a);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$9 = [
+  [
+    "path",
+    {
+      d: "M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z",
+      key: "hh9hay"
+    }
+  ],
+  ["path", { d: "m3.3 7 8.7 5 8.7-5", key: "g66t2b" }],
+  ["path", { d: "M12 22V12", key: "d0xqtd" }]
+];
+const Box = createLucideIcon("box", __iconNode$9);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$8 = [
+  ["ellipse", { cx: "12", cy: "5", rx: "9", ry: "3", key: "msslwz" }],
+  ["path", { d: "M3 5V19A9 3 0 0 0 21 19V5", key: "1wlel7" }],
+  ["path", { d: "M3 12A9 3 0 0 0 21 12", key: "mv7ke4" }]
+];
+const Database = createLucideIcon("database", __iconNode$8);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$7 = [
+  ["rect", { width: "18", height: "11", x: "3", y: "11", rx: "2", ry: "2", key: "1w4ew1" }],
+  ["path", { d: "M7 11V7a5 5 0 0 1 10 0v4", key: "fwvmzm" }]
+];
+const Lock = createLucideIcon("lock", __iconNode$7);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$6 = [
+  ["path", { d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7", key: "132q7q" }],
+  ["rect", { x: "2", y: "4", width: "20", height: "16", rx: "2", key: "izxlao" }]
+];
+const Mail = createLucideIcon("mail", __iconNode$6);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$5 = [
+  [
+    "path",
+    {
+      d: "M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401",
+      key: "kfwtm"
+    }
+  ]
+];
+const Moon = createLucideIcon("moon", __iconNode$5);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$4 = [
+  ["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }],
+  ["path", { d: "M3 9h18", key: "1pudct" }],
+  ["path", { d: "M9 21V9", key: "1oto5p" }]
+];
+const PanelsTopLeft = createLucideIcon("panels-top-left", __iconNode$4);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$3 = [
+  [
+    "path",
+    {
+      d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
+      key: "oel41y"
+    }
+  ],
+  ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+];
+const ShieldCheck = createLucideIcon("shield-check", __iconNode$3);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$2 = [
+  ["circle", { cx: "12", cy: "12", r: "4", key: "4exip2" }],
+  ["path", { d: "M12 2v2", key: "tus03m" }],
+  ["path", { d: "M12 20v2", key: "1lh1kg" }],
+  ["path", { d: "m4.93 4.93 1.41 1.41", key: "149t6j" }],
+  ["path", { d: "m17.66 17.66 1.41 1.41", key: "ptbguv" }],
+  ["path", { d: "M2 12h2", key: "1t8f8n" }],
+  ["path", { d: "M20 12h2", key: "1q8mjw" }],
+  ["path", { d: "m6.34 17.66-1.41 1.41", key: "1m8zz5" }],
+  ["path", { d: "m19.07 4.93-1.41 1.41", key: "1shlcs" }]
+];
+const Sun = createLucideIcon("sun", __iconNode$2);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode$1 = [
+  ["path", { d: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2", key: "975kel" }],
+  ["circle", { cx: "12", cy: "7", r: "4", key: "17ys0d" }]
+];
+const User = createLucideIcon("user", __iconNode$1);
+
+/**
+ * @license lucide-react v1.7.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+const __iconNode = [
+  [
+    "path",
+    {
+      d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+      key: "1xq2db"
+    }
+  ]
+];
+const Zap = createLucideIcon("zap", __iconNode);
+
 const {useState} = await importShared('react');
 
-const {Navigate: Navigate$1,useNavigate: useNavigate$1,useLocation: useLocation$1} = await importShared('react-router-dom');
+const {Navigate: Navigate$1,useNavigate: useNavigate$1,useLocation: useLocation$1,Link: Link$4} = await importShared('react-router-dom');
+const {useThemeStore: useThemeStore$3} = await importShared('@ecommerce/shared');
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -162,6 +541,8 @@ const LoginPage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate$1();
   const location = useLocation$1();
+  const { theme } = useThemeStore$3();
+  const isDark = theme === "dark";
   const from = location.state?.from?.pathname ?? "/products";
   if (isAuthenticated) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(Navigate$1, { to: from, replace: true });
@@ -179,101 +560,186 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-screen flex items-center justify-center bg-gray-50 px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-full max-w-md", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-white border border-gray-200 rounded-2xl shadow-sm p-8", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-8 text-center", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-2xl font-medium text-gray-900 mb-2", children: "Sign in" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm text-gray-500", children: "Welcome back, please login to your account" })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-6 rounded-xl bg-gray-50 border border-gray-200 p-4 text-sm text-gray-700", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "font-medium text-gray-900 mb-1", children: "Test Accounts" }),
-      TEST_ACCOUNTS.map((account) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gray-600", children: [
-        account.role,
-        ":",
-        " ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: account.email }),
-        " /",
-        " ",
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-mono", children: account.password })
-      ] }, account.role))
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit: handleSubmit, className: "space-y-5", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Email" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    "div",
+    {
+      className: `min-h-screen flex flex-col lg:flex-row transition-colors duration-300 ${isDark ? "bg-slate-950" : "bg-gray-50"}`,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full flex items-center justify-center p-8 sm:p-12 lg:p-24 relative overflow-y-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-8 left-8", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Link$4,
           {
-            type: "email",
-            value: email,
-            onChange: (e) => setEmail(e.target.value),
-            required: true,
-            autoComplete: "email",
-            className: "\n              w-full rounded-lg border border-gray-300\n              px-4 py-2.5 text-sm\n              focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900\n            "
+            to: "/",
+            className: `flex items-center gap-2 text-sm font-medium transition-colors hover:-translate-x-1 ${isDark ? "text-slate-400 hover:text-white" : "text-gray-500 hover:text-gray-900"}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowLeft, { className: "w-4 h-4" }),
+              "Back to Home"
+            ]
           }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Password" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            type: "password",
-            value: password,
-            onChange: (e) => setPassword(e.target.value),
-            required: true,
-            autoComplete: "current-password",
-            className: "\n              w-full rounded-lg border border-gray-300\n              px-4 py-2.5 text-sm\n              focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900\n            "
-          }
-        )
-      ] }),
-      error && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600", children: error }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          type: "submit",
-          disabled: loading,
-          className: `
-            w-full rounded-lg py-3 text-sm font-medium
-            transition-all duration-200
-            ${loading ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-gray-900 text-white hover:bg-gray-800"}
-          `,
-          children: loading ? "Signing in..." : "Sign in"
-        }
-      )
-    ] })
-  ] }) }) });
+        ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full max-w-md animate-fade-in", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-10 text-center lg:text-left", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "h2",
+              {
+                className: `text-4xl font-extrabold tracking-tight mb-3 ${isDark ? "text-white" : "text-gray-900"}`,
+                children: "Welcome Back"
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "p",
+              {
+                className: `text-lg flex flex-col items-center lg:items-start ${isDark ? "text-slate-400" : "text-gray-500"}`,
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { children: "Please sign in to your account" })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex justify-end mb-6 animate-fade-up delay-100", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "button",
+            {
+              type: "button",
+              onClick: () => {
+                if (TEST_ACCOUNTS.length > 0) {
+                  setEmail(TEST_ACCOUNTS[0].email);
+                  setPassword(TEST_ACCOUNTS[0].password);
+                }
+              },
+              className: `text-sm font-semibold transition-colors hover:underline flex items-center gap-1.5 ${isDark ? "text-indigo-400 hover:text-indigo-300" : "text-indigo-600 hover:text-indigo-700"}`,
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(ShieldCheck, { className: "w-4 h-4" }),
+                "Auto-fill Demo Admin"
+              ]
+            }
+          ) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "form",
+            {
+              onSubmit: handleSubmit,
+              className: "space-y-6 animate-fade-up delay-200",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "label",
+                    {
+                      className: `block text-sm font-semibold mb-2 ${isDark ? "text-slate-300" : "text-gray-700"}`,
+                      children: "Email Address"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Mail,
+                      {
+                        className: `h-5 w-5 ${isDark ? "text-slate-500" : "text-gray-400"}`
+                      }
+                    ) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "email",
+                        value: email,
+                        onChange: (e) => setEmail(e.target.value),
+                        required: true,
+                        autoComplete: "email",
+                        placeholder: "Enter your email",
+                        className: `w-full rounded-xl pl-11 pr-4 py-3.5 text-sm transition-all outline-none focus:ring-2 ${isDark ? "bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-indigo-500/20" : "bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20"}`
+                      }
+                    )
+                  ] })
+                ] }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx(
+                    "label",
+                    {
+                      className: `block text-sm font-semibold mb-2 ${isDark ? "text-slate-300" : "text-gray-700"}`,
+                      children: "Password"
+                    }
+                  ),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      Lock,
+                      {
+                        className: `h-5 w-5 ${isDark ? "text-slate-500" : "text-gray-400"}`
+                      }
+                    ) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx(
+                      "input",
+                      {
+                        type: "password",
+                        value: password,
+                        onChange: (e) => setPassword(e.target.value),
+                        required: true,
+                        autoComplete: "current-password",
+                        placeholder: "Enter your password",
+                        className: `w-full rounded-xl pl-11 pr-4 py-3.5 text-sm transition-all outline-none focus:ring-2 ${isDark ? "bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:border-indigo-500 focus:ring-indigo-500/20" : "bg-white border border-gray-300 text-gray-900 placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500/20"}`
+                      }
+                    )
+                  ] })
+                ] }),
+                error && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "div",
+                  {
+                    className: `rounded-xl px-4 py-3 text-sm flex items-center gap-2 animate-fade-in ${isDark ? "bg-red-500/10 border border-red-500/20 text-red-400" : "bg-red-50 border border-red-200 text-red-600"}`,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-1.5 h-1.5 rounded-full bg-current" }),
+                      error
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                  "button",
+                  {
+                    type: "submit",
+                    disabled: loading,
+                    className: `
+                group relative w-full flex justify-center items-center gap-2 rounded-xl py-4 text-sm font-bold text-white
+                transition-all duration-300 overflow-hidden outline-none mt-4
+                ${loading ? "bg-indigo-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-500 hover:shadow-[0_0_30px_rgba(79,70,229,0.3)] hover:-translate-y-0.5"}
+              `,
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "relative z-10", children: loading ? "Authenticating..." : "Sign In Securely" }),
+                      !loading && /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" })
+                    ]
+                  }
+                )
+              ]
+            }
+          )
+        ] })
+      ] })
+    }
+  );
 };
 
 const {Link: Link$3} = await importShared('react-router-dom');
 const {useThemeStore: useThemeStore$2} = await importShared('@ecommerce/shared');
-
 const features = [
   {
-    icon: "🏗️",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Box, { className: "w-6 h-6" }),
     title: "Micro Frontend Architecture",
     description: "Built with Module Federation for scalable, independent deployments"
   },
   {
-    icon: "⚡",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Zap, { className: "w-6 h-6" }),
     title: "Blazing Fast",
     description: "Powered by Vite for lightning-fast development and builds"
   },
   {
-    icon: "🔄",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Database, { className: "w-6 h-6" }),
     title: "State Management",
     description: "React Query for server state, Zustand for client state"
   },
   {
-    icon: "🧪",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Activity, { className: "w-6 h-6" }),
     title: "Testing Ready",
     description: "Vitest for unit tests, Playwright for E2E testing"
   },
   {
-    icon: "🌓",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(Moon, { className: "w-6 h-6" }),
     title: "Theme Support",
     description: "Dark and light themes with persistent preferences"
   },
   {
-    icon: "📦",
+    icon: /* @__PURE__ */ jsxRuntimeExports.jsx(PanelsTopLeft, { className: "w-6 h-6" }),
     title: "Modular Design",
     description: "Independent micro frontends for product catalog and shopping cart"
   }
@@ -282,70 +748,108 @@ const HomePage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { theme } = useThemeStore$2();
   const isDark = theme === "dark";
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-5xl mx-auto", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(
-      "div",
-      {
-        className: `
-          text-center px-8 py-16 mb-12 rounded-2xl
-          ${isDark ? "bg-gradient-to-br from-gray-800 to-gray-900 text-white shadow-[0_4px_20px_rgba(0,0,0,0.3)]" : "bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-[0_4px_20px_rgba(102,126,234,0.3)]"}
-        `,
-        children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-4xl font-bold leading-tight mb-4", children: "Welcome to E-Commerce Platform" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg opacity-90 max-w-xl mx-auto mb-8", children: "A modern micro frontend application built with React, Vite, and Module Federation" }),
-          !isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base opacity-90 mb-6", children: "Please login to start shopping" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Link$3,
-              {
-                to: "/login",
-                className: "\n                inline-block px-8 py-3.5 rounded-lg\n                bg-white text-indigo-600 font-medium\n                transition-all duration-200\n                hover:-translate-y-0.5 hover:shadow-lg\n              ",
-                children: "Go to Login"
-              }
-            )
-          ] }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-base opacity-90 mb-6", children: "Start exploring our products!" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              Link$3,
-              {
-                to: "/products",
-                className: "\n                inline-block px-8 py-3.5 rounded-lg\n                bg-green-500 hover:bg-green-600 text-white font-medium\n                transition-all duration-200\n                hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(40,167,69,0.4)]\n              ",
-                children: "Browse Products"
-              }
-            )
-          ] })
-        ]
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "h2",
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-6xl mx-auto px-4 pb-20 overflow-hidden", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative pt-20 pb-32 flex flex-col items-center text-center animate-fade-in", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 blur-[120px] rounded-full pointer-events-none -z-10" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-colors hover:bg-indigo-500/20 border-indigo-500/30 bg-indigo-500/10 text-indigo-500 font-medium text-sm mb-8 animate-fade-up delay-100", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "relative flex h-2 w-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "relative inline-flex rounded-full h-2 w-2 bg-indigo-500" })
+        ] }),
+        "Next-Gen Microfrontend"
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        "h1",
         {
-          className: `text-center text-3xl font-semibold mb-10 ${isDark ? "text-white" : "text-gray-800"}`,
-          children: "Platform Features"
+          className: `text-5xl md:text-7xl font-extrabold tracking-tight mb-8 animate-fade-up delay-200 ${isDark ? "text-white" : "text-slate-900"}`,
+          children: [
+            "Welcome to the ",
+            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 pb-2 inline-block", children: "E-Commerce Platform" })
+          ]
         }
       ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8", children: features.map((feature) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "p",
+        {
+          className: `text-lg md:text-xl max-w-2xl mb-12 animate-fade-up delay-300 ${isDark ? "text-slate-400" : "text-slate-600"}`,
+          children: "A modern retail experience built with React, Vite, and Module Federation. Discover seamless shopping across decentralized micro-applications."
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col sm:flex-row items-center gap-4 animate-fade-up delay-400", children: [
+        !isAuthenticated ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Link$3,
+          {
+            to: "/login",
+            className: "group relative px-8 py-4 rounded-xl bg-indigo-600 text-white font-semibold text-lg overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(79,70,229,0.4)] flex items-center justify-center gap-2 w-full sm:w-auto",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "relative z-10", children: "Sign In to Shop" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" })
+            ]
+          }
+        ) : /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          Link$3,
+          {
+            to: "/products",
+            className: "group relative px-8 py-4 rounded-xl bg-indigo-600 text-white font-semibold text-lg overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(79,70,229,0.4)] flex items-center justify-center gap-2 w-full sm:w-auto",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "relative z-10", children: "Browse Products" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(ArrowRight, { className: "w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" })
+            ]
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "a",
+          {
+            href: "https://github.com/thiendp99",
+            target: "_blank",
+            rel: "noopener noreferrer",
+            className: `px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all hover:-translate-y-1 flex items-center justify-center gap-2 w-full sm:w-auto ${isDark ? "border-slate-700 text-slate-300 hover:border-slate-500 hover:bg-slate-800" : "border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50"}`,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(User, { className: "w-5 h-5" }),
+              "View My Profile"
+            ]
+          }
+        )
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "animate-fade-up delay-500", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-16", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "h2",
+          {
+            className: `text-3xl font-bold mb-4 ${isDark ? "text-white" : "text-slate-900"}`,
+            children: "Enterprise-Grade Architecture"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: isDark ? "text-slate-400" : "text-slate-600", children: "Engineered for performance, scalability, and developer experience" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: features.map((feature, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "div",
         {
-          className: `
-                p-8 rounded-xl border transition-all duration-300
-                hover:-translate-y-1
-                ${isDark ? "bg-gray-900 border-gray-700 shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:border-gray-500 hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)]" : "bg-white border-gray-200 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:border-blue-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)]"}
-              `,
+          className: `group relative p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 animate-fade-up ${isDark ? "bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:shadow-[0_8px_30px_rgba(79,70,229,0.15)]" : "bg-white border-slate-200 hover:border-indigo-500/30 hover:shadow-[0_8px_30px_rgba(79,70,229,0.1)]"}`,
+          style: { animationDelay: `${500 + index * 100}ms` },
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-5xl mb-4 text-center", children: feature.icon }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "div",
+              {
+                className: `w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors duration-300 ${isDark ? "bg-slate-800 text-indigo-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-300" : "bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100"}`,
+                children: feature.icon
+              }
+            ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "h3",
               {
-                className: `text-lg font-semibold mb-2 text-center ${isDark ? "text-white" : "text-gray-800"}`,
+                className: `text-xl font-bold mb-3 ${isDark ? "text-white" : "text-slate-900"}`,
                 children: feature.title
               }
             ),
             /* @__PURE__ */ jsxRuntimeExports.jsx(
               "p",
               {
-                className: `text-sm leading-relaxed text-center ${isDark ? "text-gray-400" : "text-gray-500"}`,
+                className: `leading-relaxed ${isDark ? "text-slate-400" : "text-slate-600"}`,
                 children: feature.description
               }
             )
@@ -577,44 +1081,10 @@ const MainLayout = () => {
                       onClick: toggleTheme,
                       "aria-label": "Toggle theme",
                       className: `
-            p-2 rounded-full transition-colors duration-200
-            ${isDark ? "text-gray-400 hover:text-white hover:bg-gray-800" : "text-gray-500 hover:text-gray-900 hover:bg-gray-100"}
-          `,
-                      children: isDark ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "svg",
-                        {
-                          className: "w-5 h-5",
-                          fill: "none",
-                          viewBox: "0 0 24 24",
-                          stroke: "currentColor",
-                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "path",
-                            {
-                              strokeLinecap: "round",
-                              strokeLinejoin: "round",
-                              strokeWidth: 2,
-                              d: "M20.354 15.354A9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                            }
-                          )
-                        }
-                      ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-                        "svg",
-                        {
-                          className: "w-5 h-5",
-                          fill: "none",
-                          viewBox: "0 0 24 24",
-                          stroke: "currentColor",
-                          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                            "path",
-                            {
-                              strokeLinecap: "round",
-                              strokeLinejoin: "round",
-                              strokeWidth: 2,
-                              d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10 5 5 0 000-10z"
-                            }
-                          )
-                        }
-                      )
+                  p-2 rounded-full transition-all duration-300 transform hover:scale-110 shadow-sm ring-1
+                  ${isDark ? "text-yellow-400 bg-slate-800 ring-slate-700 hover:bg-slate-700 hover:text-yellow-300" : "text-indigo-600 bg-white ring-gray-200 hover:bg-indigo-50 hover:text-indigo-700"}
+                `,
+                      children: isDark ? /* @__PURE__ */ jsxRuntimeExports.jsx(Sun, { className: "w-5 h-5" }) : /* @__PURE__ */ jsxRuntimeExports.jsx(Moon, { className: "w-5 h-5" })
                     }
                   )
                 ] }),
