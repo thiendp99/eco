@@ -11,7 +11,12 @@ interface ProductCardProps {
   className?: string;
 }
 
-export const ProductCard = ({ product, onViewDetails, style, className = '' }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+  onViewDetails,
+  style,
+  className = '',
+}: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
   const { theme } = useThemeStore();
@@ -49,7 +54,9 @@ export const ProductCard = ({ product, onViewDetails, style, className = '' }: P
       `}
     >
       {/* Image Container */}
-      <div className={`relative w-full aspect-[4/5] overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-50'}`}>
+      <div
+        className={`relative w-full aspect-[4/5] overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-50'}`}
+      >
         <img
           src={product.image}
           alt={product.name}
@@ -75,7 +82,9 @@ export const ProductCard = ({ product, onViewDetails, style, className = '' }: P
               }
             `}
           >
-            {isStockAvailable && <div className="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300 ease-out"></div>}
+            {isStockAvailable && (
+              <div className="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+            )}
             <span className="relative z-10 flex items-center gap-2">
               {isStockAvailable ? (
                 <>
@@ -107,7 +116,9 @@ export const ProductCard = ({ product, onViewDetails, style, className = '' }: P
       {/* Content Area */}
       <div className="p-5 flex flex-col flex-grow relative z-10">
         {/* Category */}
-        <div className={`text-xs uppercase tracking-wider font-bold mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>
+        <div
+          className={`text-xs uppercase tracking-wider font-bold mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}
+        >
           {product.category}
         </div>
 
@@ -128,14 +139,20 @@ export const ProductCard = ({ product, onViewDetails, style, className = '' }: P
         <div className="mt-auto flex items-end justify-between">
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1.5">
-              <Star className={`w-4 h-4 ${isDark ? 'text-amber-400 fill-amber-400/20' : 'text-amber-500 fill-amber-500/20'}`} />
-              <span className={`text-sm font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              <Star
+                className={`w-4 h-4 ${isDark ? 'text-amber-400 fill-amber-400/20' : 'text-amber-500 fill-amber-500/20'}`}
+              />
+              <span
+                className={`text-sm font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}
+              >
                 {product.rating?.toFixed(1) || '0.0'}
               </span>
             </div>
           </div>
-          
-          <div className={`text-lg font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+
+          <div
+            className={`text-lg font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}
+          >
             {formattedPrice}
           </div>
         </div>

@@ -105,9 +105,11 @@ export const MainLayout = () => {
                 aria-label="Toggle theme"
                 className={`
                   p-2 rounded-full transition-all duration-300 transform hover:scale-110 shadow-sm ring-1
-                  ${isDark 
-                    ? 'text-yellow-400 bg-slate-800 ring-slate-700 hover:bg-slate-700 hover:text-yellow-300' 
-                    : 'text-indigo-600 bg-white ring-gray-200 hover:bg-indigo-50 hover:text-indigo-700'}
+                  ${
+                    isDark
+                      ? 'text-yellow-400 bg-slate-800 ring-slate-700 hover:bg-slate-700 hover:text-yellow-300'
+                      : 'text-indigo-600 bg-white ring-gray-200 hover:bg-indigo-50 hover:text-indigo-700'
+                  }
                 `}
               >
                 {isDark ? (

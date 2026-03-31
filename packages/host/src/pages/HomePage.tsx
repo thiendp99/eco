@@ -1,13 +1,23 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { useThemeStore } from '@ecommerce/shared';
-import { Box, Zap, Database, Activity, Moon, Layout, ArrowRight, User } from 'lucide-react';
+import {
+  Box,
+  Zap,
+  Database,
+  Activity,
+  Moon,
+  Layout,
+  ArrowRight,
+  User,
+} from 'lucide-react';
 
 const features = [
   {
     icon: <Box className="w-6 h-6" />,
     title: 'Micro Frontend Architecture',
-    description: 'Built with Module Federation for scalable, independent deployments',
+    description:
+      'Built with Module Federation for scalable, independent deployments',
   },
   {
     icon: <Zap className="w-6 h-6" />,
@@ -32,7 +42,8 @@ const features = [
   {
     icon: <Layout className="w-6 h-6" />,
     title: 'Modular Design',
-    description: 'Independent micro frontends for product catalog and shopping cart',
+    description:
+      'Independent micro frontends for product catalog and shopping cart',
   },
 ];
 
@@ -47,7 +58,7 @@ export const HomePage = () => {
       <div className="relative pt-20 pb-32 flex flex-col items-center text-center animate-fade-in">
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 blur-[120px] rounded-full pointer-events-none -z-10" />
-        
+
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-colors hover:bg-indigo-500/20 border-indigo-500/30 bg-indigo-500/10 text-indigo-500 font-medium text-sm mb-8 animate-fade-up delay-100">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -56,15 +67,21 @@ export const HomePage = () => {
           Next-Gen Microfrontend
         </div>
 
-        <h1 className={`text-5xl md:text-7xl font-extrabold tracking-tight mb-8 animate-fade-up delay-200 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+        <h1
+          className={`text-5xl md:text-7xl font-extrabold tracking-tight mb-8 animate-fade-up delay-200 ${isDark ? 'text-white' : 'text-slate-900'}`}
+        >
           Welcome to the <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 pb-2 inline-block">
             E-Commerce Platform
           </span>
         </h1>
-        
-        <p className={`text-lg md:text-xl max-w-2xl mb-12 animate-fade-up delay-300 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-          A modern retail experience built with React, Vite, and Module Federation. Discover seamless shopping across decentralized micro-applications.
+
+        <p
+          className={`text-lg md:text-xl max-w-2xl mb-12 animate-fade-up delay-300 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+        >
+          A modern retail experience built with React, Vite, and Module
+          Federation. Discover seamless shopping across decentralized
+          micro-applications.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-4 animate-fade-up delay-400">
@@ -93,8 +110,8 @@ export const HomePage = () => {
             target="_blank"
             rel="noopener noreferrer"
             className={`px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all hover:-translate-y-1 flex items-center justify-center gap-2 w-full sm:w-auto ${
-              isDark 
-                ? 'border-slate-700 text-slate-300 hover:border-slate-500 hover:bg-slate-800' 
+              isDark
+                ? 'border-slate-700 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
                 : 'border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
             }`}
           >
@@ -107,7 +124,9 @@ export const HomePage = () => {
       {/* Features Section */}
       <div className="animate-fade-up delay-500">
         <div className="text-center mb-16">
-          <h2 className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+          <h2
+            className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}
+          >
             Enterprise-Grade Architecture
           </h2>
           <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>
@@ -126,17 +145,23 @@ export const HomePage = () => {
               }`}
               style={{ animationDelay: `${500 + index * 100}ms` }}
             >
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors duration-300 ${
-                isDark 
-                  ? 'bg-slate-800 text-indigo-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-300' 
-                  : 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100'
-              }`}>
+              <div
+                className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-slate-800 text-indigo-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-300'
+                    : 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100'
+                }`}
+              >
                 {feature.icon}
               </div>
-              <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              <h3
+                className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}
+              >
                 {feature.title}
               </h3>
-              <p className={`leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              <p
+                className={`leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
+              >
                 {feature.description}
               </p>
             </div>
