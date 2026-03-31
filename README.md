@@ -1,5 +1,7 @@
 # Ecommerce Microfrontend Project
 
+**Live Demo:** [eco-host-git-develop-thiendp9s-projects.vercel.app/](https://eco-host-git-develop-thiendp9s-projects.vercel.app/)
+
 ### 📝 Project Overview
 
 A scalable e-commerce frontend built using a Microfrontend Architecture. It is divided into multiple independent applications (Host, Product Catalog, Shopping Cart) managed within a monorepo, allowing them to be developed, tested, and deployed independently.
@@ -23,8 +25,6 @@ A scalable e-commerce frontend built using a Microfrontend Architecture. It is d
 - **Testing coverage:** Authored robust stability measures executing unit tests with **Vitest** and reliable End-to-End checks via **Playwright**.
 
 ---
-
-**Live Demo:** [https://thiendp99.github.io/eco/](https://thiendp99.github.io/eco/)
 
 ## CI/CD Pipeline
 
