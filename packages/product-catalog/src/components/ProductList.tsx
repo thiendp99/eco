@@ -5,13 +5,12 @@ import ProductDetail from './ProductDetail';
 import { ProductFilters as Filters } from '../types/product';
 import { useProducts } from '../hooks/useProducts';
 import { useThemeStore } from '@ecommerce/shared';
+import { AlertCircle, SearchX, ChevronLeft, ChevronRight, Loader2, X } from 'lucide-react';
 
 const ProductList = () => {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<Filters>({});
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(
-    null
-  );
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const { theme } = useThemeStore();
   const isDark = theme === 'dark';
 
@@ -31,20 +30,16 @@ const ProductList = () => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh] p-8">
-        <div
-          className={`max-w-md p-8 text-center ${isDark ? 'bg-gray-900' : 'bg-white'}`}
-        >
-          <div className="text-4xl mb-4">⚠️</div>
-          <h2
-            className={`text-xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}
-          >
-            Error loading products
+      <div className="flex items-center justify-center min-h-[60vh] p-8 animate-fade-up">
+        <div className={`max-w-md w-full p-8 md:p-12 text-center rounded-3xl border shadow-xl ${isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-red-100'}`}>
+          <div className={`w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center ${isDark ? 'bg-red-500/10 text-red-400' : 'bg-red-50 text-red-500'}`}>
+            <AlertCircle className="w-10 h-10" />
+          </div>
+          <h2 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            Oops! Error loading products
           </h2>
-          <p
-            className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            {error instanceof Error ? error.message : 'Something went wrong'}
+          <p className={`text-base ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+            {error instanceof Error ? error.message : 'Something went wrong while connecting to our servers. Please try again later.'}
           </p>
         </div>
       </div>
@@ -52,39 +47,29 @@ const ProductList = () => {
   }
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-gray-950' : 'bg-white'}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header - Shopify minimalist style */}
-        <div className="mb-12">
-          <h1
-            className={`text-3xl lg:text-4xl font-normal mb-3 tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}
-          >
-            All Products
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-slate-950' : 'bg-gray-50'}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+        {/* Header */}
+        <div className="mb-10 lg:mb-16 animate-fade-up">
+          <h1 className={`text-xl lg:text-2xl font-extrabold tracking-tight mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            Discover Products
           </h1>
-          <p
-            className={`text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            {data?.total || 0} products
+          <p className={`text-lg font-medium ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}>
+            {isLoading ? 'Loading catalog...' : `${data?.total || 0} premium items available`}
           </p>
         </div>
 
         {/* Filters */}
-        <ProductFilters filters={filters} onFiltersChange={setFilters} />
+        <div className="animate-fade-up delay-50">
+          <ProductFilters filters={filters} onFiltersChange={setFilters} />
+        </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center min-h-[50vh]">
-            <div className="text-center">
-              <div
-                className={`
-                w-12 h-12 mx-auto mb-4 rounded-full
-                border-2 border-t-transparent animate-spin
-                ${isDark ? 'border-gray-700' : 'border-gray-300'}
-              `}
-              />
-              <div
-                className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-              >
-                Loading products...
+          <div className="flex items-center justify-center min-h-[50vh] animate-fade-in">
+            <div className="flex flex-col items-center">
+              <Loader2 className={`w-12 h-12 animate-spin mb-4 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`} />
+              <div className={`text-sm font-medium ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                Fetching our best products...
               </div>
             </div>
           </div>
@@ -92,27 +77,24 @@ const ProductList = () => {
           <>
             {/* Products Grid */}
             {data?.products.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="text-5xl mb-4">🔍</div>
-                <h3
-                  className={`text-xl font-medium mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}
-                >
+              <div className="text-center py-24 animate-fade-up delay-100">
+                <div className={`w-24 h-24 mx-auto mb-6 rounded-3xl flex items-center justify-center rotate-3 transition-transform hover:rotate-6 ${isDark ? 'bg-slate-800 text-slate-400' : 'bg-indigo-50 text-indigo-400'}`}>
+                  <SearchX className="w-12 h-12" />
+                </div>
+                <h3 className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   No products found
                 </h3>
-                <p
-                  className={`text-sm mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-                >
-                  Try adjusting your filters or search terms
+                <p className={`text-base mb-8 max-w-md mx-auto ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>
+                  We couldn&apos;t find anything matching your current filters. Try adjusting your search criteria.
                 </p>
                 <button
                   onClick={() => setFilters({})}
                   className={`
-                    px-6 py-2.5 text-sm font-medium
-                    transition-colors duration-200
-                    ${
-                      isDark
-                        ? 'bg-white text-gray-900 hover:bg-gray-100'
-                        : 'bg-gray-900 text-white hover:bg-gray-800'
+                    px-8 py-3.5 rounded-full text-sm font-bold tracking-wide
+                    transition-all duration-300 hover:-translate-y-1 hover:shadow-lg
+                    ${isDark
+                      ? 'bg-white text-gray-900 hover:bg-slate-200'
+                      : 'bg-indigo-600 text-white hover:bg-indigo-700'
                     }
                   `}
                 >
@@ -122,91 +104,70 @@ const ProductList = () => {
             ) : (
               <>
                 {/* Product Count with Loading Indicator */}
-                <div className="flex items-center justify-between mb-6">
-                  <div
-                    className={`text-sm uppercase tracking-wide ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-                  >
-                    Showing {data?.products.length} of {data?.total} products
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                  <div className={`text-sm font-bold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-500'}`}>
+                    Showing {data?.products.length} of {data?.total} results
                   </div>
                   {isFetching && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <div
-                        className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin ${isDark ? 'border-gray-700' : 'border-gray-300'}`}
-                      />
-                      <span
-                        className={isDark ? 'text-gray-400' : 'text-gray-600'}
-                      >
-                        Updating...
-                      </span>
+                    <div className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full ${isDark ? 'bg-slate-800 text-indigo-400' : 'bg-indigo-50 text-indigo-600'}`}>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Updating catalog...
                     </div>
                   )}
                 </div>
 
-                {/* Grid - Shopify style responsive grid */}
+                {/* Grid */}
                 <div
                   data-testid="product-grid"
-                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-6 lg:gap-y-10 mb-12"
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-16"
                 >
-                  {data?.products.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      onViewDetails={handleViewDetails}
-                    />
-                  ))}
+                  {data?.products.map((product, index) => {
+                    const staggerDelayClass = `delay-${Math.min((index % 6) * 100, 500)}`;
+                    return (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        onViewDetails={handleViewDetails}
+                        className={`animate-fade-up ${staggerDelayClass}`}
+                      />
+                    );
+                  })}
                 </div>
               </>
             )}
 
-            {/* Pagination - Shopify minimalist style */}
+            {/* Pagination Component */}
             {data && data.totalPages > 1 && (
-              <div
-                className={`flex items-center justify-center gap-2 py-8 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'}`}
-              >
+              <div className={`flex items-center justify-center gap-2 py-10 border-t ${isDark ? 'border-slate-800' : 'border-gray-200'}`}>
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
                   className={`
-                    px-4 py-2 text-sm font-medium
-                    transition-colors duration-200
-                    ${
-                      page === 1
-                        ? isDark
-                          ? 'text-gray-700 cursor-not-allowed'
-                          : 'text-gray-300 cursor-not-allowed'
-                        : isDark
-                          ? 'text-white hover:bg-gray-900'
-                          : 'text-gray-900 hover:bg-gray-100'
+                    p-3 rounded-full flex items-center justify-center
+                    transition-all duration-200
+                    ${page === 1
+                      ? isDark ? 'text-slate-600 cursor-not-allowed bg-slate-900' : 'text-gray-300 cursor-not-allowed bg-gray-50'
+                      : isDark ? 'text-white hover:bg-slate-800 bg-slate-900' : 'text-gray-700 hover:bg-gray-100 bg-white shadow-sm border border-gray-100'
                     }
                   `}
                 >
-                  Previous
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
 
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5 px-2">
                   {[...Array(data.totalPages)].map((_, i) => {
                     const pageNum = i + 1;
-                    // Show first page, last page, current page, and pages around current
-                    if (
-                      pageNum === 1 ||
-                      pageNum === data.totalPages ||
-                      (pageNum >= page - 1 && pageNum <= page + 1)
-                    ) {
+                    if (pageNum === 1 || pageNum === data.totalPages || (pageNum >= page - 1 && pageNum <= page + 1)) {
                       return (
                         <button
                           key={pageNum}
                           onClick={() => setPage(pageNum)}
                           className={`
-                            min-w-[2.5rem] px-3 py-2 text-sm font-medium
-                            transition-colors duration-200 rounded-md
-                            ${
-                              page === pageNum
-                                ? isDark
-                                  ? 'bg-white text-gray-900'
-                                  : 'bg-gray-900 text-white'
-                                : isDark
-                                  ? 'text-white hover:bg-gray-900'
-                                  : 'text-gray-900 hover:bg-gray-100'
+                            min-w-[40px] h-[40px] flex items-center justify-center text-sm font-bold
+                            transition-all duration-200 rounded-full
+                            ${page === pageNum
+                              ? isDark ? 'bg-indigo-500 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'bg-indigo-600 text-white shadow-md'
+                              : isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                             }
                           `}
                         >
@@ -215,10 +176,7 @@ const ProductList = () => {
                       );
                     } else if (pageNum === page - 2 || pageNum === page + 2) {
                       return (
-                        <span
-                          key={pageNum}
-                          className={`px-2 ${isDark ? 'text-gray-600' : 'text-gray-400'}`}
-                        >
+                        <span key={pageNum} className={`px-1 ${isDark ? 'text-slate-600' : 'text-gray-400'}`}>
                           ...
                         </span>
                       );
@@ -228,25 +186,18 @@ const ProductList = () => {
                 </div>
 
                 <button
-                  onClick={() =>
-                    setPage((p) => Math.min(data.totalPages, p + 1))
-                  }
+                  onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}
                   disabled={page === data.totalPages}
                   className={`
-                    px-4 py-2 text-sm font-medium
-                    transition-colors duration-200
-                    ${
-                      page === data.totalPages
-                        ? isDark
-                          ? 'text-gray-700 cursor-not-allowed'
-                          : 'text-gray-300 cursor-not-allowed'
-                        : isDark
-                          ? 'text-white hover:bg-gray-900'
-                          : 'text-gray-900 hover:bg-gray-100'
+                    p-3 rounded-full flex items-center justify-center
+                    transition-all duration-200
+                    ${page === data.totalPages
+                      ? isDark ? 'text-slate-600 cursor-not-allowed bg-slate-900' : 'text-gray-300 cursor-not-allowed bg-gray-50'
+                      : isDark ? 'text-white hover:bg-slate-800 bg-slate-900' : 'text-gray-700 hover:bg-gray-100 bg-white shadow-sm border border-gray-100'
                     }
                   `}
                 >
-                  Next
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
             )}
@@ -255,52 +206,39 @@ const ProductList = () => {
 
         {/* Product Detail Modal */}
         {selectedProductId && (
-          <div className="fixed inset-0 z-50 overflow-y-auto ">
+          <div className="fixed inset-0 z-50 overflow-y-auto w-full h-full flex flex-col items-center justify-center">
             {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
+              className={`fixed inset-0 backdrop-blur-md transition-opacity duration-300 ${isDark ? 'bg-slate-950/80' : 'bg-slate-900/40'}`}
               onClick={handleCloseDetail}
             />
 
             {/* Modal Content */}
-            <div className="relative min-h-screen flex items-center justify-center p-4">
+            <div className="relative z-10 w-full px-4 sm:px-6 flex items-center justify-center min-h-screen my-8 animate-fade-up">
               <div
                 className={`
-                relative max-w-4xl w-full max-h-[90vh] overflow-hidden
-                rounded-3xl shadow-2xl
-                ${isDark ? 'bg-gray-900' : 'bg-white'}
+                relative max-w-5xl w-full mx-auto overflow-hidden
+                rounded-[2rem] shadow-2xl ring-1
+                ${isDark ? 'bg-slate-900 ring-white/10' : 'bg-white ring-black/5'}
               `}
               >
                 {/* Close Button */}
                 <button
                   onClick={handleCloseDetail}
                   className={`
-                    absolute top-4 right-4 z-10 p-3 rounded-full
-                    transition-colors duration-200
-                    ${
-                      isDark
-                        ? 'bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700'
-                        : 'bg-gray-100 text-gray-600 hover:text-gray-900 hover:bg-gray-200'
+                    absolute top-6 right-6 z-20 p-2.5 rounded-full backdrop-blur-lg
+                    transition-all duration-200 hover:scale-110
+                    ${isDark
+                      ? 'bg-black/20 text-slate-300 hover:text-white hover:bg-black/40 border border-white/10'
+                      : 'bg-white/80 text-gray-500 hover:text-gray-900 hover:bg-white border border-gray-200 shadow-sm'
                     }
                   `}
                 >
-                  <svg
-                    className="w-6 h-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <X className="w-5 h-5" />
                 </button>
 
                 {/* Product Detail Component */}
-                <div className="p-6 lg:p-8 max-h-[90vh] overflow-y-auto scrollbar-custom">
+                <div className="p-0 max-h-[85vh] overflow-y-auto scrollbar-custom">
                   <ProductDetail productId={selectedProductId} />
                 </div>
               </div>
