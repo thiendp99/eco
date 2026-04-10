@@ -172,6 +172,7 @@ export const ProductFilters = ({
           {/* Search - Full Width */}
           <div className="mb-5">
             <label
+              htmlFor="search-input"
               className={`block text-xs font-semibold mb-2.5 uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
             >
               Search Products
@@ -191,6 +192,7 @@ export const ProductFilters = ({
                 />
               </svg>
               <input
+                id="search-input"
                 type="text"
                 value={localFilters.search || ''}
                 onChange={(e) =>
@@ -216,12 +218,14 @@ export const ProductFilters = ({
             {/* Category */}
             <div>
               <label
+                htmlFor="category"
                 className={`block text-xs font-semibold mb-2.5 uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
               >
                 Category
               </label>
               <div className="relative">
                 <select
+                  id="category"
                   value={localFilters.category || ''}
                   onChange={(e) =>
                     setLocalFilters({
@@ -267,12 +271,14 @@ export const ProductFilters = ({
             {/* Sort By */}
             <div>
               <label
+                htmlFor="sort-by"
                 className={`block text-xs font-semibold mb-2.5 uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
               >
                 Sort By
               </label>
               <div className="relative">
                 <select
+                  id="sort-by"
                   value={localFilters.sortBy || ''}
                   onChange={(e) =>
                     setLocalFilters({
@@ -323,6 +329,7 @@ export const ProductFilters = ({
             {/* Price Range */}
             <div className="md:col-span-2">
               <label
+                htmlFor="price-range"
                 className={`block text-xs font-semibold mb-2.5 uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
               >
                 Price Range
@@ -335,6 +342,7 @@ export const ProductFilters = ({
                     $
                   </span>
                   <input
+                    id="price-range"
                     type="number"
                     value={localFilters.minPrice || ''}
                     onChange={(e) =>
@@ -401,12 +409,14 @@ export const ProductFilters = ({
             {/* Sort Order */}
             <div>
               <label
+                htmlFor="order"
                 className={`block text-xs font-semibold mb-2.5 uppercase tracking-wider ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
               >
                 Order
               </label>
               <div className="relative">
                 <select
+                  id="order"
                   value={localFilters.sortOrder || 'asc'}
                   onChange={(e) =>
                     setLocalFilters({

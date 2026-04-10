@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { TEST_ACCOUNTS } from '../constants/testAccounts';
 
 interface User {
   id: string;
@@ -19,20 +20,22 @@ interface AuthState {
 const mockLogin = async (email: string, password: string): Promise<User> => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  if (email === 'admin@test.com' && password === 'admin123') {
+  const adminAccount = TEST_ACCOUNTS.find((a) => a.role === 'Admin');
+  if (email === adminAccount?.email && password === adminAccount?.password) {
     return {
       id: '1',
       name: 'Admin User',
-      email: 'admin@test.com',
+      email: adminAccount.email,
       role: 'admin',
     };
   }
 
-  if (email === 'user@test.com' && password === 'user123') {
+  const userAccount = TEST_ACCOUNTS.find((a) => a.role === 'User');
+  if (email === userAccount?.email && password === userAccount?.password) {
     return {
       id: '2',
       name: 'Regular User',
-      email: 'user@test.com',
+      email: userAccount.email,
       role: 'user',
     };
   }
@@ -57,7 +60,33 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-storage', // LocalStorage key
+      name: 'auth-storage',
+      // Gracefully skip persistence if localStorage is unavailable
+      // (e.g., private browsing mode or storage quota exceeded)
+      storage: {
+        getItem: (name) => {
+          try {
+            const value = localStorage.getItem(name);
+            return value ? JSON.parse(value) : null;
+          } catch {
+            return null;
+          }
+        },
+        setItem: (name, value) => {
+          try {
+            localStorage.setItem(name, JSON.stringify(value));
+          } catch {
+            // Silently ignore write errors
+          }
+        },
+        removeItem: (name) => {
+          try {
+            localStorage.removeItem(name);
+          } catch {
+            // Silently ignore remove errors
+          }
+        },
+      },
     }
   )
 );

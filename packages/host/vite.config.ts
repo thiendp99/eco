@@ -7,21 +7,25 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   const PRODUCT_CATALOG_URL =
-    env.VITE_PRODUCT_CATALOG_URL || 'http://localhost:3001';
+    env.VITE_PRODUCT_CATALOG_URL || 'http://localhost:3001/eco/product-catalog';
   const SHOPPING_CART_URL =
-    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002';
+    env.VITE_SHOPPING_CART_URL || 'http://localhost:3002/eco/shopping-cart';
 
   return {
     server: {
       port: 3000,
+    },
+    preview: {
+      port: 3000,
+      strictPort: true,
     },
     plugins: [
       react(),
       federation({
         name: 'host',
         remotes: {
-          productCatalog: `${PRODUCT_CATALOG_URL}/assets/remoteEntry.js`,
-          shoppingCart: `${SHOPPING_CART_URL}/assets/remoteEntry.js`,
+          productCatalog: `${PRODUCT_CATALOG_URL}/remoteEntry.js`,
+          shoppingCart: `${SHOPPING_CART_URL}/remoteEntry.js`,
         },
         shared: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,6 +44,7 @@ export default defineConfig(({ mode }) => {
       }),
       tailwindcss(),
     ],
+    base: process.env.VERCEL ? '/' : mode === 'production' ? '/eco/' : '/',
     build: {
       target: 'esnext',
       minify: false,

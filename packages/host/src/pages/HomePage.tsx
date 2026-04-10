@@ -1,246 +1,166 @@
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { useThemeStore } from '@ecommerce/shared';
+import {
+  Box,
+  Zap,
+  Database,
+  Activity,
+  Moon,
+  Layout,
+  ArrowRight,
+  User,
+} from 'lucide-react';
+
+const features = [
+  {
+    icon: <Box className="w-6 h-6" />,
+    title: 'Micro Frontend Architecture',
+    description:
+      'Built with Module Federation for scalable, independent deployments',
+  },
+  {
+    icon: <Zap className="w-6 h-6" />,
+    title: 'Blazing Fast',
+    description: 'Powered by Vite for lightning-fast development and builds',
+  },
+  {
+    icon: <Database className="w-6 h-6" />,
+    title: 'State Management',
+    description: 'React Query for server state, Zustand for client state',
+  },
+  {
+    icon: <Activity className="w-6 h-6" />,
+    title: 'Testing Ready',
+    description: 'Vitest for unit tests, Playwright for E2E testing',
+  },
+  {
+    icon: <Moon className="w-6 h-6" />,
+    title: 'Theme Support',
+    description: 'Dark and light themes with persistent preferences',
+  },
+  {
+    icon: <Layout className="w-6 h-6" />,
+    title: 'Modular Design',
+    description:
+      'Independent micro frontends for product catalog and shopping cart',
+  },
+];
 
 export const HomePage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const { theme } = useThemeStore();
   const isDark = theme === 'dark';
 
-  const features = [
-    {
-      icon: '🏗️',
-      title: 'Micro Frontend Architecture',
-      description:
-        'Built with Module Federation for scalable, independent deployments',
-    },
-    {
-      icon: '⚡',
-      title: 'Blazing Fast',
-      description: 'Powered by Vite for lightning-fast development and builds',
-    },
-    {
-      icon: '🔄',
-      title: 'State Management',
-      description: 'React Query for server state, Zustand for client state',
-    },
-    {
-      icon: '🧪',
-      title: 'Testing Ready',
-      description: 'Vitest for unit tests, Playwright for E2E testing',
-    },
-    {
-      icon: '🌓',
-      title: 'Theme Support',
-      description: 'Dark and light themes with persistent preferences',
-    },
-    {
-      icon: '📦',
-      title: 'Modular Design',
-      description:
-        'Independent micro frontends for product catalog and shopping cart',
-    },
-  ];
-
-  const buttonStyle = {
-    display: 'inline-block',
-    padding: '0.875rem 2rem',
-    borderRadius: '8px',
-    textDecoration: 'none',
-    fontSize: '1rem',
-    fontWeight: 500,
-    transition: 'all 0.3s ease',
-    border: 'none',
-    cursor: 'pointer',
-  };
-
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
+    <div className="max-w-6xl mx-auto px-4 pb-20 overflow-hidden">
       {/* Hero Section */}
-      <div
-        style={{
-          textAlign: 'center',
-          padding: '4rem 2rem',
-          marginBottom: '4rem',
-          background: isDark
-            ? 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)'
-            : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: '16px',
-          color: isDark ? '#ffffff' : '#ffffff',
-          boxShadow: isDark
-            ? '0 4px 20px rgba(0, 0, 0, 0.3)'
-            : '0 4px 20px rgba(102, 126, 234, 0.3)',
-        }}
-      >
+      <div className="relative pt-20 pb-32 flex flex-col items-center text-center animate-fade-in">
+        {/* Decorative background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 blur-[120px] rounded-full pointer-events-none -z-10" />
+
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-colors hover:bg-indigo-500/20 border-indigo-500/30 bg-indigo-500/10 text-indigo-500 font-medium text-sm mb-8 animate-fade-up delay-100">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+          </span>
+          Next-Gen Microfrontend
+        </div>
+
         <h1
-          style={{
-            fontSize: '2.5rem',
-            marginBottom: '1rem',
-            fontWeight: 700,
-            lineHeight: 1.2,
-          }}
+          className={`text-5xl md:text-7xl font-extrabold tracking-tight mb-8 animate-fade-up delay-200 ${isDark ? 'text-white' : 'text-slate-900'}`}
         >
-          Welcome to E-Commerce Platform
+          Welcome to the <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500 pb-2 inline-block">
+            E-Commerce Platform
+          </span>
         </h1>
+
         <p
-          style={{
-            fontSize: '1.25rem',
-            marginBottom: '2rem',
-            opacity: 0.95,
-            maxWidth: '600px',
-            margin: '0 auto 2rem',
-          }}
+          className={`text-lg md:text-xl max-w-2xl mb-12 animate-fade-up delay-300 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
         >
-          A modern micro frontend application built with React, Vite, and Module
-          Federation
+          A modern retail experience built with React, Vite, and Module
+          Federation. Discover seamless shopping across decentralized
+          micro-applications.
         </p>
 
-        {!isAuthenticated ? (
-          <div>
-            <p
-              style={{
-                marginBottom: '1.5rem',
-                fontSize: '1.1rem',
-                opacity: 0.9,
-              }}
-            >
-              Please login to start shopping
-            </p>
+        <div className="flex flex-col sm:flex-row items-center gap-4 animate-fade-up delay-400">
+          {!isAuthenticated ? (
             <Link
               to="/login"
-              style={{
-                ...buttonStyle,
-                backgroundColor: '#ffffff',
-                color: '#667eea',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow =
-                  '0 6px 20px rgba(255, 255, 255, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+              className="group relative px-8 py-4 rounded-xl bg-indigo-600 text-white font-semibold text-lg overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(79,70,229,0.4)] flex items-center justify-center gap-2 w-full sm:w-auto"
             >
-              Go to Login
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+              <span className="relative z-10">Sign In to Shop</span>
+              <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </div>
-        ) : (
-          <div>
-            <p
-              style={{
-                marginBottom: '1.5rem',
-                fontSize: '1.1rem',
-                opacity: 0.9,
-              }}
-            >
-              Start exploring our products!
-            </p>
+          ) : (
             <Link
               to="/products"
-              style={{
-                ...buttonStyle,
-                backgroundColor: '#28a745',
-                color: '#ffffff',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow =
-                  '0 6px 20px rgba(40, 167, 69, 0.4)';
-                e.currentTarget.style.backgroundColor = '#218838';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
-                e.currentTarget.style.backgroundColor = '#28a745';
-              }}
+              className="group relative px-8 py-4 rounded-xl bg-indigo-600 text-white font-semibold text-lg overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_10px_40px_rgba(79,70,229,0.4)] flex items-center justify-center gap-2 w-full sm:w-auto"
             >
-              Browse Products
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+              <span className="relative z-10">Browse Products</span>
+              <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
             </Link>
-          </div>
-        )}
+          )}
+
+          <a
+            href="https://github.com/thiendp99"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`px-8 py-4 rounded-xl font-semibold text-lg border-2 transition-all hover:-translate-y-1 flex items-center justify-center gap-2 w-full sm:w-auto ${
+              isDark
+                ? 'border-slate-700 text-slate-300 hover:border-slate-500 hover:bg-slate-800'
+                : 'border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+            }`}
+          >
+            <User className="w-5 h-5" />
+            View My Profile
+          </a>
+        </div>
       </div>
 
       {/* Features Section */}
-      <div>
-        <h2
-          style={{
-            textAlign: 'center',
-            fontSize: '2rem',
-            marginBottom: '3rem',
-            fontWeight: 600,
-            color: isDark ? '#ffffff' : '#333',
-          }}
-        >
-          Platform Features
-        </h2>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '2rem',
-          }}
-        >
+      <div className="animate-fade-up delay-500">
+        <div className="text-center mb-16">
+          <h2
+            className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}
+          >
+            Enterprise-Grade Architecture
+          </h2>
+          <p className={isDark ? 'text-slate-400' : 'text-slate-600'}>
+            Engineered for performance, scalability, and developer experience
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <div
-              key={index}
-              style={{
-                padding: '2rem',
-                backgroundColor: isDark ? '#2d2d2d' : '#ffffff',
-                borderRadius: '12px',
-                border: `1px solid ${isDark ? '#404040' : '#e0e0e0'}`,
-                transition: 'all 0.3s ease',
-                boxShadow: isDark
-                  ? '0 2px 8px rgba(0, 0, 0, 0.2)'
-                  : '0 2px 8px rgba(0, 0, 0, 0.05)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = isDark
-                  ? '0 8px 24px rgba(0, 0, 0, 0.3)'
-                  : '0 8px 24px rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.borderColor = isDark ? '#555' : '#007bff';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = isDark
-                  ? '0 2px 8px rgba(0, 0, 0, 0.2)'
-                  : '0 2px 8px rgba(0, 0, 0, 0.05)';
-                e.currentTarget.style.borderColor = isDark
-                  ? '#404040'
-                  : '#e0e0e0';
-              }}
+              key={feature.title}
+              className={`group relative p-8 rounded-2xl border transition-all duration-300 hover:-translate-y-2 animate-fade-up ${
+                isDark
+                  ? 'bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:shadow-[0_8px_30px_rgba(79,70,229,0.15)]'
+                  : 'bg-white border-slate-200 hover:border-indigo-500/30 hover:shadow-[0_8px_30px_rgba(79,70,229,0.1)]'
+              }`}
+              style={{ animationDelay: `${500 + index * 100}ms` }}
             >
               <div
-                style={{
-                  fontSize: '3rem',
-                  marginBottom: '1rem',
-                  textAlign: 'center',
-                }}
+                className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors duration-300 ${
+                  isDark
+                    ? 'bg-slate-800 text-indigo-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-300'
+                    : 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100'
+                }`}
               >
                 {feature.icon}
               </div>
               <h3
-                style={{
-                  fontSize: '1.25rem',
-                  marginBottom: '0.75rem',
-                  fontWeight: 600,
-                  color: isDark ? '#ffffff' : '#333',
-                  textAlign: 'center',
-                }}
+                className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}
               >
                 {feature.title}
               </h3>
               <p
-                style={{
-                  fontSize: '0.95rem',
-                  color: isDark ? '#b0b0b0' : '#666',
-                  lineHeight: 1.6,
-                  textAlign: 'center',
-                  margin: 0,
-                }}
+                className={`leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}
               >
                 {feature.description}
               </p>

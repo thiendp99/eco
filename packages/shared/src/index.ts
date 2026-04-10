@@ -1,4 +1,5 @@
 export * from './stores/themeStore';
+export * from './stores/cartStore';
 
 export interface Product {
   id: string;

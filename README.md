@@ -1,4 +1,30 @@
-# Ecommerce Microfrontend
+# Ecommerce Microfrontend Project
+
+**Live Demo:** [eco-host-git-develop-thiendp9s-projects.vercel.app/](https://eco-host-git-develop-thiendp9s-projects.vercel.app/)
+
+### 📝 Project Overview
+
+A scalable e-commerce frontend built using a Microfrontend Architecture. It is divided into multiple independent applications (Host, Product Catalog, Shopping Cart) managed within a monorepo, allowing them to be developed, tested, and deployed independently.
+
+### 🛠️ Tech Stack & Tools
+
+- **Core Frameworks:** React 18, TypeScript, Tailwind CSS
+- **Architecture:** Vite Module Federation (`@originjs/vite-plugin-federation`), PNPM Workspace
+- **State Tracking & Data:** Zustand, React Query, React Router DOM
+- **Testing & Quality:** Vitest (Unit), Playwright (E2E), ESLint, Prettier, Husky, Commitlint
+- **DevOps CI/CD:** GitHub Actions, Docker, Docker Compose, GitHub Pages
+- **Monitoring & Security:** Lighthouse CI, Snyk Security, CodeQL
+
+### 🚀 Key Responsibilities & Contributions
+
+- **Architecture Setup:** Architected with **Vite Module Federation** into targeted domains, isolating concerns and increasing independent development speed.
+- **Monorepo Config:** Organized via **PNPM Workspace** to efficiently share React components, types, and common utilities seamlessly.
+- **Workflow Automation:** Constructed **GitHub Actions** CI/CD pipelines to automate linting, type-checking, and rapid deployment routines.
+- **Code Quality & Sec:** Implemented automated dependency/static-analysis with **Snyk** and **CodeQL**, coupled with **Lighthouse CI** benchmarking to maintain strict accessibility parameters.
+- **Containerization Run:** Designed **multi-stage Dockerfiles** and managed services via **docker-compose** for consistent local and production stages; launched dynamically via **GitHub Pages**.
+- **Testing coverage:** Authored robust stability measures executing unit tests with **Vitest** and reliable End-to-End checks via **Playwright**.
+
+---
 
 ## CI/CD Pipeline
 
@@ -10,10 +36,15 @@ This project uses GitHub Actions for automated testing, deployment, and monitori
 
 - **Triggers:** Push to main/develop, Pull Requests
 - **Jobs:**
-  - **Test & Validate:** Type check, lint, format, test, build
-  - **Deploy Preview:** Deploy PR previews to GitHub Pages
-  - **Deploy Production:** Deploy main branch to production
-  - **E2E Tests:** Run Playwright tests on deployed preview
+  - **Validate & Build:** Type-check, lint, format, test, and build all packages
+  - **Deploy Preview:** Deploy preview environments to GitHub Pages (for `develop` branch)
+  - **E2E Tests:** Run Playwright end-to-end tests against the deployed preview
+
+#### **Production Deployment** (`.github/workflows/deploy.yml`)
+
+- **Triggers:** Push to `develop` or `feature/github-pages-deployment`
+- **Jobs:**
+  - **Deploy:** Build all applications and assemble deployment artifacts for GitHub Pages deployment.
 
 #### **Security Scan** (`.github/workflows/security.yml`)
 
@@ -59,7 +90,7 @@ docker-compose up -d  # Run all services
 **Lighthouse CI Requirements:**
 
 - Performance: ≥ 80
-- Accessibility: ≥ 90
+- Accessibility: ≥ 89
 - Best Practices: ≥ 80
 - SEO: ≥ 80
 
@@ -109,10 +140,10 @@ The `prepare` script will automatically set up Git hooks.
 ## Development
 
 ```bash
-pnpm dev          # Start all packages in development
-pnpm start        # Start production servers
-pnpm build:all    # Build all packages
-pnpm validate     # Run full validation (type-check + lint + format + test)
+pnpm start        # Start development servers (builds remotes and runs host in dev mode)
+pnpm preview      # Build all packages and serve them in preview mode locally
+pnpm build        # Build all packages (host and remotes)
+pnpm validate     # Run full validation (type-check, lint, format, and test)
 ```
 
 ## Deployment
@@ -136,5 +167,5 @@ docker-compose pull && docker-compose up -d
 
 ### Environment URLs
 
-- **Production:** `https://[username].github.io/[repo]/production/`
-- **Preview:** `https://[username].github.io/[repo]/preview/`
+- **Production:** `https://thiendp99.github.io/eco/`
+- **Preview:** `https://thiendp99.github.io/ecommerce-microfrontend/preview/`

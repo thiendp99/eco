@@ -27,7 +27,7 @@ export const CartItemComponent = ({ item }: CartItemProps) => {
       <img
         src={item.image}
         alt={item.name}
-        className="w-20 h-20 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
+        className="w-20 h-20 object-cover rounded-lg border-gray-200 dark:border-gray-700"
       />
 
       <div className="flex-1">

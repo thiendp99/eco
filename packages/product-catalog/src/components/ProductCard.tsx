@@ -1,13 +1,22 @@
+import React from 'react';
 import { Product } from '@ecommerce/shared';
 import { useCartStore } from 'shoppingCart/CartStore';
 import { useThemeStore } from '@ecommerce/shared';
+import { ShoppingCart, Star } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
   onViewDetails: (id: string) => void;
+  style?: React.CSSProperties;
+  className?: string;
 }
 
-export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+  onViewDetails,
+  style,
+  className = '',
+}: ProductCardProps) => {
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useCartStore((state) => state.openCart);
   const { theme } = useThemeStore();
@@ -28,85 +37,87 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
 
   return (
     <div
+      style={style}
       onClick={() => onViewDetails(product.id)}
       className={`
         group relative cursor-pointer
         flex flex-col h-full
-        rounded-xl overflow-hidden
+        rounded-2xl overflow-hidden
         transition-all duration-300 ease-out
+        transform hover:-translate-y-1
         ${
           isDark
-            ? 'bg-gray-800/30 hover:bg-gray-800/50 border border-gray-700 hover:border-gray-600'
-            : 'bg-white hover:shadow-xl border border-gray-100 hover:border-gray-200'
+            ? 'bg-slate-900 border border-slate-800 hover:border-slate-600 hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
+            : 'bg-white border border-gray-100 hover:border-indigo-100/50 hover:shadow-[0_8px_30px_rgba(79,70,229,0.08)]'
         }
+        ${className}
       `}
     >
       {/* Image Container */}
-      <div className="relative w-full aspect-square overflow-hidden bg-gray-100 dark:bg-gray-900">
+      <div
+        className={`relative w-full aspect-[4/5] overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-50'}`}
+      >
         <img
           src={product.image}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          loading="lazy"
         />
 
         {/* Quick Add Button Overlay */}
-        <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+        <div className="absolute inset-x-0 bottom-0 p-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
           <button
             onClick={handleAddToCart}
             disabled={!isStockAvailable}
             className={`
-              w-full py-2.5 px-4 rounded-lg text-sm font-medium
-              transition-all duration-200
+              pointer-events-auto
+              relative w-full py-3 px-4 rounded-xl text-sm font-bold
+              transition-all duration-300 overflow-hidden flex items-center justify-center gap-2
               ${
                 isStockAvailable
                   ? isDark
-                    ? 'bg-white text-gray-900 hover:bg-gray-100 shadow-lg'
-                    : 'bg-gray-900 text-white hover:bg-gray-800 shadow-lg'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-700 dark:text-gray-600'
+                    ? 'bg-indigo-500 hover:bg-indigo-400 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]'
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_4px_20px_rgba(79,70,229,0.3)]'
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-slate-800 dark:text-slate-500'
               }
             `}
           >
-            {isStockAvailable ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-                Add to Cart
-              </span>
-            ) : (
-              'Sold Out'
+            {isStockAvailable && (
+              <div className="absolute inset-0 bg-white/20 translate-y-full hover:translate-y-0 transition-transform duration-300 ease-out"></div>
             )}
+            <span className="relative z-10 flex items-center gap-2">
+              {isStockAvailable ? (
+                <>
+                  <ShoppingCart className="w-4 h-4" />
+                  Add to Cart
+                </>
+              ) : (
+                'Out of Stock'
+              )}
+            </span>
           </button>
         </div>
 
-        {/* Stock Badge */}
-        {!isStockAvailable && (
-          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-semibold shadow-lg">
-            Sold Out
-          </div>
-        )}
-        {isStockAvailable && product.stock < 5 && (
-          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-lg bg-amber-500 text-white text-xs font-semibold shadow-lg">
-            Only {product.stock} Left
-          </div>
-        )}
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2">
+          {!isStockAvailable && (
+            <div className="px-3 py-1.5 rounded-lg bg-red-500 text-white text-xs font-bold tracking-wide shadow-lg backdrop-blur-md">
+              SOLD OUT
+            </div>
+          )}
+          {isStockAvailable && product.stock < 5 && (
+            <div className="px-3 py-1.5 rounded-lg bg-orange-500 text-white text-xs font-bold tracking-wide shadow-lg backdrop-blur-md">
+              ONLY {product.stock} LEFT
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Content Area */}
-      <div className="p-4 flex flex-col flex-grow">
+      <div className="p-5 flex flex-col flex-grow relative z-10">
         {/* Category */}
         <div
-          className={`text-xs uppercase tracking-wider font-semibold mb-2 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}
+          className={`text-xs uppercase tracking-wider font-bold mb-2 ${isDark ? 'text-indigo-400' : 'text-indigo-600'}`}
         >
           {product.category}
         </div>
@@ -114,55 +125,33 @@ export const ProductCard = ({ product, onViewDetails }: ProductCardProps) => {
         {/* Product Name */}
         <h3
           className={`
-            text-base font-medium leading-tight mb-3
-            line-clamp-2 min-h-[2.5rem]
+            text-base font-semibold leading-snug mb-3
+            line-clamp-2 min-h-[3rem]
             transition-colors duration-200
-            ${isDark ? 'text-white group-hover:text-blue-400' : 'text-gray-900 group-hover:text-blue-600'}
+            ${isDark ? 'text-slate-200 group-hover:text-indigo-300' : 'text-slate-900 group-hover:text-indigo-700'}
           `}
           title={product.name}
         >
           {product.name}
         </h3>
 
-        {/* Rating */}
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <svg
-                key={i}
-                className={`w-4 h-4 ${
-                  i < Math.floor(product.rating || 0)
-                    ? 'text-amber-400 fill-current'
-                    : isDark
-                      ? 'text-gray-700'
-                      : 'text-gray-300'
-                }`}
-                fill={
-                  i < Math.floor(product.rating || 0) ? 'currentColor' : 'none'
-                }
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        {/* Rating & Price row */}
+        <div className="mt-auto flex items-end justify-between">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center gap-1.5">
+              <Star
+                className={`w-4 h-4 ${isDark ? 'text-amber-400 fill-amber-400/20' : 'text-amber-500 fill-amber-500/20'}`}
+              />
+              <span
+                className={`text-sm font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                />
-              </svg>
-            ))}
+                {product.rating?.toFixed(1) || '0.0'}
+              </span>
+            </div>
           </div>
-          <span
-            className={`text-xs font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
-          >
-            {product.rating?.toFixed(1) || '0.0'}
-          </span>
-        </div>
 
-        {/* Price */}
-        <div className="mt-auto">
           <div
-            className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}
+            className={`text-lg font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}
           >
             {formattedPrice}
           </div>

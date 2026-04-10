@@ -31,18 +31,24 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm run build:all
+        env:
+          VERCEL: '1'
+          VITE_PRODUCT_CATALOG_URL: 'http://localhost:3001'
+          VITE_SHOPPING_CART_URL: 'http://localhost:3002'
+        run: pnpm run build
 
       - name: Start application
+        env:
+          VERCEL: '1'
         run: |
           pnpm run serve:all &
-          npx wait on http://localhost:3000 http://localhost:3001 http://localhost:3002 -t 60000
+          npx wait-on http://localhost:3000/ http://localhost:3001/remoteEntry.js http://localhost:3002/remoteEntry.js -t 60000
 
       - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v9
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            http://localhost:3000
+            http://localhost:3000/
             http://localhost:3000/products
           configPath: './lighthouserc.json'
           uploadArtifacts: true
@@ -78,4 +84,4 @@ jobs:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
           pattern: './packages/*/dist/**/*.{js,css,html}'
           exclude: '{./**/*.map,./**/node_modules/**}'
-          build-script: 'build:all'
+          build-script: 'build'

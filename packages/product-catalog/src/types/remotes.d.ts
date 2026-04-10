@@ -4,8 +4,3 @@ declare module 'shoppingCart/CartStore' {
 
   export const useCartStore: UseBoundStore<StoreApi<CartStore>>;
 }
-
-declare module '*.module.css' {
-  const classes: { [key: string]: string };
-  export default classes;
-}
