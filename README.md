@@ -1,6 +1,6 @@
 # Ecommerce Microfrontend Project
 
-**Live Demo:** https://eco-host-indol.vercel.app/)
+**Live Demo:** https://eco-host-indol.vercel.app/
 
 ### 📝 Project Overview
 
