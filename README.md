@@ -1,6 +1,6 @@
 # Ecommerce Microfrontend Project
 
-**Live Demo:** [eco-host-git-develop-thiendp9s-projects.vercel.app/](https://eco-host-git-develop-thiendp9s-projects.vercel.app/)
+**Live Demo:** [https://eco-host-indol.vercel.app/])
 
 ### 📝 Project Overview
 
